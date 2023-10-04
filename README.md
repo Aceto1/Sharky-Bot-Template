@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-1. [Visual Studio 2022](https://github.com/europa-1400-community/die-gulde)
+1. [Visual Studio 2022](https://visualstudio.microsoft.com/de/downloads/)
 2. StarCraft 2 installed via Battle.net
 3. [git](https://git-scm.com/downloads)
 4. [NET SDK 7.0](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)
