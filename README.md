@@ -12,7 +12,7 @@
  
 2. Clone your fork
 	
-	`git clone https://github.com/{your GitHub username}/Starcraft2Bot.git`
+	`git clone https://github.com/{your GitHub username}/Sharky-Bot-Template.git`
 
 3. Install the Sharky framework
 
