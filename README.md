@@ -22,6 +22,7 @@
 	 
 	3.3 Run `git submodule update`
 
+4. Download and install the SC2AI Arena maps as described on their [site](https://sc2ai.net/wiki/maps/)
 ## Development
 
 The example should be runnable by opening Visual Studio and hitting F5 (or the green 'play' symbol in the top menu bar).
