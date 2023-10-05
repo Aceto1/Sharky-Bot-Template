@@ -1,11 +1,14 @@
 ﻿using SC2APIProtocol;
 using Sharky;
 using Sharky.DefaultBot;
+using Sharky.Helper;
+using StarCraft2Bot.Helper;
 
 namespace StarCraft2Bot
 {
     internal class Program
     {
+
         static void Main(string[] args)
         {
             Console.WriteLine("Starting up...");
@@ -15,25 +18,28 @@ namespace StarCraft2Bot
             // We get a default bot that has everything setup.  You can manually create one instead if you want to more heavily customize it.  
             var defaultSharkyBot = new DefaultSharkyBot(gameConnection);
 
+            Console.WriteLine("Setting up AI...");
+            ValueCallbackService.Init(ValueManager.GetValue);
+
             Console.WriteLine("Loading builds...");
-            //var buildMngr = new BuildChoicesManager(defaultSharkyBot);
+            BuildChoicesManager.Init(defaultSharkyBot);
 
             // we configure the bot with our own builds
-            //defaultSharkyBot.BuildChoices[Race.Terran] = buildMngr.GetBuildChoices();
+            defaultSharkyBot.BuildChoices[Race.Terran] = BuildChoicesManager.GetBuildChoices();
 
             // we create a bot with the modified default bot we made
-            var sharkyExampleBot = defaultSharkyBot.CreateBot(defaultSharkyBot.Managers, defaultSharkyBot.DebugService);
+            var exampleBot = defaultSharkyBot.CreateBot(defaultSharkyBot.Managers, defaultSharkyBot.DebugService);
             
             var myRace = Race.Terran;
             if (args.Length == 0)
             {
                 // if there are no arguments passed we play against a comptuer opponent
-                gameConnection.RunSinglePlayer(sharkyExampleBot, @"InsideAndOutAIE.SC2Map", myRace, Race.Terran, Difficulty.Easy, AIBuild.RandomBuild).Wait();
+                gameConnection.RunSinglePlayer(exampleBot, @"InsideAndOutAIE.SC2Map", myRace, Race.Terran, Difficulty.Easy, AIBuild.RandomBuild).Wait();
             }
             else
             {
                 // when a bot runs on the ladder it will pass arguments for a specific map, enemy, etc.
-                gameConnection.RunLadder(sharkyExampleBot, myRace, args).Wait();
+                gameConnection.RunLadder(exampleBot, myRace, args).Wait();
             }
         }
     }

@@ -1,6 +1,7 @@
 ﻿using SC2APIProtocol;
 using Sharky.Builds.Terran;
 using Sharky.DefaultBot;
+using StarCraft2Bot.Helper;
 
 namespace StarCraft2Bot.Builds.Base
 {
@@ -8,13 +9,20 @@ namespace StarCraft2Bot.Builds.Base
     {
         private const int secondsPerMeasurement = 1;
 
-        private readonly DefaultSharkyBot defaultSharkyBot;
+        private readonly DefaultSharkyBot defaultBot;
 
         private int frame = 0;
 
         public Build(DefaultSharkyBot defaultSharkyBot) : base(defaultSharkyBot)
         {
-            this.defaultSharkyBot = defaultSharkyBot;
+            this.defaultBot = defaultSharkyBot;
+        }
+
+        public override void StartBuild(int frame)
+        {
+            base.StartBuild(frame);
+
+            ValueManager.CurrentBuild = this.GetType().Name;
         }
 
         public override void OnFrame(ResponseObservation observation)
@@ -23,7 +31,7 @@ namespace StarCraft2Bot.Builds.Base
 
             frame++;
 
-            if (frame % (defaultSharkyBot.SharkyOptions.FramesPerSecond * secondsPerMeasurement) == 0)
+            if (frame % (defaultBot.SharkyOptions.FramesPerSecond * secondsPerMeasurement) == 0)
             {
                 Measure();
             }
