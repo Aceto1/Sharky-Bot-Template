@@ -7,18 +7,18 @@ using StarCraft2Bot.Builds;
 
 namespace StarCraft2Bot
 {
-    public static class BuildChoicesManager
+    public class BuildChoicesManager
     {
-        private static DefaultSharkyBot defaultSharkyBot = null!;
-        private static IndividualMicroController scvMicroController = null!;
+        private DefaultSharkyBot defaultSharkyBot = null!;
+        private IndividualMicroController scvMicroController = null!;
 
-        public static void Init(DefaultSharkyBot newDefaultSharkyBot)
+        public BuildChoicesManager(DefaultSharkyBot newDefaultSharkyBot)
         {
             defaultSharkyBot = newDefaultSharkyBot;
             scvMicroController = new IndividualMicroController(newDefaultSharkyBot, newDefaultSharkyBot.SharkyAdvancedPathFinder, MicroPriority.JustLive, false);
         }
 
-        public static BuildChoices GetBuildChoices()
+        public BuildChoices GetBuildChoices()
         {
             var reaperCheese = new ReaperOpener(defaultSharkyBot, scvMicroController);
 

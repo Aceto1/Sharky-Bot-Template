@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "StarCraft2Bot": {
+      "commandName": "Project",
+      "commandLineArgs": "-instances 2"
+    }
+  }
+}
