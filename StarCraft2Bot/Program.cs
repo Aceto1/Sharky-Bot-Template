@@ -9,7 +9,7 @@ namespace StarCraft2Bot
     {
         private static int startupPort = 5000;
 
-        public static Task StartSinglePlayerGame()
+        public static Task StartSinglePlayerGame(List<Map> maps)
         {
             var gameConnection = new GameConnection();
             var defaultSharkyBot = new DefaultSharkyBot(gameConnection);
@@ -19,7 +19,9 @@ namespace StarCraft2Bot
             
             startupPort += 5;
 
-            return gameConnection.RunSinglePlayer(exampleBot, @"InsideAndOutAIE.SC2Map", Race.Terran, Race.Terran, Difficulty.Easy, AIBuild.RandomBuild, startupPort);
+            var map = maps.GetRandomEntry();
+
+            return gameConnection.RunSinglePlayer(exampleBot, $"{Enum.GetName(map)}AIE.SC2Map", Race.Terran, Race.Terran, Difficulty.Easy, AIBuild.RandomBuild, startupPort);
         }
 
         static void Main(string[] args)
@@ -39,9 +41,15 @@ namespace StarCraft2Bot
                 instanceCount = Int32.Parse(args[1]);
             }
 
+            var maps = new List<Map>()
+            {
+                Map.InsideAndOut,
+                Map.Stargazers
+            };
+
             for (int i = 0; i < instanceCount; i++)
             {
-                games.Add(StartSinglePlayerGame());
+                games.Add(StartSinglePlayerGame(maps));
             }
 
             Task.WaitAll(games.ToArray());
