@@ -4,7 +4,7 @@ namespace StarCraft2Bot.Builds.Base.Condition
 {
     public class SupplyCondition : ICondition
     {
-        public SupplyCondition(int supplyCount, MacroData data): this(supplyCount, data, ConditionOperator.Equal)
+        public SupplyCondition(int supplyCount, MacroData data): this(supplyCount, data, ConditionOperator.GreaterOrEqual)
         {
             
         }
