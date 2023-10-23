@@ -87,6 +87,7 @@ namespace StarCraft2Bot.Builds
             BuildOrder = new Queue<BuildAction>();
             MacroData.DesiredUnitCounts[UnitTypes.TERRAN_SCV] = 18;
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(14, MacroData), new SupplyDepotDesire(1, MacroData)));
+            SendScvForFirstDepot(frame);
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(15, MacroData), new ProxyProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 1, MacroData, proxyTask.ProxyName)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(16, MacroData), new GasBuildingCountDesire(1, MacroData)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(16, MacroData), new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 2, MacroData)));
@@ -136,7 +137,7 @@ namespace StarCraft2Bot.Builds
             return (int)((minutes * 60 + seconds) * 22.4);
         }
 
-        void SetAttack()
+        /*void SetAttack()
         {
             AttackData.Attacking = true;
             if (!openingAttackChatSent)
@@ -144,7 +145,7 @@ namespace StarCraft2Bot.Builds
                 ChatService.SendChatType($"{nameof(ReaperOpener)}-FirstAttack");
                 openingAttackChatSent = true;
             }
-        }
+        }*/
             
         public override void OnFrame(ResponseObservation observation)
         {
@@ -167,14 +168,14 @@ namespace StarCraft2Bot.Builds
                 BuildOrder.Dequeue();
             }
 
-            ManageAttackCondition(observation);
+            //ManageAttackCondition(observation);
         }
 
         private void ManageAttackCondition(ResponseObservation observation)
         {
             if (UnitCountService.EquivalentTypeCount(UnitTypes.TERRAN_REAPER) >= 5)
             {
-                SetAttack();
+                //SetAttack();
             }
         }
 
