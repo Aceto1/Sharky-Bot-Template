@@ -1,4 +1,34 @@
-# StarCraft 2 Sharky Bot Template
+# StarCraft 2 AI 1-1-1-Bread-And-Butter-Tactic
+
+using Sharky
+
+## Tactic
+This tactic is written for use by other AI builders. It should adapt to 
+different enemy tactics well.
+
+
+### Opener
+Currently copied from: https://lotv.spawningtool.com/build/174631/
+
+	Supply Depot	
+	Barracks	
+	Refinery
+	Reaper, Orbital Command	
+	Supply Depot	
+	Factory	
+	Reaper
+	Command Center	
+	Hellion
+
+	Starport: Prioritize this over Reactor, Supply Depot and even SCVs if necessary.
+	Barracks Reactor	
+    Supply Depot
+	Widow Mine	
+	Marine x2	
+	Factory Tech Lab	
+	Starport Tech Lab	
+	Refinery: To make sure the refinery finishes *with* the CC.
+	Marine x2
 
 ## Prerequisites
 
