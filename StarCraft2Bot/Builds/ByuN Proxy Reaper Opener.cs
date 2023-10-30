@@ -48,7 +48,9 @@ namespace StarCraft2Bot.Builds
             27	  2:52	  Reaper
             27	  2:57	  Hellion
             31	  3:10	  Command Center	  
+
             2nd Part
+
             33	  3:20	  Factory Tech Lab	  
             33	  3:22	  Barracks Reactor	  
             32	  3:27	  Starport	  
@@ -69,7 +71,7 @@ namespace StarCraft2Bot.Builds
             59	  5:42	  Marine	  
             55	  5:45	  Siege Tank	  
             66	  6:18	  Command Center
-            **/
+        **/
 
         public override void StartBuild(int frame)
         {

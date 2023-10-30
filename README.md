@@ -24,6 +24,8 @@
 	3.3 Run `git submodule update`
 
 4. Download and install the SC2AI Arena maps as described on their [site](https://sc2ai.net/wiki/maps/)
+
+
 ## Development
 
 The example should be runnable by opening Visual Studio and hitting F5 (or the green 'play' symbol in the top menu bar).
@@ -31,6 +33,8 @@ The example should be runnable by opening Visual Studio and hitting F5 (or the g
 Adding a build is as easy as creating a new class in the 'Builds' folder and inheriting the `Build` class. You should now be able to implement all the lifecycle methods. For reference on how this could look, see `Builds/RepaerCheese.cs` or the example in the official [Sharky repo](https://github.com/sharknice/Sharky).
 
 After implementing the class just add it to the builds in the `BuildChoiceManager.cs` file.
+
+
 ## Known Issues
 
 1. `System.AggregateException: 'One or more errors occurred. (An error occurred trying to start process '...' with working directory '...'. File not found.)'`

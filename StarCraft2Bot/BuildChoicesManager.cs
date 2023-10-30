@@ -20,16 +20,16 @@ namespace StarCraft2Bot
 
         public BuildChoices GetBuildChoices()
         {
-            var reaperCheese = new ReaperOpener(defaultSharkyBot, scvMicroController);
+            var currentOpener = new DefensiveOpener(defaultSharkyBot, scvMicroController);
 
             var builds = new Dictionary<string, ISharkyBuild>
             {
-                [reaperCheese.Name()] = reaperCheese,
+                [currentOpener.Name()] = currentOpener,
             };
 
             var defaultSequences = new List<List<string>>
             {
-                new List<string> { reaperCheese.Name() },
+                new List<string> { currentOpener.Name() },
             };
 
             // INFO: The "Transition" entry should usually contain something other than the same builds over again
