@@ -1,13 +1,47 @@
-# StarCraft 2 AI 1-1-1-Bread-And-Butter-Tactic
+# StarCraft 2 AI 1-1-1-TvT-Bread-And-Butter-Tactic
 
-using Sharky
+using the Sharky framework adaptation by Aceto
+
+## What should we do?
+
++ Build an opener from the database
++ Refine the opener
++ Which buildings from the opener can we use?
++ And to which follow-up strategies can we transition with the preconditions of the opener
+
+e.g. Reaper Opener → Mech
+
+### What is difficult?
++ How can we evaluate, which tactics are good counters to which others?
++ How can we even detect a tactic?
++ How can we automatically detect a tactic and decide which counter to play?
+
+e.g. https://lotv.spawningtool.com/build/166798/
 
 ## Tactic
 This tactic is written for use by other AI builders. It should adapt to 
 different enemy tactics well.
 
+e.g. 
+Against Battle Cruisers → build Vikings (have higher range and are faster) 
 
-### Opener
+We can recognise, which tactics the enemy can choose by analyzing the possibilities of buildings:
+- If he builds a Starport, then he will build air units.
+- If the star port has a reactor: → vikings
+- if the star port has a tech lab: → probably battleships
+- If the enemy does not have factories by a certain point, he will probably focus on biological units (e.g. marines or reapers)
+- You do not spend upgrades on biological units, if you won't focus on them. So, producing upgrades is a good indicator, that he will use them.
+- Stimpacks are not visible, so they have to be observed in battle.
+- ...
+
+We can deduct necessary buildings from the properties that units have: e.g. 2-2, 2-0 means that the enemy has an armory 
+and a factory.
+
+If he only has reactors on barracks, then he lacks a response to armoured units.
+
+*Therefore it is absolutely necessary to scan the enemy regularly.*
+
+## Opener
 Currently copied from: https://lotv.spawningtool.com/build/174631/
 
 	Supply Depot	
