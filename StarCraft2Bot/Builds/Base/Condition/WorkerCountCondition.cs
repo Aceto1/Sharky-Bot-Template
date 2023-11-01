@@ -5,7 +5,7 @@ namespace StarCraft2Bot.Builds.Base.Condition
 {
     public class WorkerCountCondition : ICondition
     {
-        public WorkerCountCondition(ValueRange count, UnitCountService service) : this(count, service, ConditionOperator.Greater)
+        public WorkerCountCondition(ValueRange count, UnitCountService service) : this(count, service, ConditionOperator.GreaterOrEqual)
         {
 
         }
