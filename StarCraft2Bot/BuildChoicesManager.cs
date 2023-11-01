@@ -22,22 +22,27 @@ namespace StarCraft2Bot
         public BuildChoices GetBuildChoices()
         {
             var reaperCheese = new ReaperOpener(defaultSharkyBot, scvMicroController);
+            var saltyMarines = new SaltyMarines(defaultSharkyBot, scvMicroController);
             var bansheesAndMarines = new BansheesAndMarines(defaultSharkyBot);
 
             var builds = new Dictionary<string, ISharkyBuild>
             {
-                [reaperCheese.Name()] = reaperCheese,
+                //[reaperCheese.Name()] = reaperCheese,
+                [saltyMarines.Name()] = saltyMarines
             };
             var transitions = new List<List<string>>
             {
-                new List<string> { bansheesAndMarines.Name() },
+                new List<string> { saltyMarines.Name() },
             };
 
             var defaultSequences = new List<List<string>>
             {
+                //new List<string> {
+                //    reaperCheese.Name(),
+                //    bansheesAndMarines.Name()
+                //},
                 new List<string> {
-                    reaperCheese.Name(),
-                    bansheesAndMarines.Name()
+                    saltyMarines.Name()
                 },
             };
 
@@ -45,7 +50,7 @@ namespace StarCraft2Bot
             var buildSequences = new Dictionary<string, List<List<string>>>
             {
                 [Race.Terran.ToString()] = defaultSequences,
-                ["Transition"] = defaultSequences
+                ["Transition"] = transitions
             };
 
             return new BuildChoices { Builds = builds, BuildSequences = buildSequences };
