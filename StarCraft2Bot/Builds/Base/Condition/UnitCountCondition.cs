@@ -38,9 +38,9 @@ namespace StarCraft2Bot.Builds.Base.Condition
                     return count <= Count;
                 case ConditionOperator.GreaterOrEqual:
                     return count >= Count;
-                case ConditionOperator.Equal:
-                    return count > Count;
                 case ConditionOperator.Greater:
+                    return count > Count;
+                case ConditionOperator.Equal:
                 default:
                     return count == Count;
             }

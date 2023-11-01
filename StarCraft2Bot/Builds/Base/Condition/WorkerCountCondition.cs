@@ -52,9 +52,9 @@ namespace StarCraft2Bot.Builds.Base.Condition
                     return count <= WorkerCount;
                 case ConditionOperator.GreaterOrEqual:
                     return count >= WorkerCount;
-                case ConditionOperator.Equal:
-                    return count > WorkerCount;
                 case ConditionOperator.Greater:
+                    return count > WorkerCount;
+                case ConditionOperator.Equal:
                 default:
                     return count == WorkerCount;
             }
