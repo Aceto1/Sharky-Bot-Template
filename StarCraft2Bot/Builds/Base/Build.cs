@@ -70,7 +70,6 @@ namespace StarCraft2Bot.Builds.Base
             {
                 if (action.AreConditionsFulfilled())
                     action.EnforceDesires();
-
             }
         }
 
