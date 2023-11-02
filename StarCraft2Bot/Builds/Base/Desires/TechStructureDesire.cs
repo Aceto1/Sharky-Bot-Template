@@ -1,17 +1,16 @@
 ﻿using Sharky;
-using Sharky.Helper;
 using System;
 
 namespace StarCraft2Bot.Builds.Base.Desires
 {
-    public class ProductionStructureDesire : IDesire
+    public class TechStructureDesire : IDesire
     {
         public UnitTypes StructureType { get; private set; }
-        public ValueRange Count { get; private set; }
+        public int Count { get; private set; }
         public MacroData Data { get; private set; }
         public bool Enforced { get; set; }
 
-        public ProductionStructureDesire(UnitTypes structureType, ValueRange count, MacroData data)
+        public TechStructureDesire(UnitTypes structureType, int count, MacroData data)
         {
             StructureType = structureType;
             Count = count;
@@ -23,7 +22,7 @@ namespace StarCraft2Bot.Builds.Base.Desires
             if (Enforced)
                 return;
 
-            Data.DesiredTechCounts[StructureType] = Count;            
+            Data.DesiredProductionCounts[StructureType] = Count;            
 
             Enforced = true;
         }
