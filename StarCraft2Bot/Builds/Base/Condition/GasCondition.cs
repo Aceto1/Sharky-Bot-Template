@@ -1,22 +1,23 @@
 ﻿using Sharky;
+using Sharky.Helper;
 
 namespace StarCraft2Bot.Builds.Base.Condition
 {
     public class GasCondition : ICondition
     {
-        public GasCondition(int gas, MacroData data): this(gas, data, ConditionOperator.Equal)
+        public GasCondition(ValueRange gas, MacroData data): this(gas, data, ConditionOperator.Equal)
         {
             
         }
 
-        public GasCondition(int gas, MacroData data, ConditionOperator conditionOperator)
+        public GasCondition(ValueRange gas, MacroData data, ConditionOperator conditionOperator)
         {
             Gas = gas;
             Operator = conditionOperator;
             Data = data;
         }
 
-        public int Gas { get; private set; }
+        public ValueRange Gas { get; private set; }
 
         public ConditionOperator Operator { get; private set; }
 

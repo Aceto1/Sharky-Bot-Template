@@ -1,16 +1,17 @@
 ﻿using Sharky;
+using Sharky.Helper;
 
 namespace StarCraft2Bot.Builds.Base.Desires
 {
     public class GasBuildingCountDesire : IDesire
     {
-        public GasBuildingCountDesire(int count, MacroData data)
+        public GasBuildingCountDesire(ValueRange count, MacroData data)
         {
             Count = count;
             Data = data;
         }
 
-        public int Count { get; private set; }
+        public ValueRange Count { get; private set; }
 
         public MacroData Data { get; private set; }
 
