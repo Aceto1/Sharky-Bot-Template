@@ -19,6 +19,8 @@ namespace StarCraft2Bot.Builds.Base
 
         private readonly List<BuildAction> actions = new();
 
+        public bool DoTransition { get; set; }
+
         public Build(DefaultSharkyBot defaultSharkyBot) : base(defaultSharkyBot)
         {
             this.defaultBot = defaultSharkyBot;
@@ -70,8 +72,15 @@ namespace StarCraft2Bot.Builds.Base
             {
                 if (action.AreConditionsFulfilled())
                     action.EnforceDesires();
-
             }
+        }
+
+        public override bool Transition(int frame)
+        {
+            if (DoTransition)
+                return true;
+
+            return base.Transition(frame);
         }
 
         private void Measure()

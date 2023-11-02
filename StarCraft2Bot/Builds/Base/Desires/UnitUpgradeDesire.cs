@@ -1,19 +1,16 @@
 ﻿using Sharky;
-using Sharky.Helper;
 
 namespace StarCraft2Bot.Builds.Base.Desires
 {
-    public class MorphDesire : IDesire
+    public class UnitUpgradeDesire : IDesire
     {
-        public UnitTypes TargetType { get; private set; }
-        public ValueRange Count { get; private set; }
+        public Upgrades TargetType { get; private set; }
         public MacroData Data { get; private set; }
         public bool Enforced { get; set; }
 
-        public MorphDesire(UnitTypes targetType, ValueRange count, MacroData data)
+        public UnitUpgradeDesire(Upgrades targetType, MacroData data)
         {
             TargetType = targetType;
-            Count = count;
             Data = data;
         }
 
@@ -23,7 +20,7 @@ namespace StarCraft2Bot.Builds.Base.Desires
                 return;
 
             // Assuming the MacroData has a method or property to set the desired morph counts
-            Data.DesiredMorphCounts[TargetType] = Count;
+            Data.DesiredUpgrades[TargetType] = true;
 
             Enforced = true;
         }
