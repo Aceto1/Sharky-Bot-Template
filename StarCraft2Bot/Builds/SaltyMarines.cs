@@ -47,16 +47,17 @@ namespace StarCraft2Bot.Builds
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(19, MacroData), new MorphDesire(UnitTypes.TERRAN_ORBITALCOMMAND, 1, MacroData)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(19, MacroData), new ProductionStructureDesire(UnitTypes.TERRAN_COMMANDCENTER, 2, MacroData)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(18, MacroData), new MorphDesire(UnitTypes.TERRAN_ORBITALCOMMAND, 2, MacroData)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(22, MacroData), new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 3, MacroData)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(22, MacroData), new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 2, MacroData)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(22, MacroData), new AddonStructureDesire(UnitTypes.TERRAN_BARRACKSTECHLAB, 2, MacroData)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(23, MacroData), new GasBuildingCountDesire(2, MacroData)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(34, MacroData), new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 5, MacroData)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(34, MacroData), new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 3, MacroData)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(35, MacroData), new TechStructureDesire(UnitTypes.TERRAN_ENGINEERINGBAY, 2, MacroData)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(33, MacroData), new UnitUpgradeDesire(Upgrades.TERRANINFANTRYARMORSLEVEL1, MacroData)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(33, MacroData), new UnitUpgradeDesire(Upgrades.TERRANINFANTRYWEAPONSLEVEL1, MacroData)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(33, MacroData), new UnitUpgradeDesire(Upgrades.STIMPACK, MacroData)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(33, MacroData), new UnitUpgradeDesire(Upgrades.SHIELDWALL, MacroData)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(33, MacroData), new UnitUpgradeDesire(Upgrades.TERRANINFANTRYWEAPONSLEVEL1, MacroData)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(37, MacroData), new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 4, MacroData)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(36, MacroData), new AddonStructureDesire(UnitTypes.TERRAN_BARRACKSREACTOR, 2, MacroData)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(35, MacroData), new GasBuildingCountDesire(3, MacroData)));
 
