@@ -1,22 +1,23 @@
 ﻿using Sharky;
+using Sharky.Helper;
 
 namespace StarCraft2Bot.Builds.Base.Condition
 {
     public class SupplyCondition : ICondition
     {
-        public SupplyCondition(int supplyCount, MacroData data): this(supplyCount, data, ConditionOperator.GreaterOrEqual)
+        public SupplyCondition(ValueRange supplyCount, MacroData data): this(supplyCount, data, ConditionOperator.GreaterOrEqual)
         {
             
         }
 
-        public SupplyCondition(int supplyCount, MacroData data, ConditionOperator conditionOperator)
+        public SupplyCondition(ValueRange supplyCount, MacroData data, ConditionOperator conditionOperator)
         {
             SupplyCount = supplyCount;
             Operator = conditionOperator;
             Data = data;
         }
 
-        public int SupplyCount { get; private set; }
+        public ValueRange SupplyCount { get; private set; }
 
         public ConditionOperator Operator { get; private set; }
 

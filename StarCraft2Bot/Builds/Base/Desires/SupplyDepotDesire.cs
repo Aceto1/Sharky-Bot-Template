@@ -1,16 +1,17 @@
 ﻿using Sharky;
+using Sharky.Helper;
 
 namespace StarCraft2Bot.Builds.Base.Desires
 {
     public class SupplyDepotDesire : IDesire
     {
-        public SupplyDepotDesire(int count, MacroData data)
+        public SupplyDepotDesire(ValueRange count, MacroData data)
         {
             Count = count;
             Data = data;
         }
 
-        public int Count { get; private set; }
+        public ValueRange Count { get; private set; }
 
         public MacroData Data { get; private set; }
 
