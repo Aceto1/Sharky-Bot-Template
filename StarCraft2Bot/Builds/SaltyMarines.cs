@@ -141,7 +141,7 @@ namespace StarCraft2Bot.Builds
                 return true;
             }
 
-            return false;
+            return base.Transition(frame);
         }
     }
 }
