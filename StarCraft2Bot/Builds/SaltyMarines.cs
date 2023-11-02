@@ -119,6 +119,9 @@ namespace StarCraft2Bot.Builds
             }
 
             ManageAttackCondition(observation);
+
+            // falls bestimmte struktur des Gegners nicht gefunden, setze scouting fort
+            MicroTaskData[typeof(ProxyScoutTask).Name].Enable();
         }
 
         private void ManageAttackCondition(ResponseObservation observation)
