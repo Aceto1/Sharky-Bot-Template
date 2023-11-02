@@ -23,12 +23,14 @@ namespace StarCraft2Bot
         {
             var reaperCheese = new ReaperOpener(defaultSharkyBot, scvMicroController);
             var saltyMarines = new SaltyMarines(defaultSharkyBot, scvMicroController);
+            var tvTOpener = new TvTOpener(defaultSharkyBot, scvMicroController);
             var bansheesAndMarines = new BansheesAndMarines(defaultSharkyBot);
 
             var builds = new Dictionary<string, ISharkyBuild>
             {
                 //[reaperCheese.Name()] = reaperCheese,
-                [saltyMarines.Name()] = saltyMarines
+                [saltyMarines.Name()] = saltyMarines,
+                [tvTOpener.Name()] = tvTOpener,
             };
             var transitions = new List<List<string>>
             {
@@ -42,7 +44,8 @@ namespace StarCraft2Bot
                 //    bansheesAndMarines.Name()
                 //},
                 new List<string> {
-                    saltyMarines.Name()
+                    // saltyMarines.Name()
+                    tvTOpener.Name(),
                 },
             };
 

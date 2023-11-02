@@ -22,7 +22,7 @@ namespace StarCraft2Bot.Builds.Base.Desires
             if (Enforced)
                 return;
 
-            Data.DesiredProductionCounts[StructureType] = Count;            
+            Data.DesiredTechCounts[StructureType] = Count;            
 
             Enforced = true;
         }

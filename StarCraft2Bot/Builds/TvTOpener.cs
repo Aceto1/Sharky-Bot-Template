@@ -1,7 +1,10 @@
 ﻿using SC2APIProtocol;
 using Sharky;
 using Sharky.DefaultBot;
+using Sharky.MicroControllers;
 using Sharky.MicroTasks;
+using Sharky.MicroTasks.Attack;
+using Sharky.Proxy;
 using StarCraft2Bot.Builds.Base;
 using StarCraft2Bot.Builds.Base.Condition;
 using StarCraft2Bot.Builds.Base.Desires;
@@ -10,11 +13,13 @@ namespace StarCraft2Bot.Builds
 {
     public class TvTOpener : Build
     {
-        public Queue<BuildAction> BuildOrder { get; set; }
+        private Queue<BuildAction>? BuildOrder { get; set; }
 
-        public TvTOpener(DefaultSharkyBot defaultSharkyBot) : base(defaultSharkyBot)
+        public TvTOpener(DefaultSharkyBot defaultSharkyBot, IIndividualMicroController scvMicroController) : base(defaultSharkyBot)
         {
-            BuildOrder = new Queue<BuildAction>();
+            defaultSharkyBot.MicroController = new AdvancedMicroController(defaultSharkyBot);
+            var advancedAttackTask = new AdvancedAttackTask(defaultSharkyBot, new EnemyCleanupService(defaultSharkyBot.MicroController, defaultSharkyBot.DamageService), new List<UnitTypes> { UnitTypes.TERRAN_MARINE }, 100f, true);
+            defaultSharkyBot.MicroTaskData[typeof(AttackTask).Name] = advancedAttackTask;
         }
 
         public override void StartBuild(int frame)
@@ -33,6 +38,8 @@ namespace StarCraft2Bot.Builds
                               MicroTaskData[typeof(WorkerScoutTask).Name].Enable();
                               MicroTaskData[typeof(AttackTask).Name].Enable();
                           })));
+
+            BuildOrder = new Queue<BuildAction>();
 
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(14, MacroData),
                                                new SupplyDepotDesire(1, MacroData)));
