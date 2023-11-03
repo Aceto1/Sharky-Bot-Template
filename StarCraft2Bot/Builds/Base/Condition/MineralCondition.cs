@@ -1,22 +1,23 @@
 ﻿using Sharky;
+using Sharky.Helper;
 
 namespace StarCraft2Bot.Builds.Base.Condition
 {
     public class MineralCondition : ICondition
     {
-        public MineralCondition(int minerals, MacroData data): this(minerals, data, ConditionOperator.Equal)
+        public MineralCondition(ValueRange minerals, MacroData data): this(minerals, data, ConditionOperator.GreaterOrEqual)
         {
             
         }
 
-        public MineralCondition(int minerals, MacroData data, ConditionOperator conditionOperator)
+        public MineralCondition(ValueRange minerals, MacroData data, ConditionOperator conditionOperator)
         {
             Minerals = minerals;
             Operator = conditionOperator;
             Data = data;
         }
 
-        public int Minerals { get; private set; }
+        public ValueRange Minerals { get; private set; }
 
         public ConditionOperator Operator { get; private set; }
 

@@ -1,5 +1,4 @@
-﻿using Sharky;
-using SC2APIProtocol;
+﻿using SC2APIProtocol;
 
 namespace StarCraft2Bot.Builds.Base.Condition
 {
@@ -10,7 +9,7 @@ namespace StarCraft2Bot.Builds.Base.Condition
         public int TargetFrame { get; private set; }
         private Observation? Observation { get; set; }
 
-        public TimeCondition(double seconds, ConditionOperator conditionOperator, double framesPerSecond = 22.4)
+        public TimeCondition(double seconds, ConditionOperator conditionOperator = ConditionOperator.GreaterOrEqual, double framesPerSecond = 22.4)
         {
             FramesPerSecond = framesPerSecond;
             Operator = conditionOperator;
