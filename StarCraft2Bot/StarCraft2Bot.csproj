@@ -16,4 +16,8 @@
     <ProjectReference Include="..\Sharky\Sharky\Sharky.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Builds\BuildServices\" />
+  </ItemGroup>
+
 </Project>

@@ -4,7 +4,6 @@ using Sharky;
 using SC2APIProtocol;
 using Sharky.Builds;
 using StarCraft2Bot.Builds;
-using SharkyTerranExampleBot.Builds;
 
 namespace StarCraft2Bot
 {
@@ -24,7 +23,6 @@ namespace StarCraft2Bot
             var reaperCheese = new ReaperOpener(defaultSharkyBot, scvMicroController);
             var saltyMarines = new SaltyMarines(defaultSharkyBot, scvMicroController);
             var tvTOpener = new TvTOpener(defaultSharkyBot, scvMicroController);
-            var bansheesAndMarines = new BansheesAndMarines(defaultSharkyBot);
 
             var builds = new Dictionary<string, ISharkyBuild>
             {
@@ -39,13 +37,15 @@ namespace StarCraft2Bot
 
             var defaultSequences = new List<List<string>>
             {
-                //new List<string> {
-                //    reaperCheese.Name(),
-                //    bansheesAndMarines.Name()
-                //},
                 new List<string> {
-                    // saltyMarines.Name()
                     tvTOpener.Name(),
+                },
+            };
+
+            var cheeseSequences = new List<List<string>>
+            {
+                 new List<string> {
+                    reaperCheese.Name(),
                 },
             };
 
