@@ -39,7 +39,7 @@ namespace StarCraft2Bot
             //    ["Transition"] = defaultSequences
             //};
 
-            var reaperCheese = new TvTOpener(defaultSharkyBot);
+            var reaperCheese = new ReaperOpener(defaultSharkyBot, scvMicroController);
             var reaperCheese2 = new SaltyMarines(defaultSharkyBot, scvMicroController);
 
             var builds = new Dictionary<string, ISharkyBuild>

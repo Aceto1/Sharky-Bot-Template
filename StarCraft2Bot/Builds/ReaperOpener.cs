@@ -12,7 +12,7 @@ using StarCraft2Bot.Builds.Base.Condition;
 
 namespace StarCraft2Bot.Builds
 {
-    public class ReaperOpenerOld : Build
+    public class ReaperOpener : Build
     {
         private readonly ProxyLocationService proxyLocationService;
         private bool openingAttackChatSent;
@@ -20,13 +20,13 @@ namespace StarCraft2Bot.Builds
 
         private Queue<BuildAction>? BuildOrder { get; set; }
 
-        public ReaperOpenerOld(DefaultSharkyBot defaultSharkyBot, IIndividualMicroController scvMicroController) : base(defaultSharkyBot)
+        public ReaperOpener(DefaultSharkyBot defaultSharkyBot, IIndividualMicroController scvMicroController) : base(defaultSharkyBot)
         {
             proxyLocationService = defaultSharkyBot.ProxyLocationService;
             openingAttackChatSent = false;
             proxyTask = new ProxyTask(defaultSharkyBot, false, 0.9f, string.Empty, scvMicroController)
             {
-                ProxyName = nameof(ReaperOpenerOld)
+                ProxyName = nameof(ReaperOpener)
             };
         }
         /**
@@ -115,19 +115,19 @@ namespace StarCraft2Bot.Builds
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(40, MacroData), new UnitDesire(UnitTypes.TERRAN_MEDIVAC, 1, MacroData.DesiredUnitCounts)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(40, MacroData), new GasBuildingCountDesire(3, MacroData)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(33, MacroData), new SupplyDepotDesire(6, MacroData)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(40, MacroData), new UnitDesire(UnitTypes.TERRAN_MARINE, 4, MacroData.DesiredUnitCounts)));  
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(40, MacroData), new UnitDesire(UnitTypes.TERRAN_MARINE, 4, MacroData.DesiredUnitCounts)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(41, MacroData), new UnitDesire(UnitTypes.TERRAN_CYCLONE, 1, MacroData.DesiredUnitCounts)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(46, MacroData), new MorphDesire(UnitTypes.TERRAN_ORBITALCOMMAND, 2, MacroData))); 
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(46, MacroData), new UnitDesire(UnitTypes.TERRAN_MARINE, 6, MacroData.DesiredUnitCounts)));  
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(46, MacroData), new MorphDesire(UnitTypes.TERRAN_ORBITALCOMMAND, 2, MacroData)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(46, MacroData), new UnitDesire(UnitTypes.TERRAN_MARINE, 6, MacroData.DesiredUnitCounts)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(46, MacroData), new AddonStructureDesire(UnitTypes.TERRAN_STARPORTTECHLAB, 1, MacroData)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(33, MacroData), new SupplyDepotDesire(7, MacroData)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(49, MacroData), new UnitDesire(UnitTypes.TERRAN_SIEGETANK, 2, MacroData.DesiredUnitCounts)));  
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(49, MacroData), new UnitDesire(UnitTypes.TERRAN_MARINE, 8, MacroData.DesiredUnitCounts))); 
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(49, MacroData), new UnitDesire(UnitTypes.TERRAN_SIEGETANK, 2, MacroData.DesiredUnitCounts)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(49, MacroData), new UnitDesire(UnitTypes.TERRAN_MARINE, 8, MacroData.DesiredUnitCounts)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(54, MacroData), new UnitDesire(UnitTypes.TERRAN_RAVEN, 1, MacroData.DesiredUnitCounts)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(58, MacroData), new SupplyDepotDesire(8, MacroData)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(58, MacroData), new UnitDesire(UnitTypes.TERRAN_MARINE, 9, MacroData.DesiredUnitCounts))); 
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(59, MacroData), new UnitDesire(UnitTypes.TERRAN_MARINE, 10, MacroData.DesiredUnitCounts))); 
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(55, MacroData), new UnitDesire(UnitTypes.TERRAN_SIEGETANK, 3, MacroData.DesiredUnitCounts))); 
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(58, MacroData), new UnitDesire(UnitTypes.TERRAN_MARINE, 9, MacroData.DesiredUnitCounts)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(59, MacroData), new UnitDesire(UnitTypes.TERRAN_MARINE, 10, MacroData.DesiredUnitCounts)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(55, MacroData), new UnitDesire(UnitTypes.TERRAN_SIEGETANK, 3, MacroData.DesiredUnitCounts)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(66, MacroData), new ProductionStructureDesire(UnitTypes.TERRAN_COMMANDCENTER, 3, MacroData)));
 
 
@@ -147,7 +147,7 @@ namespace StarCraft2Bot.Builds
                 openingAttackChatSent = true;
             }
         }
-            
+
         public override void OnFrame(ResponseObservation observation)
         {
             base.OnFrame(observation);
