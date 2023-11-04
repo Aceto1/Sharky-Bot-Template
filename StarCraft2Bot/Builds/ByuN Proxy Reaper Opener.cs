@@ -89,8 +89,8 @@ namespace StarCraft2Bot.Builds
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(13, MacroData), new SupplyDepotDesire(1, MacroData)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(15, MacroData), new ProxyProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 2, MacroData, proxyTask.ProxyName)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(16, MacroData), new GasBuildingCountDesire(1, MacroData)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(16, MacroData), new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 2, MacroData)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(17, MacroData), new GasBuildingCountDesire(2, MacroData)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(18, MacroData), new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 1, MacroData)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(18, MacroData), new GasBuildingCountDesire(2, MacroData)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(18, MacroData), new UnitDesire(UnitTypes.TERRAN_REAPER, 1, MacroData.DesiredUnitCounts)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(18, MacroData), new MorphDesire(UnitTypes.TERRAN_ORBITALCOMMAND, 1, MacroData)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(19, MacroData), new UnitDesire(UnitTypes.TERRAN_SCV, 44, MacroData.DesiredUnitCounts)));
