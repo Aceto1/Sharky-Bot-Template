@@ -19,7 +19,6 @@ namespace StarCraft2Bot.Builds.Base.Desires
             if (Enforced)
                 return;
 
-            // Assuming the MacroData has a method or property to set the desired morph counts
             Data.DesiredUpgrades[TargetType] = true;
 
             Enforced = true;

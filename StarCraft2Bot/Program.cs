@@ -21,7 +21,7 @@ namespace StarCraft2Bot
 
             var map = maps.GetRandomEntry();
 
-            return gameConnection.RunSinglePlayer(exampleBot, $"{Enum.GetName(map)}AIE.SC2Map", Race.Terran, Race.Terran, Difficulty.Medium, AIBuild.RandomBuild, startupPort, realTime: true);
+            return gameConnection.RunSinglePlayer(exampleBot, $"{Enum.GetName(map)}AIE.SC2Map", Race.Terran, Race.Terran, Difficulty.CheatInsane, AIBuild.RandomBuild, startupPort, realTime: false);
         }
 
         static void Main(string[] args)
@@ -44,7 +44,11 @@ namespace StarCraft2Bot
             var maps = new List<Map>()
             {
                 Map.InsideAndOut,
-                Map.Stargazers
+                Map.Stargazers,
+                Map.Hardwire,
+                Map.Waterfall,
+                Map.Berlingrad,
+                Map.Moondance
             };
 
             for (int i = 0; i < instanceCount; i++)

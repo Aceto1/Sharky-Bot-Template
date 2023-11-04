@@ -20,49 +20,40 @@ namespace StarCraft2Bot
 
         public BuildChoices GetBuildChoices()
         {
-            //var reaperCheese = new ReaperOpener(defaultSharkyBot, scvMicroController);
-
-            //var builds = new Dictionary<string, ISharkyBuild>
-            //{
-            //    [reaperCheese.Name()] = reaperCheese,
-            //};
-
-            //var defaultSequences = new List<List<string>>
-            //{
-            //    new List<string> { reaperCheese.Name() },
-            //};
-
-            //// INFO: The "Transition" entry should usually contain something other than the same builds over again
-            //var buildSequences = new Dictionary<string, List<List<string>>>
-            //{
-            //    [Race.Terran.ToString()] = defaultSequences,
-            //    ["Transition"] = defaultSequences
-            //};
-
-            var reaperCheese = new TvTOpener(defaultSharkyBot);
-            var reaperCheese2 = new SaltyMarines(defaultSharkyBot, scvMicroController);
+            var reaperCheese = new ReaperOpener(defaultSharkyBot, scvMicroController);
+            var saltyMarines = new SaltyMarines(defaultSharkyBot, scvMicroController);
+            var tvTOpener = new TvTOpener(defaultSharkyBot, scvMicroController);
 
             var builds = new Dictionary<string, ISharkyBuild>
             {
-                [reaperCheese.Name()] = reaperCheese,
-                [reaperCheese2.Name()] = reaperCheese2,
+                //[reaperCheese.Name()] = reaperCheese,
+                [saltyMarines.Name()] = saltyMarines,
+                [tvTOpener.Name()] = tvTOpener,
+            };
+            var transitions = new List<List<string>>
+            {
+                new List<string> { saltyMarines.Name() },
             };
 
             var defaultSequences = new List<List<string>>
             {
-                new List<string> { reaperCheese.Name() },
+                new List<string> {
+                    tvTOpener.Name(),
+                },
             };
 
-            var defaultSequences2 = new List<List<string>>
+            var cheeseSequences = new List<List<string>>
             {
-                new List<string> { reaperCheese2.Name() },
+                 new List<string> {
+                    reaperCheese.Name(),
+                },
             };
 
             // INFO: The "Transition" entry should usually contain something other than the same builds over again
             var buildSequences = new Dictionary<string, List<List<string>>>
             {
                 [Race.Terran.ToString()] = defaultSequences,
-                ["Transition"] = defaultSequences2
+                ["Transition"] = transitions
             };
 
             return new BuildChoices { Builds = builds, BuildSequences = buildSequences };
