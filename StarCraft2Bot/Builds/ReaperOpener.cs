@@ -85,19 +85,30 @@ namespace StarCraft2Bot.Builds
             //MicroTaskData[typeof(AttackTask).Name].Enable();
             //MicroTaskData[typeof(ReaperWorkerHarassTask).Name].Enable();
 
-            AddAction(new BuildAction(new UnitCompletedCountCondition(UnitTypes.TERRAN_BARRACKS, 2, UnitCountService),
+
+            AddAction(new BuildAction(new UnitCountCondition(UnitTypes.TERRAN_REAPER, 1, UnitCountService),
                          new CustomDesire(() => {
+                             proxyTask.Disable();
                              MicroTaskData[typeof(WorkerScoutTask).Name].Enable();
                              MicroTaskData[typeof(AttackTask).Name].Enable();
                              MicroTaskData[typeof(ReaperWorkerHarassTask).Name].Enable();
                          })));
 
+            AddAction(new BuildAction(new EnemyUnitCountCondition(UnitTypes.TERRAN_MARINE, 2, UnitCountService),
+                         new CustomDesire(() =>
+                         {
+                             MicroTaskData[typeof(WorkerScoutTask).Name].Disable();
+                             MicroTaskData[typeof(ReaperWorkerHarassTask).Name].Disable();
+
+                         })));
+
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(14, MacroData), new SupplyDepotDesire(1, MacroData)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(15, MacroData), new ProxyProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 1, MacroData, proxyTask.ProxyName)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(15, MacroData), new GasBuildingCountDesire(1, MacroData)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(16, MacroData), new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 2, MacroData)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(16, MacroData), new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 1, MacroData)));
+            //BuildOrder.Enqueue(new BuildAction(new UnitCountCondition(UnitTypes.TERRAN_BARRACKS,1, UnitCountService), new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 1, MacroData)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(17, MacroData), new UnitDesire(UnitTypes.TERRAN_REAPER,1, MacroData.DesiredUnitCounts)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(17, MacroData), new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 3, MacroData)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(17, MacroData), new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 2, MacroData)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(18, MacroData), new GasBuildingCountDesire(2, MacroData)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(19, MacroData), new UnitDesire(UnitTypes.TERRAN_REAPER, 2, MacroData.DesiredUnitCounts)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(20, MacroData), new MorphDesire(UnitTypes.TERRAN_ORBITALCOMMAND, 1, MacroData)));
