@@ -3,7 +3,7 @@
     public enum Map
     {
         Berlingrad,
-        Hardware,
+        Hardwire,
         InsideAndOut,
         Moondance,
         Stargazers,

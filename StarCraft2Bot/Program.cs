@@ -44,7 +44,11 @@ namespace StarCraft2Bot
             var maps = new List<Map>()
             {
                 Map.InsideAndOut,
-                Map.Stargazers
+                Map.Stargazers,
+                Map.Hardwire,
+                Map.Waterfall,
+                Map.Berlingrad,
+                Map.Moondance
             };
 
             for (int i = 0; i < instanceCount; i++)
