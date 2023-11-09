@@ -1,29 +1,30 @@
 ﻿using SC2APIProtocol;
 using Sharky;
 using Sharky.Builds.Terran;
-using Sharky.DefaultBot;
 using Sharky.Helper;
+using StarCraft2Bot.Bot;
 using StarCraft2Bot.Builds.Base.Condition;
 using StarCraft2Bot.Builds.Base.Desires;
-using StarCraft2Bot.Helper;
+using StarCraft2Bot.Database;
+using StarCraft2Bot.Database.Entities;
 
 namespace StarCraft2Bot.Builds.Base
 {
     public class Build : TerranSharkyBuild
     {
-        private const int secondsPerMeasurement = 1;
+        private const int framesBetweenMeasurements = 112;
 
-        private readonly DefaultSharkyBot defaultBot;
+        private int lastMeasurementFrame = 0;
 
-        private int frame = 0;
+        private readonly BaseBot defaultBot;
 
         private readonly List<BuildAction> actions = new();
 
         public bool DoTransition { get; set; }
 
-        public Build(DefaultSharkyBot defaultSharkyBot) : base(defaultSharkyBot)
+        public Build(BaseBot defaultSharkyBot) : base(defaultSharkyBot)
         {
-            this.defaultBot = defaultSharkyBot;
+            defaultBot = defaultSharkyBot;
         }
 
         public void AddActionOnWorkerCount(ValueRange workerCount, UnitTypes desireUnitType, ValueRange desireCount, Dictionary<UnitTypes, ValueRange>? dataDict = null)
@@ -50,22 +51,19 @@ namespace StarCraft2Bot.Builds.Base
             actions.AddRange(actionArr);
         }
 
-        public override void StartBuild(int frame)
-        {
-            base.StartBuild(frame);
-
-            ValueManager.CurrentBuild = this.GetType().Name;
-        }
-
         public override void OnFrame(ResponseObservation observation)
         {
             base.OnFrame(observation);
 
-            frame++;
-
-            if (frame % (defaultBot.SharkyOptions.FramesPerSecond * secondsPerMeasurement) == 0)
+            if (lastMeasurementFrame == 0 && defaultBot.Frame > framesBetweenMeasurements * 2)
             {
-                Measure();
+                lastMeasurementFrame = defaultBot.Frame - defaultBot.Frame % framesBetweenMeasurements;
+            }
+
+            if (defaultBot.Frame >= lastMeasurementFrame + framesBetweenMeasurements)
+            {
+                lastMeasurementFrame = defaultBot.Frame;
+                Measure(defaultBot.Frame);
             }
 
             foreach (var action in actions)
@@ -83,9 +81,37 @@ namespace StarCraft2Bot.Builds.Base
             return base.Transition(frame);
         }
 
-        private void Measure()
+        private void Measure(int frame)
         {
-            //TODO: Measure current state
+            var dataPoint = new DataPoint()
+            {
+                GameId = CustomSharkyBot.GameId,
+                CurrentBuild = GetType().Name,
+                IngameSeconds = (int)(frame / defaultBot.SharkyOptions.FramesPerSecond),
+
+                CurrentMinerals = MacroData.Minerals,
+                CurrentVespene = MacroData.VespeneGas,
+
+                TotalMinerals = -1,
+                TotalVespene = -1,
+
+                Supply = MacroData.FoodUsed,
+                WorkerCount = MacroData.FoodWorkers,
+
+                LostVespene = defaultBot.ActiveUnitData.SelfVespeneLost,
+                LostMinerals = defaultBot.ActiveUnitData.SelfMineralsLost,
+                LostUnits = defaultBot.ActiveUnitData.SelfDeaths,
+                LostBuildings = -1,
+
+                KilledMinerals = defaultBot.ActiveUnitData.EnemyMineralsLost,
+                KilledVespene = defaultBot.ActiveUnitData.EnemyVespeneLost,
+                KilledUnits = defaultBot.ActiveUnitData.EnemyDeaths
+            };
+
+            using var ctx = new DatabaseContext();
+
+            ctx.Datapoints.Add(dataPoint);
+            ctx.SaveChanges();
         }
     }
 }

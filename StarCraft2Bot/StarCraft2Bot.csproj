@@ -8,16 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Builds\BansheesAndMarines - Copy.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Sharky\S2ClientProtocol\S2ClientProtocol.csproj" />
     <ProjectReference Include="..\Sharky\Sharky\Sharky.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Builds\BuildServices\" />
+    <ProjectReference Include="..\StarCraft2Bot.Database\StarCraft2Bot.Database.csproj" />
   </ItemGroup>
 
 </Project>
