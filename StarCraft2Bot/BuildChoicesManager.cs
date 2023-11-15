@@ -4,15 +4,16 @@ using Sharky;
 using SC2APIProtocol;
 using Sharky.Builds;
 using StarCraft2Bot.Builds;
+using StarCraft2Bot.Bot;
 
 namespace StarCraft2Bot
 {
     public class BuildChoicesManager
     {
-        private DefaultSharkyBot defaultSharkyBot = null!;
+        private BaseBot defaultSharkyBot = null!;
         private IndividualMicroController scvMicroController = null!;
 
-        public BuildChoicesManager(DefaultSharkyBot newDefaultSharkyBot)
+        public BuildChoicesManager(BaseBot newDefaultSharkyBot)
         {
             defaultSharkyBot = newDefaultSharkyBot;
             scvMicroController = new IndividualMicroController(newDefaultSharkyBot, newDefaultSharkyBot.SharkyAdvancedPathFinder, MicroPriority.JustLive, false);
@@ -21,8 +22,8 @@ namespace StarCraft2Bot
         public BuildChoices GetBuildChoices()
         {
             var reaperCheese = new ReaperOpener(defaultSharkyBot, scvMicroController);
-            var saltyMarines = new SaltyMarines(defaultSharkyBot, scvMicroController);
-            var tvTOpener = new TvTOpener(defaultSharkyBot, scvMicroController);
+            var saltyMarines = new SaltyMarines(defaultSharkyBot);
+            var tvTOpener = new TvTOpener(defaultSharkyBot);
 
             var builds = new Dictionary<string, ISharkyBuild>
             {
