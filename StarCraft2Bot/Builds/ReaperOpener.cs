@@ -9,6 +9,8 @@ using Sharky;
 using StarCraft2Bot.Builds.Base;
 using StarCraft2Bot.Builds.Base.Desires;
 using StarCraft2Bot.Builds.Base.Condition;
+using Sharky.Managers;
+using Sharky.MicroTasks.Attack;
 
 namespace StarCraft2Bot.Builds
 {
@@ -28,6 +30,18 @@ namespace StarCraft2Bot.Builds
             {
                 ProxyName = nameof(ReaperOpener)
             };
+
+            defaultSharkyBot.MicroController = new AdvancedMicroController(defaultSharkyBot);
+            var advancedAttackTask = new AdvancedAttackTask(defaultSharkyBot, new EnemyCleanupService(defaultSharkyBot.MicroController, defaultSharkyBot.DamageService), new List<UnitTypes> { UnitTypes.TERRAN_REAPER, UnitTypes.TERRAN_MARINE }, 2f, true);
+            defaultSharkyBot.MicroTaskData[typeof(AttackTask).Name] = advancedAttackTask;
+            var advancedAttackService = new AdvancedAttackService(defaultSharkyBot, advancedAttackTask);
+            var advancedAttackDataManager = new AdvancedAttackDataManager(defaultSharkyBot, advancedAttackService, advancedAttackTask);
+            defaultSharkyBot.AttackDataManager = advancedAttackDataManager;
+            defaultSharkyBot.Managers.RemoveAll(m => m.GetType() == typeof(AttackDataManager));
+            defaultSharkyBot.Managers.Add(advancedAttackDataManager);
+
+            
+
 
         }
         /*  
@@ -69,56 +83,84 @@ namespace StarCraft2Bot.Builds
         {
             base.StartBuild(frame);
 
+            AttackData.CustomAttackFunction = true;
+            AttackData.UseAttackDataManager = false;
+            //AttackData.RequireMaxOut = true;
+            //AttackData.AttackWhenMaxedOut = true;
+            //AttackData.RequireBank = true;
+            AttackData.AttackTrigger = 2f;
+            //AttackData.RetreatTrigger = 50f;
+            AttackData.GroupUpEnabled = true;
+            AttackData.KillTrigger = 2f;
+
             BuildOptions.StrictGasCount = true;
             BuildOptions.StrictSupplyCount = true;
             BuildOptions.StrictWorkerCount = true;
 
             MicroTaskData[GetType().Name] = proxyTask;
+            proxyTask.DesiredWorkers = 2;
             var proxyLocation = proxyLocationService.GetCliffProxyLocation();
             MacroData.Proxies[proxyTask.ProxyName] = new ProxyData(proxyLocation, MacroData);
             proxyTask.Enable();
 
             BuildOrder = new Queue<BuildAction>();
-            MacroData.DesiredUnitCounts[UnitTypes.TERRAN_SCV] = 21;
+            MacroData.DesiredUnitCounts[UnitTypes.TERRAN_SCV] = 12;
+            MacroData.DesiredUnitCounts[UnitTypes.TERRAN_REAPER] = 10;
 
-            //MicroTaskData[typeof(WorkerScoutTask).Name].Enable();
-            //MicroTaskData[typeof(AttackTask).Name].Enable();
-            //MicroTaskData[typeof(ReaperWorkerHarassTask).Name].Enable();
-
-
-            AddAction(new BuildAction(new UnitCountCondition(UnitTypes.TERRAN_REAPER, 1, UnitCountService),
+            AddAction(new BuildAction(new UnitCompletedCountCondition(UnitTypes.TERRAN_REAPER, 1, UnitCountService,ConditionOperator.GreaterOrEqual),
                          new CustomDesire(() => {
-                             proxyTask.Disable();
-                             MicroTaskData[typeof(WorkerScoutTask).Name].Enable();
-                             MicroTaskData[typeof(AttackTask).Name].Enable();
-                             MicroTaskData[typeof(ReaperWorkerHarassTask).Name].Enable();
+                             SetAttack();
                          })));
 
-            AddAction(new BuildAction(new EnemyUnitCountCondition(UnitTypes.TERRAN_MARINE, 2, UnitCountService),
+            //AddAction(new BuildAction(new EnemyHasUnitTypeCondition(UnitTypes.TERRAN_MARINE, UnitCountService),
+            //             new CustomDesire(() => {
+            //                 SetAttack();
+            //                 MicroTaskData[typeof(ReaperWorkerHarassTask).Name].Disable();
+            //             })));
+
+            AddAction(new BuildAction(new UnitCompletedCountCondition(UnitTypes.TERRAN_BARRACKS, 1, UnitCountService),
                          new CustomDesire(() =>
                          {
-                             MicroTaskData[typeof(WorkerScoutTask).Name].Disable();
-                             MicroTaskData[typeof(ReaperWorkerHarassTask).Name].Disable();
-
+                             proxyTask.Disable();
+                             MicroTaskData[typeof(WorkerScoutTask).Name].Enable();
                          })));
 
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(14, MacroData), new SupplyDepotDesire(1, MacroData)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(15, MacroData), new ProxyProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 1, MacroData, proxyTask.ProxyName)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(15, MacroData), new GasBuildingCountDesire(1, MacroData)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(16, MacroData), new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 1, MacroData)));
+            AddAction(new BuildAction(new UnitCountCondition(UnitTypes.TERRAN_BARRACKS, 2, UnitCountService),
+                         new CustomDesire(() =>
+                         {
+                             MacroData.DesiredUnitCounts[UnitTypes.TERRAN_SCV] = 21;
+                             MacroData.DesiredUnitCounts[UnitTypes.TERRAN_REAPER] = 10;
+                         })));
+            AddAction(new BuildAction(new UnitCountCondition(UnitTypes.TERRAN_BARRACKS, 1, UnitCountService),
+                        new CustomDesire(() =>
+                        {
+                            MacroData.DesiredUnitCounts[UnitTypes.TERRAN_SCV] = 15;
+                        })));
+
+            //AddAction(new BuildAction(new EnemyUnitCountCondition(UnitTypes.TERRAN_MARINE, 2, UnitCountService),
+            //             new CustomDesire(() =>
+            //             {
+            //                 MicroTaskData[typeof(WorkerScoutTask).Name].Disable();
+            //                 MicroTaskData[typeof(ReaperWorkerHarassTask).Name].Disable();
+            //             })));
+
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(12, MacroData), new SupplyDepotDesire(1, MacroData)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(12, MacroData), new ProxyProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 1, MacroData, proxyTask.ProxyName)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(13, MacroData), new GasBuildingCountDesire(1, MacroData)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(14, MacroData), new ProxyProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 2, MacroData, proxyTask.ProxyName)));
             //BuildOrder.Enqueue(new BuildAction(new UnitCountCondition(UnitTypes.TERRAN_BARRACKS,1, UnitCountService), new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 1, MacroData)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(17, MacroData), new UnitDesire(UnitTypes.TERRAN_REAPER,1, MacroData.DesiredUnitCounts)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(17, MacroData), new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 2, MacroData)));
+            //BuildOrder.Enqueue(new BuildAction(new SupplyCondition(17, MacroData), new UnitDesire(UnitTypes.TERRAN_REAPER,1, MacroData.DesiredUnitCounts)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(17, MacroData), new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 3, MacroData)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(18, MacroData), new GasBuildingCountDesire(2, MacroData)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(19, MacroData), new UnitDesire(UnitTypes.TERRAN_REAPER, 2, MacroData.DesiredUnitCounts)));
+            //BuildOrder.Enqueue(new BuildAction(new SupplyCondition(19, MacroData), new UnitDesire(UnitTypes.TERRAN_REAPER, 2, MacroData.DesiredUnitCounts)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(20, MacroData), new MorphDesire(UnitTypes.TERRAN_ORBITALCOMMAND, 1, MacroData)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(20, MacroData), new UnitDesire(UnitTypes.TERRAN_REAPER, 4, MacroData.DesiredUnitCounts)));
+            //BuildOrder.Enqueue(new BuildAction(new SupplyCondition(20, MacroData), new UnitDesire(UnitTypes.TERRAN_REAPER, 4, MacroData.DesiredUnitCounts)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(21, MacroData), new SupplyDepotDesire(2, MacroData)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(21, MacroData), new UnitDesire(UnitTypes.TERRAN_REAPER, 5, MacroData.DesiredUnitCounts)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(23, MacroData), new UnitDesire(UnitTypes.TERRAN_REAPER, 7, MacroData.DesiredUnitCounts)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(24, MacroData), new UnitDesire(UnitTypes.TERRAN_REAPER, 9, MacroData.DesiredUnitCounts)));
+            //BuildOrder.Enqueue(new BuildAction(new SupplyCondition(21, MacroData), new UnitDesire(UnitTypes.TERRAN_REAPER, 5, MacroData.DesiredUnitCounts)));
+            //BuildOrder.Enqueue(new BuildAction(new SupplyCondition(23, MacroData), new UnitDesire(UnitTypes.TERRAN_REAPER, 7, MacroData.DesiredUnitCounts)));
+            //BuildOrder.Enqueue(new BuildAction(new SupplyCondition(24, MacroData), new UnitDesire(UnitTypes.TERRAN_REAPER, 9, MacroData.DesiredUnitCounts)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(25, MacroData), new ProductionStructureDesire(UnitTypes.TERRAN_FACTORY, 1, MacroData)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(25, MacroData), new UnitDesire(UnitTypes.TERRAN_REAPER, 10, MacroData.DesiredUnitCounts)));
+            //BuildOrder.Enqueue(new BuildAction(new SupplyCondition(25, MacroData), new UnitDesire(UnitTypes.TERRAN_REAPER, 10, MacroData.DesiredUnitCounts)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(28, MacroData), new SupplyDepotDesire(3, MacroData)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(28, MacroData), new AddonStructureDesire(UnitTypes.TERRAN_FACTORYTECHLAB, 1, MacroData)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(29, MacroData), new ProductionStructureDesire(UnitTypes.TERRAN_COMMANDCENTER, 1, MacroData)));
@@ -129,15 +171,18 @@ namespace StarCraft2Bot.Builds
             return (int)((minutes * 60 + seconds) * 22.4);
         }
 
-        /*void SetAttack()
+        void SetAttack()
         {
             AttackData.Attacking = true;
+            MicroTaskData[typeof(AdvancedAttackTask).Name].Enable();
+            MicroTaskData[typeof(ReaperWorkerHarassTask).Name].Enable();
+
             if (!openingAttackChatSent)
             {
                 ChatService.SendChatType($"{nameof(ReaperOpener)}-FirstAttack");
                 openingAttackChatSent = true;
             }
-        }*/
+        }
 
         public override void OnFrame(ResponseObservation observation)
         {
