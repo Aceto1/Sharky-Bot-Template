@@ -88,7 +88,7 @@ namespace StarCraft2Bot.Builds
             //AttackData.RequireMaxOut = true;
             //AttackData.AttackWhenMaxedOut = true;
             //AttackData.RequireBank = true;
-            AttackData.AttackTrigger = 2f;
+            AttackData.AttackTrigger = 1f;
             //AttackData.RetreatTrigger = 50f;
             AttackData.GroupUpEnabled = true;
             AttackData.KillTrigger = 2f;
@@ -105,9 +105,12 @@ namespace StarCraft2Bot.Builds
 
             BuildOrder = new Queue<BuildAction>();
             MacroData.DesiredUnitCounts[UnitTypes.TERRAN_SCV] = 12;
-            MacroData.DesiredUnitCounts[UnitTypes.TERRAN_REAPER] = 10;
+            MacroData.DesiredUnitCounts[UnitTypes.TERRAN_MARINE] = 3;
+            MacroData.DesiredUnitCounts[UnitTypes.TERRAN_REAPER] = 5;
 
-            AddAction(new BuildAction(new UnitCompletedCountCondition(UnitTypes.TERRAN_REAPER, 1, UnitCountService,ConditionOperator.GreaterOrEqual),
+            // TODO: Marines are not building equally to reapers, attackmanager still buggy, marines are good, maybe 3 rax proxy but not sure
+
+            AddAction(new BuildAction(new UnitCompletedCountCondition(UnitTypes.TERRAN_REAPER, 1, UnitCountService),
                          new CustomDesire(() => {
                              SetAttack();
                          })));
@@ -121,7 +124,7 @@ namespace StarCraft2Bot.Builds
             AddAction(new BuildAction(new UnitCompletedCountCondition(UnitTypes.TERRAN_BARRACKS, 1, UnitCountService),
                          new CustomDesire(() =>
                          {
-                             proxyTask.Disable();
+                             proxyTask.DesiredWorkers = 1;
                              MicroTaskData[typeof(WorkerScoutTask).Name].Enable();
                          })));
 
@@ -150,7 +153,7 @@ namespace StarCraft2Bot.Builds
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(14, MacroData), new ProxyProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 2, MacroData, proxyTask.ProxyName)));
             //BuildOrder.Enqueue(new BuildAction(new UnitCountCondition(UnitTypes.TERRAN_BARRACKS,1, UnitCountService), new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 1, MacroData)));
             //BuildOrder.Enqueue(new BuildAction(new SupplyCondition(17, MacroData), new UnitDesire(UnitTypes.TERRAN_REAPER,1, MacroData.DesiredUnitCounts)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(17, MacroData), new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 3, MacroData)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(17, MacroData), new ProxyProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 3, MacroData,proxyTask.ProxyName)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(18, MacroData), new GasBuildingCountDesire(2, MacroData)));
             //BuildOrder.Enqueue(new BuildAction(new SupplyCondition(19, MacroData), new UnitDesire(UnitTypes.TERRAN_REAPER, 2, MacroData.DesiredUnitCounts)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(20, MacroData), new MorphDesire(UnitTypes.TERRAN_ORBITALCOMMAND, 1, MacroData)));
