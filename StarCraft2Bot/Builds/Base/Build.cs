@@ -16,7 +16,7 @@ namespace StarCraft2Bot.Builds.Base
 
         private int lastMeasurementFrame = 0;
 
-        private readonly BaseBot defaultBot;
+        protected readonly BaseBot DefaultBot;
 
         private readonly List<BuildAction> actions = new();
 
@@ -24,7 +24,7 @@ namespace StarCraft2Bot.Builds.Base
 
         public Build(BaseBot defaultSharkyBot) : base(defaultSharkyBot)
         {
-            defaultBot = defaultSharkyBot;
+            DefaultBot = defaultSharkyBot;
         }
 
         public void AddActionOnWorkerCount(ValueRange workerCount, UnitTypes desireUnitType, ValueRange desireCount, Dictionary<UnitTypes, ValueRange>? dataDict = null)
@@ -55,15 +55,15 @@ namespace StarCraft2Bot.Builds.Base
         {
             base.OnFrame(observation);
 
-            if (lastMeasurementFrame == 0 && defaultBot.Frame > framesBetweenMeasurements * 2)
+            if (lastMeasurementFrame == 0 && DefaultBot.Frame > framesBetweenMeasurements * 2)
             {
-                lastMeasurementFrame = defaultBot.Frame - defaultBot.Frame % framesBetweenMeasurements;
+                lastMeasurementFrame = DefaultBot.Frame - DefaultBot.Frame % framesBetweenMeasurements;
             }
 
-            if (defaultBot.Frame >= lastMeasurementFrame + framesBetweenMeasurements)
+            if (DefaultBot.Frame >= lastMeasurementFrame + framesBetweenMeasurements)
             {
-                lastMeasurementFrame = defaultBot.Frame;
-                Measure(defaultBot.Frame);
+                lastMeasurementFrame = DefaultBot.Frame;
+                Measure(DefaultBot.Frame);
             }
 
             foreach (var action in actions)
@@ -87,7 +87,7 @@ namespace StarCraft2Bot.Builds.Base
             {
                 GameId = CustomSharkyBot.GameId,
                 CurrentBuild = GetType().Name,
-                IngameSeconds = (int)(frame / defaultBot.SharkyOptions.FramesPerSecond),
+                IngameSeconds = (int)(frame / DefaultBot.SharkyOptions.FramesPerSecond),
 
                 CurrentMinerals = MacroData.Minerals,
                 CurrentVespene = MacroData.VespeneGas,
@@ -98,14 +98,14 @@ namespace StarCraft2Bot.Builds.Base
                 Supply = MacroData.FoodUsed,
                 WorkerCount = MacroData.FoodWorkers,
 
-                LostVespene = defaultBot.ActiveUnitData.SelfVespeneLost,
-                LostMinerals = defaultBot.ActiveUnitData.SelfMineralsLost,
-                LostUnits = defaultBot.ActiveUnitData.SelfDeaths,
+                LostVespene = DefaultBot.ActiveUnitData.SelfVespeneLost,
+                LostMinerals = DefaultBot.ActiveUnitData.SelfMineralsLost,
+                LostUnits = DefaultBot.ActiveUnitData.SelfDeaths,
                 LostBuildings = -1,
 
-                KilledMinerals = defaultBot.ActiveUnitData.EnemyMineralsLost,
-                KilledVespene = defaultBot.ActiveUnitData.EnemyVespeneLost,
-                KilledUnits = defaultBot.ActiveUnitData.EnemyDeaths
+                KilledMinerals = DefaultBot.ActiveUnitData.EnemyMineralsLost,
+                KilledVespene = DefaultBot.ActiveUnitData.EnemyVespeneLost,
+                KilledUnits = DefaultBot.ActiveUnitData.EnemyDeaths
             };
 
             using var ctx = new DatabaseContext();
