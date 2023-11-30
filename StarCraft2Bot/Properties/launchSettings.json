@@ -2,7 +2,7 @@
   "profiles": {
     "StarCraft2Bot": {
       "commandName": "Project",
-      "commandLineArgs": "-instances 1"
+      "commandLineArgs": "-instances 1 -endless"
     }
   }
 }

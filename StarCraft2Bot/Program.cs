@@ -1,7 +1,9 @@
-﻿using SC2APIProtocol;
+﻿using System.Diagnostics;
+using SC2APIProtocol;
 using Sharky;
-using Sharky.DefaultBot;
+using StarCraft2Bot.Bot;
 using StarCraft2Bot.Helper;
+using System.Net.NetworkInformation;
 
 namespace StarCraft2Bot
 {
@@ -9,19 +11,42 @@ namespace StarCraft2Bot
     {
         private static int startupPort = 5000;
 
-        public static Task StartSinglePlayerGame(List<Map> maps)
+        private static bool CheckPort(int startupPort)
+        {
+            bool isAvailable = true;
+
+            // Evaluate current system tcp connections. This is the same information provided
+            // by the netstat command line application, just in .Net strongly-typed object
+            // form.  We will look through the list, and if our port we would like to use
+            // in our TcpClient is occupied, we will set isAvailable to false.
+            IPGlobalProperties ipGlobalProperties = IPGlobalProperties.GetIPGlobalProperties();
+            TcpConnectionInformation[] tcpConnInfoArray = ipGlobalProperties.GetActiveTcpConnections();
+
+            foreach (TcpConnectionInformation tcpi in tcpConnInfoArray)
+            {
+                if (tcpi.LocalEndPoint.Port >= startupPort && tcpi.LocalEndPoint.Port <= startupPort + 5)
+                {
+                    isAvailable = false;
+                    break;
+                }
+            }
+
+            return isAvailable;
+        }
+
+        public static Task<Process> StartSinglePlayerGame(List<Map> maps)
         {
             var gameConnection = new GameConnection();
-            var defaultSharkyBot = new DefaultSharkyBot(gameConnection);
+            var defaultSharkyBot = new BaseBot(gameConnection);
             defaultSharkyBot.BuildChoices[Race.Terran] = new BuildChoicesManager(defaultSharkyBot).GetBuildChoices();
-
             var exampleBot = defaultSharkyBot.CreateBot(defaultSharkyBot.Managers, defaultSharkyBot.DebugService);
             
-            startupPort += 5;
+            while(!CheckPort(startupPort))
+                startupPort += 5;
 
             var map = maps.GetRandomEntry();
 
-            return gameConnection.RunSinglePlayer(exampleBot, $"{Enum.GetName(map)}AIE.SC2Map", Race.Terran, Race.Terran, Difficulty.Hard, AIBuild.RandomBuild, startupPort, realTime: true);
+            return gameConnection.RunSinglePlayer(exampleBot, $"{Enum.GetName(map)}AIE.SC2Map", Race.Terran, Race.Terran, Difficulty.CheatInsane, AIBuild.RandomBuild, startupPort, realTime: false);
         }
 
         static void Main(string[] args)
@@ -31,32 +56,35 @@ namespace StarCraft2Bot
             Console.WriteLine("Setting up AI...");
             ValueCallbackService.Init(ValueManager.GetValue);
 
-            Console.WriteLine("Starting bot(s)...");
+            Console.WriteLine("Starting bot...");
 
-            var games = new List<Task>();
-            var instanceCount = 1;
-
-            if (args.Length > 0 && args.FirstOrDefault() == "-instances")
-            {
-                instanceCount = Int32.Parse(args[1]);
-            }
+            var endless = args.Contains("-endless");
 
             var maps = new List<Map>()
             {
                 Map.InsideAndOut,
-                //Map.Stargazers,
-                //Map.Hardwire,
-                //Map.Waterfall,
-                //Map.Berlingrad,
-                //Map.Moondance
+                Map.Stargazers,
+                // Map.Hardwire,
+                Map.Waterfall,
+                Map.Berlingrad,
+                Map.Moondance
             };
 
-            for (int i = 0; i < instanceCount; i++)
-            {
-                games.Add(StartSinglePlayerGame(maps));
-            }
+            if(endless)
+                Console.WriteLine("Running in endless mode...");
 
-             Task.WaitAll(games.ToArray());
+            do
+            {
+                var game = StartSinglePlayerGame(maps);
+
+                while (!game.IsCompleted)
+                {
+                    Thread.Sleep(50);
+                }
+              
+                Thread.Sleep(500);
+                game.Result.Kill();
+            } while (endless);
         }
     }
 }

@@ -2,21 +2,21 @@
 {
     public class TransitionDesire : IDesire
     {
-        public TransitionDesire(Build build)
+        public TransitionDesire(Build currentBuild)
         {
-            Build = build;
+            CurrentBuild = currentBuild;
         }
 
         public bool Enforced { get; set; }
 
-        public Build Build { get; set; }
+        public Build CurrentBuild { get; set; }
 
         public void Enforce()
         {
             if (Enforced)
                 return;
 
-            Build.DoTransition = true;
+            CurrentBuild.DoTransition = true;
 
             Enforced = true;
         }

@@ -16,6 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarCraft2Bot.Database", "StarCraft2Bot.Database\StarCraft2Bot.Database.csproj", "{F876EE7F-CE42-4A40-BC28-DE397563B1A5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +36,10 @@ Global
 		{B38D4EB3-F42B-4D08-BDAC-1C741D7079C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B38D4EB3-F42B-4D08-BDAC-1C741D7079C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B38D4EB3-F42B-4D08-BDAC-1C741D7079C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F876EE7F-CE42-4A40-BC28-DE397563B1A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F876EE7F-CE42-4A40-BC28-DE397563B1A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F876EE7F-CE42-4A40-BC28-DE397563B1A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F876EE7F-CE42-4A40-BC28-DE397563B1A5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
