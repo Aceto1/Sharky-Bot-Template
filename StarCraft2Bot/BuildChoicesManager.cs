@@ -21,13 +21,14 @@ namespace StarCraft2Bot
 
         public BuildChoices GetBuildChoices()
         {
+
             var reaperCheese = new ReaperOpener(defaultSharkyBot, scvMicroController);
             var saltyMarines = new SaltyMarines(defaultSharkyBot);
             var tvTOpener = new TvTOpener(defaultSharkyBot);
 
             var builds = new Dictionary<string, ISharkyBuild>
             {
-                //[reaperCheese.Name()] = reaperCheese,
+                [reaperCheese.Name()] = reaperCheese,
                 [saltyMarines.Name()] = saltyMarines,
                 [tvTOpener.Name()] = tvTOpener,
             };
@@ -53,7 +54,7 @@ namespace StarCraft2Bot
             // INFO: The "Transition" entry should usually contain something other than the same builds over again
             var buildSequences = new Dictionary<string, List<List<string>>>
             {
-                [Race.Terran.ToString()] = defaultSequences,
+                [Race.Terran.ToString()] = cheeseSequences,
                 ["Transition"] = transitions
             };
 
