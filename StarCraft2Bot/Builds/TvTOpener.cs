@@ -1,11 +1,9 @@
 ﻿using SC2APIProtocol;
 using Sharky;
-using Sharky.DefaultBot;
 using Sharky.MicroControllers;
 using Sharky.MicroTasks;
 using StarCraft2Bot.Bot;
 using Sharky.MicroTasks.Attack;
-using Sharky.Proxy;
 using StarCraft2Bot.Builds.Base;
 using StarCraft2Bot.Builds.Base.Condition;
 using StarCraft2Bot.Builds.Base.Desires;
@@ -19,8 +17,8 @@ namespace StarCraft2Bot.Builds
         public TvTOpener(BaseBot defaultSharkyBot) : base(defaultSharkyBot)
         {
             defaultSharkyBot.MicroController = new AdvancedMicroController(defaultSharkyBot);
-            var advancedAttackTask = new AdvancedAttackTask(defaultSharkyBot, new EnemyCleanupService(defaultSharkyBot.MicroController, defaultSharkyBot.DamageService), new List<UnitTypes> { UnitTypes.TERRAN_MARINE }, 100f, true);
-            defaultSharkyBot.MicroTaskData[typeof(AttackTask).Name] = advancedAttackTask;
+            var advancedAttackTask = new AdvancedAttackTask(defaultSharkyBot, new EnemyCleanupService(defaultSharkyBot.MicroController, defaultSharkyBot.DamageService), new List<UnitTypes> { UnitTypes.TERRAN_MARINE }, 100f);
+            defaultSharkyBot.MicroTaskData[nameof(AttackTask)] = advancedAttackTask;
         }
 
         public override void StartBuild(int frame)
@@ -36,8 +34,8 @@ namespace StarCraft2Bot.Builds
 
             AddAction(new BuildAction(new UnitCompletedCountCondition(UnitTypes.TERRAN_SUPPLYDEPOT, 1, UnitCountService),
                           new CustomDesire(() => {
-                              MicroTaskData[typeof(WorkerScoutTask).Name].Enable();
-                              MicroTaskData[typeof(AttackTask).Name].Enable();
+                              MicroTaskData[nameof(WorkerScoutTask)].Enable();
+                              MicroTaskData[nameof(AttackTask)].Enable();
                           })));
 
             BuildOrder = new Queue<BuildAction>();
