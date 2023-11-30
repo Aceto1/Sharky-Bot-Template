@@ -1,7 +1,5 @@
 ﻿using SC2APIProtocol;
 using Sharky.Builds;
-using Sharky.Chat;
-using Sharky.DefaultBot;
 using Sharky.MicroControllers;
 using Sharky.MicroTasks;
 using Sharky.Proxy;
@@ -11,29 +9,30 @@ using StarCraft2Bot.Builds.Base.Desires;
 using StarCraft2Bot.Builds.Base.Condition;
 using Sharky.Managers;
 using Sharky.MicroTasks.Attack;
+using StarCraft2Bot.Bot;
 
 namespace StarCraft2Bot.Builds
 {
     public class ReaperOpener : Build
     {
         private readonly ProxyLocationService proxyLocationService;
-        private bool openingAttackChatSent;
         private readonly ProxyTask proxyTask;
 
         private Queue<BuildAction>? BuildOrder { get; set; }
-        
-        public ReaperOpener(DefaultSharkyBot defaultSharkyBot, IIndividualMicroController scvMicroController) : base(defaultSharkyBot)
+
+        public ReaperOpener(BaseBot defaultSharkyBot, IIndividualMicroController scvMicroController) : base(defaultSharkyBot)
         {
             proxyLocationService = defaultSharkyBot.ProxyLocationService;
-            openingAttackChatSent = false;
             proxyTask = new ProxyTask(defaultSharkyBot, false, 0.9f, string.Empty, scvMicroController)
             {
                 ProxyName = nameof(ReaperOpener)
             };
 
             defaultSharkyBot.MicroController = new AdvancedMicroController(defaultSharkyBot);
+
             var advancedAttackTask = new AdvancedAttackTask(defaultSharkyBot, new EnemyCleanupService(defaultSharkyBot.MicroController, defaultSharkyBot.DamageService), new List<UnitTypes> { UnitTypes.TERRAN_REAPER, UnitTypes.TERRAN_MARINE }, 2f, true);
-            defaultSharkyBot.MicroTaskData[typeof(AttackTask).Name] = advancedAttackTask;
+            defaultSharkyBot.MicroTaskData[nameof(AttackTask)] = advancedAttackTask;
+
             var advancedAttackService = new AdvancedAttackService(defaultSharkyBot, advancedAttackTask);
             var advancedAttackDataManager = new AdvancedAttackDataManager(defaultSharkyBot, advancedAttackService, advancedAttackTask);
             defaultSharkyBot.AttackDataManager = advancedAttackDataManager;
@@ -81,9 +80,6 @@ namespace StarCraft2Bot.Builds
 
             AttackData.CustomAttackFunction = true;
             AttackData.UseAttackDataManager = false;
-            //AttackData.RequireMaxOut = true;
-            //AttackData.AttackWhenMaxedOut = true;
-            //AttackData.RequireBank = true;
             AttackData.AttackTrigger = 5f;
             AttackData.RetreatTrigger = 1f;
             AttackData.GroupUpEnabled = true;
@@ -110,7 +106,7 @@ namespace StarCraft2Bot.Builds
                              ChatService.SendChatType($"{nameof(ReaperOpener)}-CANCEL");
                              AttackData.Attacking = false;
                          })));
-            AddAction(new BuildAction(new List<ICondition> { new EnemyUnitCountCondition(UnitTypes.TERRAN_BARRACKS,2, UnitCountService,ConditionOperator.GreaterOrEqual), new UnitCountCondition(UnitTypes.TERRAN_REAPER, 2, UnitCountService, ConditionOperator.Smaller) },
+            AddAction(new BuildAction(new List<ICondition> { new EnemyUnitCountCondition(UnitTypes.TERRAN_BARRACKS, 2, UnitCountService, ConditionOperator.GreaterOrEqual), new UnitCountCondition(UnitTypes.TERRAN_REAPER, 2, UnitCountService, ConditionOperator.Smaller) },
                          new CustomDesire(() =>
                          {
                              ChatService.SendChatType($"{nameof(ReaperOpener)}-CANCEL");
@@ -162,12 +158,6 @@ namespace StarCraft2Bot.Builds
                             MacroData.DesiredUnitCounts[UnitTypes.TERRAN_SCV] = 15;
                         })));
 
-            //AddAction(new BuildAction(new UnitCompletedCountCondition(UnitTypes.TERRAN_SUPPLYDEPOT, 1, UnitCountService),
-            //            new CustomDesire(() =>
-            //            {
-            //                proxyTask.DesiredWorkers = 2;
-            //            })));
-
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(12, MacroData), new SupplyDepotDesire(1, MacroData)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(12, MacroData), new ProxyProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 1, MacroData, proxyTask.ProxyName)));
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(13, MacroData), new GasBuildingCountDesire(1, MacroData)));
@@ -183,23 +173,6 @@ namespace StarCraft2Bot.Builds
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(29, MacroData), new ProductionStructureDesire(UnitTypes.TERRAN_ENGINEERINGBAY, 2, MacroData)));
 
         }
-
-        private int FrameFromTime(int minutes, int seconds)
-        {
-            return (int)((minutes * 60 + seconds) * 22.4);
-        }
-
-        //void SetAttack()
-        //{
-        //    AttackData.Attacking = true;
-        //    //MicroTaskData[typeof(AdvancedAttackTask).Name].Enable();
-
-        //    if (!openingAttackChatSent)
-        //    {
-        //        ChatService.SendChatType($"{nameof(ReaperOpener)}-FirstAttack");
-        //        openingAttackChatSent = true;
-        //    }
-        //}
 
         public override void OnFrame(ResponseObservation observation)
         {
@@ -218,8 +191,6 @@ namespace StarCraft2Bot.Builds
             {
                 proxyTask.DesiredWorkers = 2;
             }
-            
-
 
             var nextAction = BuildOrder.Peek();
 
@@ -232,17 +203,18 @@ namespace StarCraft2Bot.Builds
             ManageAttack();
         }
 
-        private double getEnemyReaperRateCount()
+        private double GetEnemyReaperRateCount()
         {
             return UnitCountService.EquivalentEnemyTypeCount(UnitTypes.TERRAN_MARINE) * 1.25 + UnitCountService.EquivalentEnemyTypeCount(UnitTypes.TERRAN_MARAUDER) * 5 + UnitCountService.EquivalentEnemyTypeCount(UnitTypes.TERRAN_HELLION) * 3;
         }
 
         private void ManageAttack()
         {
-            if (UnitCountService.EquivalentTypeCount(UnitTypes.TERRAN_REAPER) >= getEnemyReaperRateCount() || getEnemyReaperRateCount() >= 0)
+            if (UnitCountService.EquivalentTypeCount(UnitTypes.TERRAN_REAPER) >= GetEnemyReaperRateCount() || GetEnemyReaperRateCount() >= 0)
             {
                 AttackData.Attacking = true;
-            } else
+            }
+            else
             {
                 AttackData.Attacking = false;
             }

@@ -1,7 +1,5 @@
 ﻿using SC2APIProtocol;
 using Sharky.Builds;
-using Sharky.Chat;
-using Sharky.DefaultBot;
 using Sharky.MicroControllers;
 using Sharky.MicroTasks;
 using Sharky.Proxy;
@@ -9,7 +7,6 @@ using Sharky;
 using StarCraft2Bot.Builds.Base;
 using StarCraft2Bot.Builds.Base.Desires;
 using StarCraft2Bot.Builds.Base.Condition;
-using Sharky.Builds.QuickBuilds;
 using StarCraft2Bot.Bot;
 
 namespace StarCraft2Bot.Builds
@@ -22,7 +19,7 @@ namespace StarCraft2Bot.Builds
 
         private Queue<BuildAction>? BuildOrder { get; set; }
 
-        public ReaperOpener(BaseBot defaultSharkyBot, IIndividualMicroController scvMicroController) : base(defaultSharkyBot)
+        public ReaperOpenerOld(BaseBot defaultSharkyBot, IIndividualMicroController scvMicroController) : base(defaultSharkyBot)
         {
             proxyLocationService = defaultSharkyBot.ProxyLocationService;
             openingAttackChatSent = false;
