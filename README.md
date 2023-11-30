@@ -31,6 +31,13 @@ The example should be runnable by opening Visual Studio and hitting F5 (or the g
 Adding a build is as easy as creating a new class in the 'Builds' folder and inheriting the `Build` class. You should now be able to implement all the lifecycle methods. For reference on how this could look, see `Builds/RepaerCheese.cs` or the example in the official [Sharky repo](https://github.com/sharknice/Sharky).
 
 After implementing the class just add it to the builds in the `BuildChoiceManager.cs` file.
+
+## Data
+
+Every 5 seconds ingame a log entry is written to a database located at `C:\Users\{your username}\AppData\Local\StarCraft 2 Bot\sc2bot.db`. This database also contains the results of every played game as well as other telemtry data.
+
+To view this data you can use [DB Browser for SQlite](https://sqlitebrowser.org/).
+
 ## Known Issues
 
 1. `System.AggregateException: 'One or more errors occurred. (An error occurred trying to start process '...' with working directory '...'. File not found.)'`
