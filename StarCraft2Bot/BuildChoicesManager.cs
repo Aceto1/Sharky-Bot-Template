@@ -23,11 +23,13 @@ namespace StarCraft2Bot
 
             var reaperCheese = new ReaperOpener(defaultSharkyBot, scvMicroController);
             var saltyMarines = new SaltyMarines(defaultSharkyBot);
+            var threeCC = new ThreeCC(defaultSharkyBot);
             var tvtOpener = new TvTOpener(defaultSharkyBot);
 
             var builds = new Dictionary<string, ISharkyBuild>
             {
                 [reaperCheese.Name()] = reaperCheese,
+                [threeCC.Name()] = threeCC,
                 [tvtOpener.Name()] = tvtOpener,
                 [saltyMarines.Name()] = saltyMarines
             };
@@ -40,7 +42,8 @@ namespace StarCraft2Bot
             var openers = new List<List<string>>
             {
                 new() { tvtOpener.Name() },
-                new() { reaperCheese.Name() }
+                new() { reaperCheese.Name() },
+                new() { threeCC.Name() }
             };
 
             // INFO: The "Transition" entry should usually contain something other than the same builds over again

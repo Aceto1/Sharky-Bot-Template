@@ -10,12 +10,10 @@ using Sharky.Managers;
 using Sharky.MicroControllers;
 using Sharky.MicroTasks;
 using Sharky.MicroTasks.Attack;
-using Sharky.MicroTasks.Macro;
 using StarCraft2Bot.Bot;
 using StarCraft2Bot.Builds.Base;
 using StarCraft2Bot.Builds.Base.Condition;
 using StarCraft2Bot.Builds.Base.Desires;
-using StarCraft2Bot.Builds.Tasks;
 
 namespace StarCraft2Bot.Builds
 {
@@ -26,7 +24,6 @@ namespace StarCraft2Bot.Builds
          * Bessere Enemy Detection Conditions
          * Drittes CC in Base bauen
          *      ->Wie CC in Base bauen?
-         *      ->Wie CC zum Fliegen bringen (x)
          */
 
         public ThreeCC(BaseBot defaultSharkyBot) : base(defaultSharkyBot)
@@ -76,12 +73,10 @@ namespace StarCraft2Bot.Builds
 
             AttackData.CustomAttackFunction = false;
             AttackData.UseAttackDataManager = true;
-            AttackData.RequireMaxOut = true;
+            AttackData.RequireMaxOut = false;
             AttackData.AttackWhenMaxedOut = false;
             AttackData.RequireBank = false;
-            AttackData.AttackTrigger = 1000f;
-            AttackData.ArmyFoodAttack = 1000;
-            AttackData.AttackWhenOverwhelm = false;
+            AttackData.AttackTrigger = 100f;
             AttackData.RetreatTrigger = 5f;
             AttackData.Attacking = false;
 
