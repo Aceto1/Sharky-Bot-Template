@@ -13,4 +13,10 @@
     <ProjectReference Include="..\StarCraft2Bot.Database\StarCraft2Bot.Database.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Helper\BuildOrders.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

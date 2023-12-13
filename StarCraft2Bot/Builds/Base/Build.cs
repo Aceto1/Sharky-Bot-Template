@@ -18,7 +18,7 @@ namespace StarCraft2Bot.Builds.Base
 
         protected readonly BaseBot DefaultBot;
 
-        private readonly List<BuildAction> actions = new();
+        protected readonly List<BuildAction> actions = new();
 
         public bool DoTransition { get; set; }
 
