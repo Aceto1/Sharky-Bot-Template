@@ -129,7 +129,7 @@ namespace StarCraft2Bot.Helper
                 "Barracks" => new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, amount, data),
                 "Barracks Tech Lab" => new AddonStructureDesire(UnitTypes.TERRAN_TECHLAB, amount, data),
                 "Barracks Reactor" => new AddonStructureDesire(UnitTypes.TERRAN_BARRACKSREACTOR, amount, data),
-                "Combat Shield" => new UnitUpgradeDesire(Upgrades.INVALID, data), //Combat Shield Upgrade not found
+                "Combat Shield" => new UnitUpgradeDesire(Upgrades.SHIELDWALL, data),
                 "Command Center" => new ProductionStructureDesire(UnitTypes.TERRAN_COMMANDCENTER, amount, data),
                 "Cyclone" => new UnitDesire(UnitTypes.TERRAN_CYCLONE, amount, data.DesiredUnitCounts),
                 "Engineering Bay" => new ProductionStructureDesire(UnitTypes.TERRAN_ENGINEERINGBAY, amount, data),
