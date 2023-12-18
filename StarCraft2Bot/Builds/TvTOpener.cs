@@ -7,6 +7,7 @@ using Sharky.MicroTasks.Attack;
 using StarCraft2Bot.Builds.Base;
 using StarCraft2Bot.Builds.Base.Condition;
 using StarCraft2Bot.Builds.Base.Desires;
+using Sharky.Managers;
 
 namespace StarCraft2Bot.Builds
 {
@@ -17,8 +18,14 @@ namespace StarCraft2Bot.Builds
         public TvTOpener(BaseBot defaultSharkyBot) : base(defaultSharkyBot)
         {
             defaultSharkyBot.MicroController = new AdvancedMicroController(defaultSharkyBot);
-            var advancedAttackTask = new AdvancedAttackTask(defaultSharkyBot, new EnemyCleanupService(defaultSharkyBot.MicroController, defaultSharkyBot.DamageService), new List<UnitTypes> { UnitTypes.TERRAN_MARINE }, 100f);
-            defaultSharkyBot.MicroTaskData[nameof(AttackTask)] = advancedAttackTask;
+            var advancedAttackTask = new AdvancedAttackTask(defaultSharkyBot, new EnemyCleanupService(defaultSharkyBot.MicroController,
+                defaultSharkyBot.DamageService), new List<UnitTypes> { UnitTypes.TERRAN_MARINE }, 1f, true);
+            defaultSharkyBot.MicroTaskData[typeof(AttackTask).Name] = advancedAttackTask;
+            var advancedAttackService = new AdvancedAttackService(defaultSharkyBot, advancedAttackTask);
+            var advancedAttackDataManager = new AdvancedAttackDataManager(defaultSharkyBot, advancedAttackService, advancedAttackTask);
+            defaultSharkyBot.AttackDataManager = advancedAttackDataManager;
+            defaultSharkyBot.Managers.RemoveAll(m => m.GetType() == typeof(AttackDataManager));
+            defaultSharkyBot.Managers.Add(advancedAttackDataManager);
         }
 
         public override void StartBuild(int frame)

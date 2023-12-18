@@ -30,7 +30,7 @@ namespace StarCraft2Bot.Builds
 
             defaultSharkyBot.MicroController = new AdvancedMicroController(defaultSharkyBot);
 
-            var advancedAttackTask = new AdvancedAttackTask(defaultSharkyBot, new EnemyCleanupService(defaultSharkyBot.MicroController, defaultSharkyBot.DamageService), new List<UnitTypes> { UnitTypes.TERRAN_REAPER, UnitTypes.TERRAN_MARINE }, 2f, true);
+            var advancedAttackTask = new AdvancedAttackTask(defaultSharkyBot, new EnemyCleanupService(defaultSharkyBot.MicroController, defaultSharkyBot.DamageService), new List<UnitTypes> { UnitTypes.TERRAN_REAPER, UnitTypes.TERRAN_MARINE }, 1f, true);
             defaultSharkyBot.MicroTaskData[nameof(AttackTask)] = advancedAttackTask;
 
             var advancedAttackService = new AdvancedAttackService(defaultSharkyBot, advancedAttackTask);
