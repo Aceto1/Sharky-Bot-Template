@@ -53,16 +53,6 @@ namespace StarCraft2Bot.Builds.Base
         public override void OnFrame(ResponseObservation observation)
         {
             base.OnFrame(observation);
-            if (buildOrder.Count == 0) return;
-
-            var nextAction = buildOrder.Peek();
-            if (nextAction.AreConditionsFulfilled())
-            {
-                FullfillActionDebugMessage(nextAction);
-
-                nextAction.EnforceDesires();
-                buildOrder.Dequeue();
-            }
 
             //workaround to send debug message for simple action
             for (int i = shadowActions.Count - 1; i >= 0; i--)
@@ -73,6 +63,17 @@ namespace StarCraft2Bot.Builds.Base
                     FullfillActionDebugMessage(action);
                     shadowActions.Remove(action);
                 }
+            }
+
+            if (buildOrder.Count == 0) return;
+
+            var nextAction = buildOrder.Peek();
+            if (nextAction.AreConditionsFulfilled())
+            {
+                FullfillActionDebugMessage(nextAction);
+
+                nextAction.EnforceDesires();
+                buildOrder.Dequeue();
             }
         }
 
