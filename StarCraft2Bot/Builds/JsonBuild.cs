@@ -20,7 +20,7 @@ namespace StarCraft2Bot.Builds
         {
             JsonBuildTemplate jsonBuildTemplate = JsonBuildTemplate.GetJsonBuildTemplateByName(buildName);
             JsonBuildSettings = new JsonBuildSettings(jsonBuildTemplate, MacroData, jsonBuildConditionType);
-            InitAttackManager(defaultSharkyBot);
+            // InitAttackManager(defaultSharkyBot);
         }
 
         private void InitAttackManager(BaseBot defaultSharkyBot)

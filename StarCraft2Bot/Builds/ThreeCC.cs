@@ -30,7 +30,7 @@ namespace StarCraft2Bot.Builds
         {
             defaultSharkyBot.MicroController = new AdvancedMicroController(defaultSharkyBot);
             defaultSharkyBot.SharkyOptions.GameStatusReportingEnabled = false;
-            InitAttackManager(defaultSharkyBot);
+            // InitAttackManager(defaultSharkyBot);
         }
 
         public void InitAttackManager(BaseBot defaultSharkyBot)
@@ -77,7 +77,7 @@ namespace StarCraft2Bot.Builds
             AttackData.AttackWhenMaxedOut = false;
             AttackData.RequireBank = false;
             AttackData.AttackTrigger = 100f;
-            AttackData.RetreatTrigger = 5f;
+            AttackData.RetreatTrigger = 50f;
             AttackData.Attacking = false;
 
             NextPhase();
