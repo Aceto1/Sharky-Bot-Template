@@ -10,6 +10,7 @@ using StarCraft2Bot.Builds.Base.Condition;
 using Sharky.Managers;
 using Sharky.MicroTasks.Attack;
 using StarCraft2Bot.Bot;
+using System.Numerics;
 
 namespace StarCraft2Bot.Builds
 {
@@ -28,16 +29,16 @@ namespace StarCraft2Bot.Builds
                 ProxyName = nameof(ReaperOpener)
             };
 
-            defaultSharkyBot.MicroController = new AdvancedMicroController(defaultSharkyBot);
+            //defaultSharkyBot.MicroController = new AdvancedMicroController(defaultSharkyBot);
 
-            var advancedAttackTask = new AdvancedAttackTask(defaultSharkyBot, new EnemyCleanupService(defaultSharkyBot.MicroController, defaultSharkyBot.DamageService), new List<UnitTypes> { UnitTypes.TERRAN_REAPER, UnitTypes.TERRAN_MARINE }, 1f, true);
-            defaultSharkyBot.MicroTaskData[nameof(AttackTask)] = advancedAttackTask;
+            //var advancedAttackTask = new AdvancedAttackTask(defaultSharkyBot, new EnemyCleanupService(defaultSharkyBot.MicroController, defaultSharkyBot.DamageService), new List<UnitTypes> { UnitTypes.TERRAN_REAPER, UnitTypes.TERRAN_MARINE }, 1f, true);
+            //defaultSharkyBot.MicroTaskData[nameof(AttackTask)] = advancedAttackTask;
 
-            var advancedAttackService = new AdvancedAttackService(defaultSharkyBot, advancedAttackTask);
-            var advancedAttackDataManager = new AdvancedAttackDataManager(defaultSharkyBot, advancedAttackService, advancedAttackTask);
-            defaultSharkyBot.AttackDataManager = advancedAttackDataManager;
-            defaultSharkyBot.Managers.RemoveAll(m => m.GetType() == typeof(AttackDataManager));
-            defaultSharkyBot.Managers.Add(advancedAttackDataManager);
+            //var advancedAttackService = new AdvancedAttackService(defaultSharkyBot, advancedAttackTask);
+            //var advancedAttackDataManager = new AdvancedAttackDataManager(defaultSharkyBot, advancedAttackService, advancedAttackTask);
+            //defaultSharkyBot.AttackDataManager = advancedAttackDataManager;
+            //defaultSharkyBot.Managers.RemoveAll(m => m.GetType() == typeof(AttackDataManager));
+            //defaultSharkyBot.Managers.Add(advancedAttackDataManager);
         }
         /*  
   12	  0:01	  SCV	  
@@ -72,6 +73,43 @@ namespace StarCraft2Bot.Builds
   28	  3:58	  Supply Depot	  
   28	  4:02	  Factory Tech Lab	  
   29	  4:21	  Command Center
+        */
+        /*
+        // Method to check if the SCV is at the build location
+        // Method to convert Vector2 to Point2D
+        private Point2D ConvertToPoint2D(Vector2 vector)
+        {
+            return new Point2D { X = vector.X, Y = vector.Y };
+        }
+
+        private bool IsScvAtBuildLocation(UnitCommander scv, Point2D buildLocation)
+        {
+            float buildRange = 1.0f; // Set a small range within which SCV can start building
+            Point2D scvPosition = ConvertToPoint2D(scv.ChildUnitCalculation.Position);
+            float distance = Distance(scvPosition, buildLocation);
+            return distance <= buildRange;
+        }
+
+        // Calculate Euclidean distance between two points
+        private float Distance(Point2D point1, Point2D point2)
+        {
+            return (float)Math.Sqrt(Math.Pow(point1.X - point2.X, 2) + Math.Pow(point1.Y - point2.Y, 2));
+        }
+
+        // Use this method before issuing the build command
+        public void IssueBuildCommand(UnitCommander scv, Point2D buildLocation, UnitTypes unitTypeToBuild)
+        {
+            if (IsScvAtBuildLocation(scv, buildLocation))
+            {
+                // Issue build command
+                // Note: Replace the below line with the actual build command logic
+                // new ProxyProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 1, MacroData, proxyTask.ProxyName)
+            }
+            else
+            {
+                // SCV is not at the location yet, you might want to log this or handle it accordingly
+            }
+        }
         */
 
         public override void StartBuild(int frame)

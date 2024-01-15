@@ -17,15 +17,15 @@ namespace StarCraft2Bot.Builds
 
         public TvTOpener(BaseBot defaultSharkyBot) : base(defaultSharkyBot)
         {
-            defaultSharkyBot.MicroController = new AdvancedMicroController(defaultSharkyBot);
-            var advancedAttackTask = new AdvancedAttackTask(defaultSharkyBot, new EnemyCleanupService(defaultSharkyBot.MicroController,
-                defaultSharkyBot.DamageService), new List<UnitTypes> { UnitTypes.TERRAN_MARINE }, 1f, true);
-            defaultSharkyBot.MicroTaskData[typeof(AttackTask).Name] = advancedAttackTask;
-            var advancedAttackService = new AdvancedAttackService(defaultSharkyBot, advancedAttackTask);
-            var advancedAttackDataManager = new AdvancedAttackDataManager(defaultSharkyBot, advancedAttackService, advancedAttackTask);
-            defaultSharkyBot.AttackDataManager = advancedAttackDataManager;
-            defaultSharkyBot.Managers.RemoveAll(m => m.GetType() == typeof(AttackDataManager));
-            defaultSharkyBot.Managers.Add(advancedAttackDataManager);
+            // defaultSharkyBot.MicroController = new AdvancedMicroController(defaultSharkyBot);
+            // var advancedAttackTask = new AdvancedAttackTask(defaultSharkyBot, new EnemyCleanupService(defaultSharkyBot.MicroController,
+            //     defaultSharkyBot.DamageService), new List<UnitTypes> { UnitTypes.TERRAN_MARINE }, 1f, true);
+            // defaultSharkyBot.MicroTaskData[typeof(AttackTask).Name] = advancedAttackTask;
+            // var advancedAttackService = new AdvancedAttackService(defaultSharkyBot, advancedAttackTask);
+            // var advancedAttackDataManager = new AdvancedAttackDataManager(defaultSharkyBot, advancedAttackService, advancedAttackTask);
+            // defaultSharkyBot.AttackDataManager = advancedAttackDataManager;
+            // defaultSharkyBot.Managers.RemoveAll(m => m.GetType() == typeof(AttackDataManager));
+            // defaultSharkyBot.Managers.Add(advancedAttackDataManager);
         }
 
         public override void StartBuild(int frame)
@@ -35,6 +35,15 @@ namespace StarCraft2Bot.Builds
             BuildOptions.StrictGasCount = true;
             BuildOptions.StrictSupplyCount = true;
             BuildOptions.StrictWorkerCount = true;
+
+            AttackData.CustomAttackFunction = false;
+            AttackData.UseAttackDataManager = true;
+            AttackData.RequireMaxOut = false;
+            AttackData.AttackWhenMaxedOut = true;
+            AttackData.RequireBank = false;
+            AttackData.AttackTrigger = 80f;
+            AttackData.RetreatTrigger = 45f;
+            AttackData.Attacking = false;
 
             MacroData.DesiredUnitCounts[UnitTypes.TERRAN_SCV] = 19;
 
@@ -74,11 +83,7 @@ namespace StarCraft2Bot.Builds
             BuildOrder.Enqueue(new BuildAction(new UnitCompletedCountCondition(UnitTypes.TERRAN_REAPER, 1, UnitCountService),
                                                new AddonStructureDesire(UnitTypes.TERRAN_BARRACKSREACTOR, 1, MacroData)));
 
-            BuildOrder.Enqueue(new BuildAction(new UnitCountCondition(UnitTypes.TERRAN_FACTORY, 1, UnitCountService),
-                                               new SupplyDepotDesire(2, MacroData),
-                                               new AddonStructureDesire(UnitTypes.TERRAN_FACTORYTECHLAB, 1, MacroData)));
-
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(22, MacroData),
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(21, MacroData),
                                                new GasBuildingCountDesire(2, MacroData)));
 
             BuildOrder.Enqueue(new BuildAction(new UnitCompletedCountCondition(UnitTypes.TERRAN_FACTORY, 1, UnitCountService),
@@ -87,17 +92,21 @@ namespace StarCraft2Bot.Builds
             BuildOrder.Enqueue(new BuildAction(new UnitCompletedCountCondition(UnitTypes.TERRAN_BARRACKSREACTOR, 1, UnitCountService),
                                                new UnitDesire(UnitTypes.TERRAN_MARINE, 2, MacroData.DesiredUnitCounts)));
 
-            BuildOrder.Enqueue(new BuildAction(new WorkerCountCondition(23, UnitCountService),
+            BuildOrder.Enqueue(new BuildAction(new WorkerCountCondition(22, UnitCountService),
                                                new MorphDesire(UnitTypes.TERRAN_ORBITALCOMMAND, 2, MacroData)));
 
             BuildOrder.Enqueue(new BuildAction(new UnitCompletedCountCondition(UnitTypes.TERRAN_MARINE, 2, UnitCountService),
                                                new UnitDesire(UnitTypes.TERRAN_MARINE, 4, MacroData.DesiredUnitCounts)));
 
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(29, MacroData),
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(28, MacroData),
                                                new ProductionStructureDesire(UnitTypes.TERRAN_STARPORT, 1, MacroData)));
 
             BuildOrder.Enqueue(new BuildAction(new UnitCountCondition(UnitTypes.TERRAN_STARPORT, 1, UnitCountService),
                                                new UnitDesire(UnitTypes.TERRAN_CYCLONE, 2, MacroData.DesiredUnitCounts)));
+
+            BuildOrder.Enqueue(new BuildAction(new UnitCountCondition(UnitTypes.TERRAN_FACTORY, 1, UnitCountService),
+                                               new SupplyDepotDesire(2, MacroData),
+                                               new AddonStructureDesire(UnitTypes.TERRAN_FACTORYTECHLAB, 1, MacroData)));
         }
 
         public override void OnFrame(ResponseObservation observation)
