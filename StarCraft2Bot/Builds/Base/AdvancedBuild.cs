@@ -127,7 +127,7 @@ namespace StarCraft2Bot.Builds.Base
                 AddonStructureDesire => $"Build {(int)((AddonStructureDesire)desire).Count} {((AddonStructureDesire)desire).AddonType}",
                 MorphDesire => $"Build {(int)((MorphDesire)desire).Count} {((MorphDesire)desire).TargetType}",
                 TechStructureDesire => $"Build{(int)((TechStructureDesire)desire).Count} {((TechStructureDesire)desire).StructureType}",
-                UnitDesire => $"Train {(int)((UnitDesire)desire).UnitCount} {((UnitDesire)desire).Unit}",
+                UnitDesire => $"Train {(int)((UnitDesire)desire).Count} {((UnitDesire)desire).Unit}",
                 UnitUpgradeDesire => $"Upgrade {((UnitUpgradeDesire)desire).TargetType}",
                 DefenseStructureDesire => $"Build {((DefenseStructureDesire)desire).Count} {((DefenseStructureDesire)desire).StructureType}",
                 CustomDesire => $"{((CustomDesire)desire).CustomEnforceFunc.Method}",

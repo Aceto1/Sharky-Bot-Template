@@ -1,4 +1,5 @@
 ﻿using StarCraft2Bot.Bot;
+using Type = System.Type;
 
 namespace StarCraft2Bot.Builds.Base.Desires
 {
@@ -16,11 +17,26 @@ namespace StarCraft2Bot.Builds.Base.Desires
             Bot = bot;
         }
 
+        public TransitionToBuildDesire(Build currentBuild, Type desiredBuild, BaseBot bot, int mineralCost, int vespeneCost, int timeCost) : this(currentBuild, desiredBuild, bot)
+        {
+            MineralCost = mineralCost;
+            VespeneCost = vespeneCost;
+            TimeCost = timeCost;
+        }
+
         public Type DesiredBuild { get; set; }
 
         public Build  CurrentBuild { get; set; }
 
         public BaseBot Bot { get; set; }
+
+        public bool Enforced { get; set; }
+
+        public int MineralCost { get; }
+
+        public int VespeneCost { get; }
+
+        public int TimeCost { get; }
 
         public void Enforce()
         {
@@ -36,7 +52,5 @@ namespace StarCraft2Bot.Builds.Base.Desires
 
             Enforced = true;
         }
-
-        public bool Enforced { get; set; }
     }
 }
