@@ -7,10 +7,11 @@ namespace StarCraft2Bot.Builds.Base.Desires
 {
     public class GasBuildingCountDesire : IDesire
     {
-        public GasBuildingCountDesire(ValueRange count, MacroData data)
+        public GasBuildingCountDesire(ValueRange count, MacroData data, UnitCountService unitCountService)
         {
             Count = count;
             Data = data;
+            this.unitCountService = unitCountService;
 
             UnitTypes gasBuilding;
 
@@ -30,13 +31,19 @@ namespace StarCraft2Bot.Builds.Base.Desires
                     break;
             }
 
+            GasBuildingType = gasBuilding;
+
             if (new BuildingDataService().BuildingData().TryGetValue(gasBuilding, out var structureInfo))
             {
-                MineralCost = structureInfo.Minerals * count;
-                VespeneCost = structureInfo.Gas * count;
-                TimeCost = structureInfo.Time * count;
+                buildingTypeData = structureInfo;
             }
         }
+
+        private UnitCountService unitCountService;
+
+        private BuildingTypeData? buildingTypeData;
+
+        public UnitTypes GasBuildingType;
 
         public ValueRange Count { get; private set; }
 
@@ -44,11 +51,45 @@ namespace StarCraft2Bot.Builds.Base.Desires
 
         public bool Enforced { get; set; }
 
-        public int MineralCost { get; }
+        public int MineralCost => GetMineralCost();
 
-        public int VespeneCost { get; }
+        public int VespeneCost => GetVespeneCost();
 
-        public int TimeCost { get; }
+        public int TimeCost => GetTimeCost();
+
+        public int GetTimeCost()
+        {
+            var existingCount = unitCountService.BuildingsDoneAndInProgressCount(GasBuildingType);
+            var remainingCount = Count - existingCount;
+
+            if (remainingCount <= 0)
+                return 0;
+
+
+            return remainingCount * buildingTypeData?.Time ?? 0;
+        }
+
+        public int GetMineralCost()
+        {
+            var existingCount = unitCountService.BuildingsDoneAndInProgressCount(GasBuildingType);
+            var remainingCount = Count - existingCount;
+
+            if (remainingCount <= 0)
+                return 0;
+
+            return existingCount * buildingTypeData?.Minerals ?? 0;
+        }
+
+        public int GetVespeneCost()
+        {
+            var existingCount = unitCountService.BuildingsDoneAndInProgressCount(GasBuildingType);
+            var remainingCount = Count - existingCount;
+
+            if (remainingCount <= 0)
+                return 0;
+
+            return existingCount * buildingTypeData?.Gas ?? 0;
+        }
 
         public void Enforce()
         {
@@ -56,7 +97,6 @@ namespace StarCraft2Bot.Builds.Base.Desires
                 return;
 
             Data.DesiredGases = Count;
-
             Enforced = true;
         }
     }

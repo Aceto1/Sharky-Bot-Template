@@ -6,6 +6,10 @@ namespace StarCraft2Bot.Builds.Base.Desires
 {
     public class AddonStructureDesire : IDesire
     {
+        private TrainingTypeData? typeData;
+
+        private UnitCountService unitCountService;
+
         public UnitTypes AddonType { get; private set; }
 
         public ValueRange Count { get; private set; }
@@ -14,23 +18,56 @@ namespace StarCraft2Bot.Builds.Base.Desires
 
         public bool Enforced { get; set; }
 
-        public int MineralCost { get; }
+        public int MineralCost => GetMineralCost();
 
-        public int VespeneCost { get; }
+        public int VespeneCost => GetVespeneCost();
 
-        public int TimeCost { get; }
+        public int TimeCost => GetTimeCost();
 
-        public AddonStructureDesire(UnitTypes addonType, ValueRange count, MacroData data)
+        public int GetTimeCost()
+        {
+            var existingCount = unitCountService.BuildingsDoneAndInProgressCount(AddonType);
+            var remainingCount = Count - existingCount;
+
+            if (remainingCount <= 0)
+                return 0;
+
+
+            return typeData?.Time ?? 0;
+        }
+
+        public int GetMineralCost()
+        {
+            var existingCount = unitCountService.BuildingsDoneAndInProgressCount(AddonType);
+            var remainingCount = Count - existingCount;
+
+            if (remainingCount <= 0)
+                return 0;
+
+            return existingCount * typeData?.Minerals ?? 0;
+        }
+
+        public int GetVespeneCost()
+        {
+            var existingCount = unitCountService.BuildingsDoneAndInProgressCount(AddonType);
+            var remainingCount = Count - existingCount;
+
+            if (remainingCount <= 0)
+                return 0;
+
+            return existingCount * typeData?.Gas ?? 0;
+        }
+
+        public AddonStructureDesire(UnitTypes addonType, ValueRange count, MacroData data, UnitCountService unitCountService)
         {
             AddonType = addonType;
             Count = count;
             Data = data;
+            this.unitCountService = unitCountService;
 
             if (new AddOnDataService().AddOnData().TryGetValue(addonType, out var addonInfo))
             {
-                MineralCost = addonInfo.Minerals * count;
-                VespeneCost = addonInfo.Gas * count;
-                TimeCost = addonInfo.Time * count;
+                typeData = addonInfo;
             }
         }
 

@@ -85,46 +85,46 @@ namespace StarCraft2Bot.Builds
             BuildOrder = new Queue<BuildAction>();
             MacroData.DesiredUnitCounts[UnitTypes.TERRAN_SCV] = 18;
 
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(13, MacroData), new SupplyDepotDesire(1, MacroData)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(13, MacroData), new SupplyDepotDesire(1, MacroData, UnitCountService)));
 
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(15, MacroData), new ProxyProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 1, MacroData, proxyTask.ProxyName)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(16, MacroData), new GasBuildingCountDesire(1, MacroData)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(18, MacroData), new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 2, MacroData)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(18, MacroData), new GasBuildingCountDesire(2, MacroData)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(18, MacroData), new UnitDesire(UnitTypes.TERRAN_REAPER, 1, MacroData.DesiredUnitCounts)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(18, MacroData), new MorphDesire(UnitTypes.TERRAN_ORBITALCOMMAND, 1, MacroData)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(19, MacroData), new UnitDesire(UnitTypes.TERRAN_SCV, 44, MacroData.DesiredUnitCounts)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(19, MacroData), new UnitDesire(UnitTypes.TERRAN_REAPER, 2, MacroData.DesiredUnitCounts)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(19, MacroData), new UnitDesire(UnitTypes.TERRAN_REAPER, 3, MacroData.DesiredUnitCounts)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(23, MacroData), new ProductionStructureDesire(UnitTypes.TERRAN_FACTORY, 1, MacroData)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(23, MacroData), new UnitDesire(UnitTypes.TERRAN_REAPER, 4, MacroData.DesiredUnitCounts)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(23, MacroData), new UnitDesire(UnitTypes.TERRAN_REAPER, 5, MacroData.DesiredUnitCounts)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(23, MacroData), new UnitDesire(UnitTypes.TERRAN_REAPER, 6, MacroData.DesiredUnitCounts)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(27, MacroData), new UnitDesire(UnitTypes.TERRAN_HELLION, 1, MacroData.DesiredUnitCounts)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(31, MacroData), new ProductionStructureDesire(UnitTypes.TERRAN_COMMANDCENTER, 2, MacroData)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(15, MacroData), new ProxyProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 1, MacroData, proxyTask.ProxyName, UnitCountService)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(16, MacroData), new GasBuildingCountDesire(1, MacroData, UnitCountService)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(18, MacroData), new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 2, MacroData, UnitCountService)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(18, MacroData), new GasBuildingCountDesire(2, MacroData, UnitCountService)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(18, MacroData), new UnitDesire(UnitTypes.TERRAN_REAPER, 1, MacroData.DesiredUnitCounts, UnitCountService)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(18, MacroData), new MorphDesire(UnitTypes.TERRAN_ORBITALCOMMAND, 1, MacroData, UnitCountService)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(19, MacroData), new UnitDesire(UnitTypes.TERRAN_SCV, 44, MacroData.DesiredUnitCounts, UnitCountService)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(19, MacroData), new UnitDesire(UnitTypes.TERRAN_REAPER, 2, MacroData.DesiredUnitCounts, UnitCountService)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(19, MacroData), new UnitDesire(UnitTypes.TERRAN_REAPER, 3, MacroData.DesiredUnitCounts, UnitCountService)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(23, MacroData), new ProductionStructureDesire(UnitTypes.TERRAN_FACTORY, 1, MacroData, UnitCountService)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(23, MacroData), new UnitDesire(UnitTypes.TERRAN_REAPER, 4, MacroData.DesiredUnitCounts, UnitCountService)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(23, MacroData), new UnitDesire(UnitTypes.TERRAN_REAPER, 5, MacroData.DesiredUnitCounts, UnitCountService)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(23, MacroData), new UnitDesire(UnitTypes.TERRAN_REAPER, 6, MacroData.DesiredUnitCounts, UnitCountService)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(27, MacroData), new UnitDesire(UnitTypes.TERRAN_HELLION, 1, MacroData.DesiredUnitCounts, UnitCountService)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(31, MacroData), new ProductionStructureDesire(UnitTypes.TERRAN_COMMANDCENTER, 2, MacroData, UnitCountService)));
             //2nd part
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(31, MacroData), new UnitDesire(UnitTypes.TERRAN_REAPER, 0, MacroData.DesiredUnitCounts)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(33, MacroData), new AddonStructureDesire(UnitTypes.TERRAN_FACTORYTECHLAB, 1, MacroData)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(33, MacroData), new AddonStructureDesire(UnitTypes.TERRAN_BARRACKSREACTOR, 1, MacroData)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(32, MacroData), new ProductionStructureDesire(UnitTypes.TERRAN_STARPORT, 1, MacroData)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(33, MacroData), new UnitDesire(UnitTypes.TERRAN_SIEGETANK, 1, MacroData.DesiredUnitCounts)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(37, MacroData), new UnitDesire(UnitTypes.TERRAN_MARINE, 2, MacroData.DesiredUnitCounts)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(40, MacroData), new UnitDesire(UnitTypes.TERRAN_MEDIVAC, 1, MacroData.DesiredUnitCounts)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(40, MacroData), new GasBuildingCountDesire(3, MacroData)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(40, MacroData), new UnitDesire(UnitTypes.TERRAN_MARINE, 4, MacroData.DesiredUnitCounts)));  
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(41, MacroData), new UnitDesire(UnitTypes.TERRAN_CYCLONE, 1, MacroData.DesiredUnitCounts)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(46, MacroData), new MorphDesire(UnitTypes.TERRAN_ORBITALCOMMAND, 2, MacroData))); 
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(46, MacroData), new UnitDesire(UnitTypes.TERRAN_MARINE, 6, MacroData.DesiredUnitCounts)));  
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(46, MacroData), new AddonStructureDesire(UnitTypes.TERRAN_STARPORTTECHLAB, 1, MacroData)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(49, MacroData), new UnitDesire(UnitTypes.TERRAN_SIEGETANK, 2, MacroData.DesiredUnitCounts)));  
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(49, MacroData), new UnitDesire(UnitTypes.TERRAN_MARINE, 8, MacroData.DesiredUnitCounts))); 
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(54, MacroData), new UnitDesire(UnitTypes.TERRAN_RAVEN, 1, MacroData.DesiredUnitCounts)));
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(58, MacroData), new UnitDesire(UnitTypes.TERRAN_MARINE, 9, MacroData.DesiredUnitCounts))); 
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(59, MacroData), new UnitDesire(UnitTypes.TERRAN_MARINE, 10, MacroData.DesiredUnitCounts))); 
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(55, MacroData), new UnitDesire(UnitTypes.TERRAN_SIEGETANK, 3, MacroData.DesiredUnitCounts))); 
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(66, MacroData), new ProductionStructureDesire(UnitTypes.TERRAN_COMMANDCENTER, 3, MacroData)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(31, MacroData), new UnitDesire(UnitTypes.TERRAN_REAPER, 0, MacroData.DesiredUnitCounts, UnitCountService)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(33, MacroData), new AddonStructureDesire(UnitTypes.TERRAN_FACTORYTECHLAB, 1, MacroData, UnitCountService)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(33, MacroData), new AddonStructureDesire(UnitTypes.TERRAN_BARRACKSREACTOR, 1, MacroData, UnitCountService)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(32, MacroData), new ProductionStructureDesire(UnitTypes.TERRAN_STARPORT, 1, MacroData, UnitCountService)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(33, MacroData), new UnitDesire(UnitTypes.TERRAN_SIEGETANK, 1, MacroData.DesiredUnitCounts, UnitCountService)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(37, MacroData), new UnitDesire(UnitTypes.TERRAN_MARINE, 2, MacroData.DesiredUnitCounts, UnitCountService)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(40, MacroData), new UnitDesire(UnitTypes.TERRAN_MEDIVAC, 1, MacroData.DesiredUnitCounts, UnitCountService)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(40, MacroData), new GasBuildingCountDesire(3, MacroData, UnitCountService)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(40, MacroData), new UnitDesire(UnitTypes.TERRAN_MARINE, 4, MacroData.DesiredUnitCounts, UnitCountService)));  
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(41, MacroData), new UnitDesire(UnitTypes.TERRAN_CYCLONE, 1, MacroData.DesiredUnitCounts, UnitCountService)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(46, MacroData), new MorphDesire(UnitTypes.TERRAN_ORBITALCOMMAND, 2, MacroData, UnitCountService))); 
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(46, MacroData), new UnitDesire(UnitTypes.TERRAN_MARINE, 6, MacroData.DesiredUnitCounts, UnitCountService)));  
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(46, MacroData), new AddonStructureDesire(UnitTypes.TERRAN_STARPORTTECHLAB, 1, MacroData, UnitCountService)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(49, MacroData), new UnitDesire(UnitTypes.TERRAN_SIEGETANK, 2, MacroData.DesiredUnitCounts, UnitCountService)));  
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(49, MacroData), new UnitDesire(UnitTypes.TERRAN_MARINE, 8, MacroData.DesiredUnitCounts, UnitCountService))); 
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(54, MacroData), new UnitDesire(UnitTypes.TERRAN_RAVEN, 1, MacroData.DesiredUnitCounts, UnitCountService)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(58, MacroData), new UnitDesire(UnitTypes.TERRAN_MARINE, 9, MacroData.DesiredUnitCounts, UnitCountService))); 
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(59, MacroData), new UnitDesire(UnitTypes.TERRAN_MARINE, 10, MacroData.DesiredUnitCounts, UnitCountService))); 
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(55, MacroData), new UnitDesire(UnitTypes.TERRAN_SIEGETANK, 3, MacroData.DesiredUnitCounts, UnitCountService))); 
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(66, MacroData), new ProductionStructureDesire(UnitTypes.TERRAN_COMMANDCENTER, 3, MacroData, UnitCountService)));
 
-            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(18, MacroData), new MorphDesire(UnitTypes.TERRAN_ORBITALCOMMAND, 3, MacroData)));
+            BuildOrder.Enqueue(new BuildAction(new SupplyCondition(18, MacroData), new MorphDesire(UnitTypes.TERRAN_ORBITALCOMMAND, 3, MacroData, UnitCountService)));
         }
 
         private int FrameFromTime(int minutes, int seconds)

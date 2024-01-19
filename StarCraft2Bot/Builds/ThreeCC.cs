@@ -89,7 +89,7 @@ namespace StarCraft2Bot.Builds
             
             //if barack build -> train reaper
             AddAction(new UnitCompletedCountCondition(UnitTypes.TERRAN_BARRACKS, 1, UnitCountService), 
-                new UnitDesire(UnitTypes.TERRAN_REAPER, 1, MacroData.DesiredUnitCounts));
+                new UnitDesire(UnitTypes.TERRAN_REAPER, 1, MacroData.DesiredUnitCounts, UnitCountService));
             //if enough gas for 1 reaper -> lower gas workers
             AddAction(new CustomCondition(() => MacroData.VespeneGas > DefaultBot.SharkyUnitData.UnitData[UnitTypes.TERRAN_REAPER].VespeneCost), 
                 new CustomDesire(() => { BuildOptions.StrictWorkersPerGasCount = 1; }));
@@ -99,12 +99,12 @@ namespace StarCraft2Bot.Builds
 
             //builds 1 supply depot, 1 barrack, 1 gas refinery, 1 orbital commandcenter
             AppendToBuildOrder(new SupplyCondition(13, MacroData), 
-                new SupplyDepotDesire(1, MacroData));
+                new SupplyDepotDesire(1, MacroData, UnitCountService));
             AppendToBuildOrder(new SupplyCondition(14, MacroData), 
-                new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 1, MacroData));
+                new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 1, MacroData, UnitCountService));
             AppendToBuildOrder(new BuildingDoneOrInProgressCondition(UnitTypes.TERRAN_BARRACKS, 1, UnitCountService), 
-                new GasBuildingCountDesire(1, MacroData),
-                new MorphDesire(UnitTypes.TERRAN_ORBITALCOMMAND, 1, MacroData));
+                new GasBuildingCountDesire(1, MacroData, UnitCountService),
+                new MorphDesire(UnitTypes.TERRAN_ORBITALCOMMAND, 1, MacroData, UnitCountService));
             AddAction(new BuildingDoneOrInProgressCondition(UnitTypes.TERRAN_ORBITALCOMMAND, 1, UnitCountService), 
                 new CustomDesire(NextPhase));
         }
@@ -116,7 +116,7 @@ namespace StarCraft2Bot.Builds
             {
                 int marinesToTrain = IsEnemyProxing() ? 4 : 1;
                 AddAction(new UnitCountCondition(UnitTypes.TERRAN_REAPER, 1, UnitCountService), 
-                    new UnitDesire(UnitTypes.TERRAN_MARINE, marinesToTrain, MacroData.DesiredUnitCounts));
+                    new UnitDesire(UnitTypes.TERRAN_MARINE, marinesToTrain, MacroData.DesiredUnitCounts, UnitCountService));
                 NextPhase();
                 return;
             }
@@ -124,11 +124,11 @@ namespace StarCraft2Bot.Builds
            
            //builds 8 marines, 1 additional barrack (2 total), 1 bunker
             AddAction(new UnitCountCondition(UnitTypes.TERRAN_REAPER, 1, UnitCountService), 
-                new UnitDesire(UnitTypes.TERRAN_MARINE, 8, MacroData.DesiredUnitCounts));
+                new UnitDesire(UnitTypes.TERRAN_MARINE, 8, MacroData.DesiredUnitCounts, UnitCountService));
             AppendToBuildOrder(new NoneCondition(), 
-                new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 2, MacroData));
+                new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 2, MacroData, UnitCountService));
             AppendToBuildOrder(new BuildingDoneOrInProgressCondition(UnitTypes.TERRAN_BARRACKS, 2, UnitCountService), 
-                new DefenseStructureDesire(UnitTypes.TERRAN_BUNKER, 1, MacroData));
+                new DefenseStructureDesire(UnitTypes.TERRAN_BUNKER, 1, MacroData, UnitCountService));
             AppendToBuildOrder(new BuildingDoneOrInProgressCondition(UnitTypes.TERRAN_BUNKER, 1, UnitCountService), 
                 new CustomDesire(NextPhase));
         }
@@ -137,10 +137,10 @@ namespace StarCraft2Bot.Builds
         {
             //builds second command center, second supply depot, 1 barrack-reactor
             AppendToBuildOrder(new NoneCondition(), 
-                new ProductionStructureDesire(UnitTypes.TERRAN_COMMANDCENTER, 2, MacroData));
+                new ProductionStructureDesire(UnitTypes.TERRAN_COMMANDCENTER, 2, MacroData, UnitCountService));
             AppendToBuildOrder(new BuildingDoneOrInProgressCondition(UnitTypes.TERRAN_COMMANDCENTER, 2, UnitCountService), 
-                new SupplyDepotDesire(2, MacroData),
-                new AddonStructureDesire(UnitTypes.TERRAN_BARRACKSREACTOR, 1, MacroData));
+                new SupplyDepotDesire(2, MacroData, UnitCountService),
+                new AddonStructureDesire(UnitTypes.TERRAN_BARRACKSREACTOR, 1, MacroData, UnitCountService));
             AppendToBuildOrder(new BuildingDoneOrInProgressCondition(UnitTypes.TERRAN_BARRACKSREACTOR, 1, UnitCountService), 
                 new CustomDesire(NextPhase));
         }
@@ -157,11 +157,11 @@ namespace StarCraft2Bot.Builds
 
             //builds 16 marines, 1 additional barrack (3 total), 1 additional bunker(2 total)
             AppendToBuildOrder(new NoneCondition(), 
-                new UnitDesire(UnitTypes.TERRAN_MARINE, 16, MacroData.DesiredUnitCounts),
-                new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 3, MacroData),
-                new SupplyDepotDesire(3, MacroData));
+                new UnitDesire(UnitTypes.TERRAN_MARINE, 16, MacroData.DesiredUnitCounts, UnitCountService),
+                new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 3, MacroData, UnitCountService),
+                new SupplyDepotDesire(3, MacroData, UnitCountService));
             AppendToBuildOrder(new BuildingDoneOrInProgressCondition(UnitTypes.TERRAN_BARRACKS, 3, UnitCountService), 
-                new DefenseStructureDesire(UnitTypes.TERRAN_BUNKER, 2, MacroData));
+                new DefenseStructureDesire(UnitTypes.TERRAN_BUNKER, 2, MacroData, UnitCountService));
             AppendToBuildOrder(new BuildingDoneOrInProgressCondition(UnitTypes.TERRAN_BUNKER, 2, UnitCountService),
                 new CustomDesire(NextPhase));
         }
@@ -170,20 +170,20 @@ namespace StarCraft2Bot.Builds
         {
             // if factory, upgrade factory-lab
             AddAction(new UnitCompletedCountCondition(UnitTypes.TERRAN_FACTORY, 1, UnitCountService),
-                new ProductionStructureDesire(UnitTypes.TERRAN_STARPORT, 1, MacroData),
-                new AddonStructureDesire(UnitTypes.TERRAN_FACTORYTECHLAB, 1, MacroData));
+                new ProductionStructureDesire(UnitTypes.TERRAN_STARPORT, 1, MacroData, UnitCountService),
+                new AddonStructureDesire(UnitTypes.TERRAN_FACTORYTECHLAB, 1, MacroData, UnitCountService));
             // if factory-lab, build cyclone
             AddAction(new UnitCompletedCountCondition(UnitTypes.TERRAN_FACTORYTECHLAB, 1, UnitCountService), 
-                new UnitDesire(UnitTypes.TERRAN_CYCLONE, 1, MacroData.DesiredUnitCounts));
+                new UnitDesire(UnitTypes.TERRAN_CYCLONE, 1, MacroData.DesiredUnitCounts, UnitCountService));
 
             //builds third command center, 1 factory, second orbital commandcenter, first starport
             AppendToBuildOrder(new NoneCondition(),
-                new ProductionStructureDesire(UnitTypes.TERRAN_COMMANDCENTER, 3, MacroData));                                            
+                new ProductionStructureDesire(UnitTypes.TERRAN_COMMANDCENTER, 3, MacroData, UnitCountService));                                            
             AppendToBuildOrder(new BuildingDoneOrInProgressCondition(UnitTypes.TERRAN_COMMANDCENTER, 3, UnitCountService),
-                new ProductionStructureDesire(UnitTypes.TERRAN_FACTORY, 1, MacroData),
-                new MorphDesire(UnitTypes.TERRAN_ORBITALCOMMAND, 2, MacroData), 
-                new GasBuildingCountDesire(2, MacroData),
-                new UnitDesire(UnitTypes.TERRAN_MARINE, Math.Max(6, MacroData.DesiredUnitCounts[UnitTypes.TERRAN_MARINE]), MacroData.DesiredUnitCounts));
+                new ProductionStructureDesire(UnitTypes.TERRAN_FACTORY, 1, MacroData, UnitCountService),
+                new MorphDesire(UnitTypes.TERRAN_ORBITALCOMMAND, 2, MacroData, UnitCountService), 
+                new GasBuildingCountDesire(2, MacroData, UnitCountService),
+                new UnitDesire(UnitTypes.TERRAN_MARINE, Math.Max(6, MacroData.DesiredUnitCounts[UnitTypes.TERRAN_MARINE]), MacroData.DesiredUnitCounts, UnitCountService));
             AppendToBuildOrder(new BuildingDoneOrInProgressCondition(UnitTypes.TERRAN_STARPORT, 1, UnitCountService), 
                 new CustomDesire(NextPhase));
         }

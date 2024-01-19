@@ -6,8 +6,6 @@ using Sharky.MicroTasks;
 using StarCraft2Bot.Bot;
 using StarCraft2Bot.Builds.Base;
 using StarCraft2Bot.Helper;
-using StarCraft2Bot.Builds.Base.Condition;
-using Sharky.Builds;
 
 namespace StarCraft2Bot.Builds
 {
@@ -19,7 +17,7 @@ namespace StarCraft2Bot.Builds
         public JsonBuild(BaseBot defaultSharkyBot, string buildName, JsonBuildConditionType jsonBuildConditionType = JsonBuildConditionType.OnlySupplyCondition) : base(defaultSharkyBot)
         {
             JsonBuildTemplate jsonBuildTemplate = JsonBuildTemplate.GetJsonBuildTemplateByName(buildName);
-            JsonBuildSettings = new JsonBuildSettings(jsonBuildTemplate, MacroData, jsonBuildConditionType);
+            JsonBuildSettings = new JsonBuildSettings(jsonBuildTemplate, MacroData, UnitCountService, SharkyUnitData, jsonBuildConditionType);
             InitAttackManager(defaultSharkyBot);
         }
 
@@ -46,7 +44,7 @@ namespace StarCraft2Bot.Builds
             BuildOptions.StrictSupplyCount = true;
             BuildOptions.StrictGasCount = true;
             BuildOptions.StrictWorkerCount = false;
-            
+
             List<BuildAction> buildActions = JsonBuildParser.GetBuildActionsFromJsonBuildTemplate(JsonBuildSettings);
             buildActions.ForEach(AddAction);
         }
@@ -65,6 +63,6 @@ namespace StarCraft2Bot.Builds
             return base.Transition(frame);
         }
 
-        
+
     }
 }
