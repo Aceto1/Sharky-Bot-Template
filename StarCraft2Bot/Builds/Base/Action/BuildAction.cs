@@ -2,9 +2,9 @@
 using StarCraft2Bot.Builds.Base.Condition;
 using StarCraft2Bot.Builds.Base.Desires;
 
-namespace StarCraft2Bot.Builds.Base
+namespace StarCraft2Bot.Builds.Base.Action
 {
-    public class BuildAction
+    public class BuildAction : IAction
     {
         public BuildAction(List<ICondition> conditions, List<IDesire> desires)
         {
@@ -36,12 +36,23 @@ namespace StarCraft2Bot.Builds.Base
             Desires = new List<IDesire> { desire };
         }
 
+        public bool HasStarted()
+        {
+            return Desires.Any(d => d.Enforced);
+        }
+
+        public bool HasCompleted ()
+        {
+            return MineralCost == 0 && VespeneCost == 0 && TimeCost == 0
+                && Desires.All(d => d.Enforced);
+        }
+
         public bool AreConditionsFulfilled()
         {
             return Conditions.All(m => m.IsFulfilled());
         }
 
-        public void EnforceDesires()
+        public void Enforce()
         {
             Desires.ForEach(m => m.Enforce());
         }

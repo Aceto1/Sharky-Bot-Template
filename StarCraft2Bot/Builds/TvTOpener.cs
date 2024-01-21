@@ -7,6 +7,7 @@ using Sharky.MicroTasks.Attack;
 using StarCraft2Bot.Builds.Base;
 using StarCraft2Bot.Builds.Base.Condition;
 using StarCraft2Bot.Builds.Base.Desires;
+using StarCraft2Bot.Builds.Base.Action;
 
 namespace StarCraft2Bot.Builds
 {
@@ -110,7 +111,7 @@ namespace StarCraft2Bot.Builds
 
             if (nextAction.AreConditionsFulfilled())
             {
-                nextAction.EnforceDesires();
+                nextAction.Enforce();
                 BuildOrder.Dequeue();
             }
         }
