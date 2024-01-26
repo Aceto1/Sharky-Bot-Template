@@ -1,4 +1,6 @@
-﻿using StarCraft2Bot.Builds.Base.Condition;
+﻿using StarCraft2Bot.Builds.Base.Action.BuildBlocks;
+using StarCraft2Bot.Builds.Base.Condition;
+using StarCraft2Bot.Builds.Base.Desires;
 
 namespace StarCraft2Bot.Builds.Base.Action
 {
@@ -8,9 +10,9 @@ namespace StarCraft2Bot.Builds.Base.Action
         public int VespeneCost => CalculateVespeneCost();
         public int TimeCost => CalculateTimeCost();
 
-        protected List<ICondition> Conditions { get; }
-        protected List<IAction> SerialBuildActions { get; }
-        protected List<IAction> ParallelBuildActions { get; }
+        protected List<ICondition> Conditions { get; set; }
+        protected List<IAction> SerialBuildActions { get; set;  }
+        protected List<IAction> ParallelBuildActions { get; set; }
 
         protected BuildBlock(List<ICondition> conditions, List<IAction> serialBuildActions, List<IAction> parallelBuildActions)
         {
@@ -18,8 +20,6 @@ namespace StarCraft2Bot.Builds.Base.Action
             SerialBuildActions = serialBuildActions;
             ParallelBuildActions = parallelBuildActions;
         }
-
-        protected BuildBlock() : this([], [], []) { }
 
         protected int CalculateMineralCost()
         {
@@ -33,7 +33,7 @@ namespace StarCraft2Bot.Builds.Base.Action
 
         protected int CalculateTimeCost()
         {
-            //TODO Better accumulate Time Cost
+            //TODO Find more accurate way to predict time? Abhängig vom Income(Zeit bis Gas und Mineral gesammelt)?
             var serialTimeCost = SerialBuildActions.Sum(a => a.TimeCost);
             var parallelTimeCost = ParallelBuildActions.Count > 0 ? ParallelBuildActions.Max(a => a.TimeCost) : 0;
             return int.Max(serialTimeCost, parallelTimeCost);
@@ -46,8 +46,17 @@ namespace StarCraft2Bot.Builds.Base.Action
 
         public bool HasCompleted()
         {
-            return MineralCost == 0 && VespeneCost == 0 && TimeCost == 0
-                && SerialBuildActions.All(a => a.HasCompleted()) && ParallelBuildActions.All(a => a.HasCompleted());
+            return MineralCost == 0 && VespeneCost == 0 && TimeCost == 0;
+        }
+
+        public List<ICondition> GetConditions()
+        {
+            return Conditions;
+        }
+
+        public List<IDesire> GetDesires()
+        {
+            return SerialBuildActions.SelectMany(action => action.GetDesires()).Concat(ParallelBuildActions.SelectMany(action => action.GetDesires())).ToList();
         }
 
         public bool AreConditionsFulfilled()
@@ -57,22 +66,33 @@ namespace StarCraft2Bot.Builds.Base.Action
 
         public void Enforce()
         {
-            foreach (BuildAction buildAction in ParallelBuildActions)
+            EnforceParallelActions();
+            EnforceSerialActions();
+        }
+
+        protected void EnforceParallelActions()
+        {
+            foreach (IAction action in ParallelBuildActions)
             {
-                if (buildAction.AreConditionsFulfilled())
+                if (action.AreConditionsFulfilled())
                 {
-                    buildAction.Enforce();
+                    action.Enforce();
                 }
             }
-            foreach (BuildAction buildAction in SerialBuildActions)
+            ParallelBuildActions = ParallelBuildActions.Where(a => !a.HasCompleted()).ToList();
+        }
+
+        protected void EnforceSerialActions()
+        {
+            if (SerialBuildActions.Count == 0) return;
+
+            IAction nextAction = SerialBuildActions[0];
+            if (!nextAction.AreConditionsFulfilled()) return;
+
+            nextAction.Enforce();
+            if (nextAction.HasCompleted())
             {
-                if (buildAction.AreConditionsFulfilled())
-                { 
-                    buildAction.Enforce();
-                } else
-                {
-                    break;
-                }
+                SerialBuildActions.Remove(nextAction);
             }
         }
     }

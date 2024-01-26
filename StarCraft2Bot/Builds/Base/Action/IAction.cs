@@ -1,4 +1,7 @@
-﻿namespace StarCraft2Bot.Builds.Base.Action
+﻿using StarCraft2Bot.Builds.Base.Condition;
+using StarCraft2Bot.Builds.Base.Desires;
+
+namespace StarCraft2Bot.Builds.Base.Action
 {
     public interface IAction
     {
@@ -8,6 +11,9 @@
 
         public bool HasStarted();
         public bool HasCompleted();
+
+        public List<ICondition> GetConditions();
+        public List<IDesire> GetDesires();
 
         public bool AreConditionsFulfilled();
         public void Enforce();

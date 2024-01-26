@@ -6,6 +6,15 @@ namespace StarCraft2Bot.Builds.Base.Action
 {
     public class BuildAction : IAction
     {
+        public int MineralCost => Desires.Sum(m => m.MineralCost);
+
+        public int VespeneCost => Desires.Sum(m => m.VespeneCost);
+
+        public int TimeCost => Desires.Sum(m => m.TimeCost);
+
+        protected List<ICondition> Conditions { get; set; }
+
+        protected List<IDesire> Desires { get; set; }
         public BuildAction(List<ICondition> conditions, List<IDesire> desires)
         {
             Conditions = conditions;
@@ -47,6 +56,16 @@ namespace StarCraft2Bot.Builds.Base.Action
                 && Desires.All(d => d.Enforced);
         }
 
+        public List<ICondition> GetConditions()
+        {
+            return Conditions;
+        }
+
+        public List<IDesire> GetDesires()
+        {
+            return Desires;
+        }
+
         public bool AreConditionsFulfilled()
         {
             return Conditions.All(m => m.IsFulfilled());
@@ -56,15 +75,5 @@ namespace StarCraft2Bot.Builds.Base.Action
         {
             Desires.ForEach(m => m.Enforce());
         }
-
-        public int MineralCost => Desires.Sum(m => m.MineralCost);
-
-        public int VespeneCost => Desires.Sum(m => m.VespeneCost);
-
-        public int TimeCost => Desires.Sum(m => m.TimeCost);
-
-        public List<ICondition> Conditions { get; set; }
-
-        public List<IDesire> Desires { get; set; }
     }
 }

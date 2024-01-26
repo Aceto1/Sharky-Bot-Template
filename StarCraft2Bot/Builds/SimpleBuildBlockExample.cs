@@ -8,6 +8,7 @@ using Sharky.MicroTasks;
 using StarCraft2Bot.Bot;
 using StarCraft2Bot.Builds.Base;
 using StarCraft2Bot.Builds.Base.Action;
+using StarCraft2Bot.Builds.Base.Action.BuildBlocks;
 using StarCraft2Bot.Builds.Base.Condition;
 using StarCraft2Bot.Builds.Base.Desires;
 
@@ -32,19 +33,26 @@ namespace StarCraft2Bot.Builds
 
             ActionQueue = new Queue<IAction> {};
 
-            var expandSupplyBarrackGasBlock = new CustomBuildBlock().WithBuildActions((serial, parallel) =>
-            {
-                serial.Add(new BuildAction(new SupplyCondition(13, MacroData), 
-                    new SupplyDepotDesire(1, MacroData, UnitCountService)));
-                var buildBarrackAction = new BuildAction(new SupplyCondition(14, MacroData),
-                    new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 1, MacroData, UnitCountService));
-                serial.Add(buildBarrackAction);
-                parallel.Add(new BuildAction(new ActionCompletedCondition(buildBarrackAction), new GasBuildingCountDesire(1, MacroData, UnitCountService)));
-            });
-            var scoutWithTrainedReaper = new ScoutWithTrainedReaper(MicroTaskData, MacroData, ActiveUnitData, UnitCountService, BaseData);
+            //TerranTechTree.GetRequiredTechUnits(UnitTypes.TERRAN_REAPER).ToList().ForEach(unit => Console.WriteLine(unit));
 
-            ActionQueue.Enqueue(expandSupplyBarrackGasBlock);
-            ActionQueue.Enqueue(scoutWithTrainedReaper);
+            var expandSupplyBarrackGasBlock = new AutoTechBuildBlock(DefaultBot)
+                .WithSerialActions([
+                    new BuildAction(new SupplyCondition(13, MacroData), new SupplyDepotDesire(1, MacroData, UnitCountService)),
+                    new BuildAction(new SupplyCondition(14, MacroData), new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 1, MacroData, UnitCountService)),
+                    new BuildAction(new UnitCompletedCountCondition(UnitTypes.TERRAN_BARRACKS, 1, UnitCountService), new GasBuildingCountDesire(1, MacroData, UnitCountService))
+                ]);
+            var scoutWithTrainedReaper = new ScoutWithTrainedReaper(DefaultBot);
+
+            var testBlock = new AutoTechBuildBlock(DefaultBot)
+               .WithSerialActions([
+                   new BuildAction(new SupplyCondition(13, MacroData), new SupplyDepotDesire(1, MacroData, UnitCountService)),
+                   new BuildAction(new NoneCondition(), new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 1, DefaultBot.MacroData, DefaultBot.UnitCountService)),
+                   new BuildAction(new SupplyCondition(13, MacroData), new UnitDesire(UnitTypes.TERRAN_BATTLECRUISER, 1, DefaultBot.MacroData.DesiredUnitCounts, DefaultBot.UnitCountService)),
+               ]);
+
+            //ActionQueue.Enqueue(expandSupplyBarrackGasBlock);
+            //ActionQueue.Enqueue(scoutWithTrainedReaper);
+            ActionQueue.Enqueue(testBlock);
         }
 
         
