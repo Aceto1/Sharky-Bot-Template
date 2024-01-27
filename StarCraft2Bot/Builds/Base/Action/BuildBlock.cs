@@ -3,14 +3,16 @@ using StarCraft2Bot.Builds.Base.Desires;
 
 namespace StarCraft2Bot.Builds.Base.Action
 {
-    public class BuildBlock() : IAction
+    public class BuildBlock(string Name) : IAction
     {
+        public readonly string Name = Name;
+
         public int MineralCost => Actions.Sum(a => a.MineralCost);
         public int VespeneCost => Actions.Sum(a => a.VespeneCost);
         public int TimeCost => CalculateTimeCost();
 
         protected List<ICondition> Conditions { get; set; } = [];
-        protected ActionNode ActionTree { get; } = ActionNode.GetRootNode();
+        protected ActionNode ActionTree { get; } = ActionNode.GetRootNode(Name);
         protected List<IAction> Actions => ActionTree.GetRecursiveChildActions();
 
         public List<ICondition> GetConditions() => Conditions;

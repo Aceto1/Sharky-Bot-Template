@@ -13,7 +13,7 @@ namespace StarCraft2Bot.Builds
 {
     public class SimpleBuildBlockExample : Build
     {
-        Queue<IAction>? ActionQueue;
+        Queue<AutoTechBuildBlock> ActionQueue = [];
 
         public SimpleBuildBlockExample(BaseBot defaultSharkyBot) : base(defaultSharkyBot)
         {
@@ -28,15 +28,13 @@ namespace StarCraft2Bot.Builds
             BuildOptions.StrictGasCount = true;
             BuildOptions.StrictWorkerCount = false;
 
-            ActionQueue = new Queue<IAction> { };
-
-            var expandSupplyBarrackGasBlock = new AutoTechBuildBlock(DefaultBot).WithConditions([]).WithActionNodes(root =>
+            var expandSupplyBarrackGasBlock = new AutoTechBuildBlock("ExpandSupplyBarrackGas",DefaultBot).WithConditions([]).WithActionNodes(root =>
             {
-                root.AddActionOnStart(new BuildAction(new SupplyCondition(13, MacroData), new SupplyDepotDesire(1, MacroData, UnitCountService)), n =>
+                root.AddActionOnStart("BuildSupply", new BuildAction(new SupplyCondition(13, MacroData), new SupplyDepotDesire(1, MacroData, UnitCountService)), n =>
                 {
-                    n.AddActionOnStart(new BuildAction(new SupplyCondition(14, MacroData), new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 1, MacroData, UnitCountService)), n =>
+                    n.AddActionOnStart("BuildBarrack", new BuildAction(new SupplyCondition(14, MacroData), new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 1, MacroData, UnitCountService)), n =>
                     {
-                        n.AddActionOnStart(new BuildAction(new UnitCompletedCountCondition(UnitTypes.TERRAN_BARRACKS, 1, UnitCountService), new GasBuildingCountDesire(1, MacroData, UnitCountService)), n =>
+                        n.AddActionOnStart("BuildGas",new BuildAction(new UnitCompletedCountCondition(UnitTypes.TERRAN_BARRACKS, 1, UnitCountService), new GasBuildingCountDesire(1, MacroData, UnitCountService)), n =>
                         {
                         });
                     });
@@ -44,16 +42,16 @@ namespace StarCraft2Bot.Builds
             });
             var scoutWithTrainedReaper = new ScoutWithTrainedReaper(DefaultBot);
 
-            var testBlock = new AutoTechBuildBlock(DefaultBot).WithActionNodes(root =>
+            var testBlock = new AutoTechBuildBlock("TestBlock",DefaultBot).WithActionNodes(root =>
             {
-                root.AddActionOnStart(new BuildAction(new SupplyCondition(13, MacroData), new SupplyDepotDesire(1, MacroData, UnitCountService)), node =>
+                root.AddActionOnStart("BuildSupply",new BuildAction(new SupplyCondition(13, MacroData), new SupplyDepotDesire(1, MacroData, UnitCountService)), node =>
                 {
-                    node.AddActionOnStart(new BuildAction(new SupplyCondition(13, MacroData), new UnitDesire(UnitTypes.TERRAN_BATTLECRUISER, 1, DefaultBot.MacroData.DesiredUnitCounts, DefaultBot.UnitCountService)));
+                    node.AddActionOnStart("BuildBattleCruiser", new BuildAction(new SupplyCondition(13, MacroData), new UnitDesire(UnitTypes.TERRAN_BATTLECRUISER, 1, DefaultBot.MacroData.DesiredUnitCounts, DefaultBot.UnitCountService)));
                 });
-                root.AddActionOnStart(new BuildAction(new NoneCondition(), new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 1, DefaultBot.MacroData, DefaultBot.UnitCountService)));
+                root.AddActionOnStart("BuildBarrack", new BuildAction(new NoneCondition(), new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 1, DefaultBot.MacroData, DefaultBot.UnitCountService)));
             });
-            //ActionQueue.Enqueue(expandSupplyBarrackGasBlock);
-            //ActionQueue.Enqueue(scoutWithTrainedReaper);
+            ActionQueue.Enqueue(expandSupplyBarrackGasBlock);
+            ActionQueue.Enqueue(scoutWithTrainedReaper);
             ActionQueue.Enqueue(testBlock);
         }
 
@@ -62,17 +60,15 @@ namespace StarCraft2Bot.Builds
         public override void OnFrame(ResponseObservation observation)
         {
             base.OnFrame(observation);
-            if (ActionQueue == null)
-            {
-                throw new InvalidOperationException("BuildOrder has not been initialized.");
-            }
-
             if (ActionQueue.Count == 0)
             {
                 return;
             }
 
             var currentBlock = ActionQueue.Peek();
+            if (!currentBlock.AreConditionsFulfilled()) return;
+
+            if (!currentBlock.HasStarted()) currentBlock.PrintBuildBlock();
             if (currentBlock.HasCompleted())
             {
                 ActionQueue.Dequeue();

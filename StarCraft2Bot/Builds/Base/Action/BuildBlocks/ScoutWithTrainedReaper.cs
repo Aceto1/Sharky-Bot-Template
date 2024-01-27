@@ -10,14 +10,14 @@ namespace StarCraft2Bot.Builds.Base.Action.BuildBlocks
 {
     class ScoutWithTrainedReaper : AutoTechBuildBlock
     {
-        public ScoutWithTrainedReaper(BaseBot bot) : base(bot)
+        public ScoutWithTrainedReaper(BaseBot bot) : base("ScoutWithTrainedReaper", bot)
         {
             WithConditions(new UnitCompletedCountCondition(UnitTypes.TERRAN_REFINERY, 1, DefaultBot.UnitCountService));
             WithActionNodes(root =>
             {
-                root.AddActionOnStart(new BuildAction(new UnitCompletedCountCondition(UnitTypes.TERRAN_BARRACKS, 1, DefaultBot.UnitCountService), new UnitDesire(UnitTypes.TERRAN_REAPER, 1, DefaultBot.MacroData.DesiredUnitCounts, DefaultBot.UnitCountService)), node =>
+                root.AddActionOnStart("TrainReaper", new BuildAction(new UnitCompletedCountCondition(UnitTypes.TERRAN_BARRACKS, 1, DefaultBot.UnitCountService), new UnitDesire(UnitTypes.TERRAN_REAPER, 1, DefaultBot.MacroData.DesiredUnitCounts, DefaultBot.UnitCountService)), node =>
                 {
-                    node.AddActionOnStart(new BuildAction(new UnitCompletedCountCondition(UnitTypes.TERRAN_REAPER, 1, DefaultBot.UnitCountService), new CustomDesire(EnableReaperScouting)));
+                    node.AddActionOnStart("StartReaperScouting", new BuildAction(new UnitCompletedCountCondition(UnitTypes.TERRAN_REAPER, 1, DefaultBot.UnitCountService), new CustomDesire(EnableReaperScouting)));
                 });
             });
         }

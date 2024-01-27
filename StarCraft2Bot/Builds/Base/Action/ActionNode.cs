@@ -2,7 +2,8 @@
 {
     public class ActionNode
     {
-        readonly IAction? nodeAction;
+        public readonly string? Name = null;
+        public readonly IAction? nodeAction;
         readonly ParentConditionFunction nodeEnforceCondition;
         readonly ActionNode? parentNode;
         readonly List<ActionNode> childrenNodes = [];
@@ -13,19 +14,22 @@
 
         public delegate void PopulateActionTree(ActionNode root);
 
-        private ActionNode(ActionNode? parent, IAction? action, ParentConditionFunction condition)
+        private ActionNode(string? name, ActionNode? parent, IAction? action, ParentConditionFunction condition)
         {
+            this.Name = name;
             parentNode = parent;
             nodeAction = action;
             nodeEnforceCondition = condition;
         }
-        internal static ActionNode GetRootNode() => new ActionNode(null, null, parentStartCondition);
+        internal static ActionNode GetRootNode(string name = "Root") => new ActionNode(name, null, null, parentStartCondition);
 
-        public ActionNode AddActionOnStart(IAction action, PopulateActionTree? populate = null) => AddActionToEnforce(action, parentStartCondition, populate);
-        public ActionNode AddActionOnCompletion(IAction action, PopulateActionTree? populate = null) => AddActionToEnforce(action, parentCompletedCondition, populate);
-        private ActionNode AddActionToEnforce(IAction action, ParentConditionFunction condition, PopulateActionTree? populate)
+        public ActionNode AddActionOnStart(string name, IAction action, PopulateActionTree? populate = null) => AddActionToEnforce(name, action, parentStartCondition, populate);
+        public ActionNode AddActionOnCompletion(string name, IAction action, PopulateActionTree? populate = null) => AddActionToEnforce(name, action, parentCompletedCondition, populate);
+        public ActionNode AddActionOnStart(IAction action, PopulateActionTree? populate = null) => AddActionToEnforce(null, action, parentStartCondition, populate);
+        public ActionNode AddActionOnCompletion(IAction action, PopulateActionTree? populate = null) => AddActionToEnforce(null, action, parentCompletedCondition, populate);
+        private ActionNode AddActionToEnforce(string? name, IAction action, ParentConditionFunction condition, PopulateActionTree? populate)
         {
-            ActionNode newChild = new ActionNode(this, action, condition);
+            ActionNode newChild = new ActionNode(name, this, action, condition);
             populate?.Invoke(newChild);
             childrenNodes.Add(newChild);
             return this;
@@ -56,29 +60,15 @@
             return recursiveChildActions;
         }
 
-        /**
-        internal List<ActionNode> GetParentNodes()
+        public static void PrintNodeTree(ActionNode node, string indent = "", bool last = true, Func<ActionNode, string>? additionalInfos = null)
         {
-            List<ActionNode> parentNodes = [];
-            ActionNode? node = parentNode;
-            while (node != null)
-            {
-                parentNodes.Add(node);
-                node = node.parentNode;
-            }
-            return parentNodes;
-        }
+            Console.WriteLine(indent + "+- " + node.Name + "(" + additionalInfos?.Invoke(node) + ")");
+            indent += last ? "   " : "|  ";
 
-        internal List<ActionNode> GetRecursiveChildrenNodes()
-        {
-            List<ActionNode> recursiveChildrenNodes = [];
-            foreach (ActionNode childNode in childrenNodes)
+            for (int i = 0; i < node.childrenNodes.Count; i++)
             {
-                recursiveChildrenNodes.Add(childNode);
-                recursiveChildrenNodes.AddRange(childNode.GetRecursiveChildrenNodes());
+                PrintNodeTree(node.childrenNodes[i], indent, i == node.childrenNodes.Count - 1, additionalInfos);
             }
-            return recursiveChildrenNodes;
         }
-        */
     }
 }

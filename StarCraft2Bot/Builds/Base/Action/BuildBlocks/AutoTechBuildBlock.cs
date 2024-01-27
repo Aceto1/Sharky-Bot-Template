@@ -6,7 +6,7 @@ using StarCraft2Bot.Helper;
 
 namespace StarCraft2Bot.Builds.Base.Action.BuildBlocks
 {
-    public class AutoTechBuildBlock(BaseBot bot) : BuildBlock()
+    public class AutoTechBuildBlock(string name, BaseBot bot) : BuildBlock(name)
     {
         protected readonly BaseBot DefaultBot = bot;
 
@@ -23,21 +23,25 @@ namespace StarCraft2Bot.Builds.Base.Action.BuildBlocks
             return this;
         }
 
-        private void DebugLogMissingTech()
+        public void PrintBuildBlock()
         {
-            foreach (IAction action in Actions)
-            {
-                List<UnitTypes> desiredUnits = GetDesiredUnitsOfAction(action);
-                if (desiredUnits.Count == 0) continue;
-
-                HashSet<UnitTypes> techRequirements = desiredUnits.SelectMany(TerranTechTree.GetRecursiveRequiredTechStructuresForUnit).ToHashSet();
-                Console.WriteLine((string.Join(",", desiredUnits) + " requires " + string.Join(",", techRequirements)).Replace("TERRAN_", ""));
-            }
+            ActionNode.PrintNodeTree(ActionTree, additionalInfos: node => string.Join(",", GetRequiredTechForActionNode(node)));
         }
 
         private void InjectMissingTechBuildingNodes()
         {
-            DebugLogMissingTech();
+            
+        }
+
+        private List<UnitTypes> GetRequiredTechForActionNode(ActionNode node)
+        {
+            List<UnitTypes> desiredUnits = node.nodeAction != null ? GetDesiredUnitsOfAction(node.nodeAction) : [];
+            return desiredUnits.SelectMany(TerranTechTree.GetRecursiveRequiredTechStructuresForUnit).ToList();
+        }
+
+        private IDesire GetDesireToBuildTech(UnitTypes unit)
+        {
+            return new CustomDesire(() => { });
         }
 
         private List<UnitTypes> GetDesiredUnitsOfAction(IAction action)
