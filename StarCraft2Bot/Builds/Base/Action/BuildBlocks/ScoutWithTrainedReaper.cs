@@ -12,14 +12,14 @@ namespace StarCraft2Bot.Builds.Base.Action.BuildBlocks
     {
         public ScoutWithTrainedReaper(BaseBot bot) : base(bot)
         {
-            base.WithConditions([
-                new UnitCompletedCountCondition(UnitTypes.TERRAN_BARRACKS, 1, DefaultBot.UnitCountService),
-                new UnitCompletedCountCondition(UnitTypes.TERRAN_REFINERY, 1, DefaultBot.UnitCountService),
-            ]);
-            base.WithSerialActions([
-                new BuildAction(new UnitCompletedCountCondition(UnitTypes.TERRAN_BARRACKS, 1, DefaultBot.UnitCountService), new UnitDesire(UnitTypes.TERRAN_REAPER, 1, DefaultBot.MacroData.DesiredUnitCounts, DefaultBot.UnitCountService)),
-                new BuildAction(new UnitCompletedCountCondition(UnitTypes.TERRAN_REAPER, 1, DefaultBot.UnitCountService), new CustomDesire(EnableReaperScouting)),
-            ]);
+            WithConditions(new UnitCompletedCountCondition(UnitTypes.TERRAN_REFINERY, 1, DefaultBot.UnitCountService));
+            WithActionNodes(root =>
+            {
+                root.AddActionOnStart(new BuildAction(new UnitCompletedCountCondition(UnitTypes.TERRAN_BARRACKS, 1, DefaultBot.UnitCountService), new UnitDesire(UnitTypes.TERRAN_REAPER, 1, DefaultBot.MacroData.DesiredUnitCounts, DefaultBot.UnitCountService)), node =>
+                {
+                    node.AddActionOnStart(new BuildAction(new UnitCompletedCountCondition(UnitTypes.TERRAN_REAPER, 1, DefaultBot.UnitCountService), new CustomDesire(EnableReaperScouting)));
+                });
+            });
         }
 
         private void EnableReaperScouting()

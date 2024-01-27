@@ -1,10 +1,7 @@
-﻿using System.Numerics;
-using SC2APIProtocol;
+﻿using SC2APIProtocol;
 using Sharky;
 using Sharky.Builds;
-using Sharky.Extensions;
 using Sharky.MicroControllers;
-using Sharky.MicroTasks;
 using StarCraft2Bot.Bot;
 using StarCraft2Bot.Builds.Base;
 using StarCraft2Bot.Builds.Base.Action;
@@ -31,31 +28,36 @@ namespace StarCraft2Bot.Builds
             BuildOptions.StrictGasCount = true;
             BuildOptions.StrictWorkerCount = false;
 
-            ActionQueue = new Queue<IAction> {};
+            ActionQueue = new Queue<IAction> { };
 
-            //TerranTechTree.GetRequiredTechUnits(UnitTypes.TERRAN_REAPER).ToList().ForEach(unit => Console.WriteLine(unit));
-
-            var expandSupplyBarrackGasBlock = new AutoTechBuildBlock(DefaultBot)
-                .WithSerialActions([
-                    new BuildAction(new SupplyCondition(13, MacroData), new SupplyDepotDesire(1, MacroData, UnitCountService)),
-                    new BuildAction(new SupplyCondition(14, MacroData), new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 1, MacroData, UnitCountService)),
-                    new BuildAction(new UnitCompletedCountCondition(UnitTypes.TERRAN_BARRACKS, 1, UnitCountService), new GasBuildingCountDesire(1, MacroData, UnitCountService))
-                ]);
+            var expandSupplyBarrackGasBlock = new AutoTechBuildBlock(DefaultBot).WithConditions([]).WithActionNodes(root =>
+            {
+                root.AddActionOnStart(new BuildAction(new SupplyCondition(13, MacroData), new SupplyDepotDesire(1, MacroData, UnitCountService)), n =>
+                {
+                    n.AddActionOnStart(new BuildAction(new SupplyCondition(14, MacroData), new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 1, MacroData, UnitCountService)), n =>
+                    {
+                        n.AddActionOnStart(new BuildAction(new UnitCompletedCountCondition(UnitTypes.TERRAN_BARRACKS, 1, UnitCountService), new GasBuildingCountDesire(1, MacroData, UnitCountService)), n =>
+                        {
+                        });
+                    });
+                });
+            });
             var scoutWithTrainedReaper = new ScoutWithTrainedReaper(DefaultBot);
 
-            var testBlock = new AutoTechBuildBlock(DefaultBot)
-               .WithSerialActions([
-                   new BuildAction(new SupplyCondition(13, MacroData), new SupplyDepotDesire(1, MacroData, UnitCountService)),
-                   new BuildAction(new NoneCondition(), new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 1, DefaultBot.MacroData, DefaultBot.UnitCountService)),
-                   new BuildAction(new SupplyCondition(13, MacroData), new UnitDesire(UnitTypes.TERRAN_BATTLECRUISER, 1, DefaultBot.MacroData.DesiredUnitCounts, DefaultBot.UnitCountService)),
-               ]);
-
+            var testBlock = new AutoTechBuildBlock(DefaultBot).WithActionNodes(root =>
+            {
+                root.AddActionOnStart(new BuildAction(new SupplyCondition(13, MacroData), new SupplyDepotDesire(1, MacroData, UnitCountService)), node =>
+                {
+                    node.AddActionOnStart(new BuildAction(new SupplyCondition(13, MacroData), new UnitDesire(UnitTypes.TERRAN_BATTLECRUISER, 1, DefaultBot.MacroData.DesiredUnitCounts, DefaultBot.UnitCountService)));
+                });
+                root.AddActionOnStart(new BuildAction(new NoneCondition(), new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 1, DefaultBot.MacroData, DefaultBot.UnitCountService)));
+            });
             //ActionQueue.Enqueue(expandSupplyBarrackGasBlock);
             //ActionQueue.Enqueue(scoutWithTrainedReaper);
             ActionQueue.Enqueue(testBlock);
         }
 
-        
+
 
         public override void OnFrame(ResponseObservation observation)
         {
@@ -74,7 +76,8 @@ namespace StarCraft2Bot.Builds
             if (currentBlock.HasCompleted())
             {
                 ActionQueue.Dequeue();
-            } else
+            }
+            else
             {
                 currentBlock.Enforce();
             }
