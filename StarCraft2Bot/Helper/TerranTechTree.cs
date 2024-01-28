@@ -62,6 +62,8 @@ namespace StarCraft2Bot.Helper
 
         public static List<UnitTypes> GetRecursiveRequiredTechStructuresForUnit(UnitTypes unit)
         {
+            if (!TechTreeDict.ContainsKey(unit)) return [];
+
             List<UnitTypes> allTechStructures = TechTreeDict[unit].ToList();
 
             bool stable = false;
