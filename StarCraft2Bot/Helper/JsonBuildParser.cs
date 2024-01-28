@@ -29,12 +29,16 @@ namespace StarCraft2Bot.Helper
         public readonly JsonBuildTemplate template;
         public readonly JsonBuildConditionType conditionType;
         public readonly MacroData data;
+        public readonly UnitCountService unitCountService;
+        public readonly SharkyUnitData unitData;
 
-        public JsonBuildSettings(JsonBuildTemplate template, MacroData data, JsonBuildConditionType conditionType = JsonBuildConditionType.OnlySupplyCondition)
+        public JsonBuildSettings(JsonBuildTemplate template, MacroData data, UnitCountService unitCountService, SharkyUnitData unitData, JsonBuildConditionType conditionType = JsonBuildConditionType.OnlySupplyCondition)
         {
             this.template = template;
             this.data = data;
             this.conditionType = JsonBuildConditionType.OnlySupplyCondition;
+            this.unitCountService = unitCountService;
+            this.unitData = unitData;
 
             //TODO enable time condition, fix observation error
             if (conditionType != JsonBuildConditionType.OnlySupplyCondition)
@@ -115,49 +119,49 @@ namespace StarCraft2Bot.Helper
                 }
                 buildActionAmounts[desireActionString] = buildActionAmounts.GetValueOrDefault(desireActionString, 0) + amount;
 
-                IDesire parsedDesire = ParseDesireFromString(desireActionString, buildActionAmounts[desireActionString], buildSettings.data);
+                IDesire parsedDesire = ParseDesireFromString(desireActionString, buildActionAmounts[desireActionString], buildSettings.data, buildSettings.unitCountService, buildSettings.unitData);
                 desires.Add(parsedDesire);
             }
             return desires;
         }
 
-        private static IDesire ParseDesireFromString(string desireString, int amount, MacroData data)
+        private static IDesire ParseDesireFromString(string desireString, int amount, MacroData data, UnitCountService unitCountService, SharkyUnitData unitData)
         {
             return desireString switch
             {
-                "Armory" => new ProductionStructureDesire(UnitTypes.TERRAN_ARMORY, amount, data),
-                "Barracks" => new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, amount, data),
-                "Barracks Tech Lab" => new AddonStructureDesire(UnitTypes.TERRAN_TECHLAB, amount, data),
-                "Barracks Reactor" => new AddonStructureDesire(UnitTypes.TERRAN_BARRACKSREACTOR, amount, data),
-                "Combat Shield" => new UnitUpgradeDesire(Upgrades.SHIELDWALL, data),
-                "Command Center" => new ProductionStructureDesire(UnitTypes.TERRAN_COMMANDCENTER, amount, data),
-                "Cyclone" => new UnitDesire(UnitTypes.TERRAN_CYCLONE, amount, data.DesiredUnitCounts),
-                "Engineering Bay" => new ProductionStructureDesire(UnitTypes.TERRAN_ENGINEERINGBAY, amount, data),
-                "Factory" => new ProductionStructureDesire(UnitTypes.TERRAN_FACTORY, amount, data),
-                "Factory Tech Lab" => new AddonStructureDesire(UnitTypes.TERRAN_FACTORYTECHLAB, amount, data),
-                "Hellion" => new UnitDesire(UnitTypes.TERRAN_HELLION, amount, data.DesiredUnitCounts),
-                "Marauder" => new UnitDesire(UnitTypes.TERRAN_MARAUDER, amount, data.DesiredUnitCounts),
-                "Marine" => new UnitDesire(UnitTypes.TERRAN_MARINE, amount, data.DesiredUnitCounts),
-                "Medivac" => new UnitDesire(UnitTypes.TERRAN_MEDIVAC, amount, data.DesiredUnitCounts),
-                "Missile Turret" => new DefenseStructureDesire(UnitTypes.TERRAN_MISSILETURRET, amount, data),
-                "Orbital Command" => new MorphDesire(UnitTypes.TERRAN_ORBITALCOMMAND, amount, data),
-                "Raven" => new UnitDesire(UnitTypes.TERRAN_RAVEN, amount, data.DesiredUnitCounts),
-                "Siege Tank" => new UnitDesire(UnitTypes.TERRAN_SIEGETANK, amount, data.DesiredUnitCounts),
-                "Reaper" => new UnitDesire(UnitTypes.TERRAN_REAPER, amount, data.DesiredUnitCounts),
-                "Refinery" => new GasBuildingCountDesire(amount, data),
-                "Sensor Tower" => new DefenseStructureDesire(UnitTypes.TERRAN_SENSORTOWER, amount, data),
-                "Starport" => new ProductionStructureDesire(UnitTypes.TERRAN_STARPORT, amount, data),
-                "Starport Tech Lab" => new AddonStructureDesire(UnitTypes.TERRAN_STARPORTTECHLAB, amount, data),
-                "Starport Reactor" => new AddonStructureDesire(UnitTypes.TERRAN_STARPORTREACTOR, amount, data),
-                "Stimpack" => new UnitUpgradeDesire(Upgrades.STIMPACK, data),
-                "Supply Depot" => new SupplyDepotDesire(amount, data),
-                "Terran Infantry Armor Level 1" => new UnitUpgradeDesire(Upgrades.TERRANINFANTRYARMORSLEVEL1, data),
-                "Terran Infantry Armor Level 2" => new UnitUpgradeDesire(Upgrades.TERRANINFANTRYARMORSLEVEL2, data),
-                "Terran Infantry Weapons Level 1" => new UnitUpgradeDesire(Upgrades.TERRANINFANTRYWEAPONSLEVEL1, data),
-                "Terran Infantry Weapons Level 2" => new UnitUpgradeDesire(Upgrades.TERRANINFANTRYWEAPONSLEVEL2, data),
-                "Terran Vehicle And Ship Armor Level 1" => new UnitUpgradeDesire(Upgrades.TERRANVEHICLEANDSHIPARMORSLEVEL1, data),
-                "Thor" => new UnitDesire(UnitTypes.TERRAN_THOR, amount, data.DesiredUnitCounts),
-                "Widow Mine" => new UnitDesire(UnitTypes.TERRAN_WIDOWMINE, amount, data.DesiredUnitCounts),
+                "Armory" => new ProductionStructureDesire(UnitTypes.TERRAN_ARMORY, amount, data, unitCountService),
+                "Barracks" => new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, amount, data, unitCountService),
+                "Barracks Tech Lab" => new AddonStructureDesire(UnitTypes.TERRAN_TECHLAB, amount, data, unitCountService),
+                "Barracks Reactor" => new AddonStructureDesire(UnitTypes.TERRAN_BARRACKSREACTOR, amount, data, unitCountService),
+                "Combat Shield" => new UnitUpgradeDesire(Upgrades.SHIELDWALL, data, unitData),
+                "Command Center" => new ProductionStructureDesire(UnitTypes.TERRAN_COMMANDCENTER, amount, data, unitCountService),
+                "Cyclone" => new UnitDesire(UnitTypes.TERRAN_CYCLONE, amount, data.DesiredUnitCounts, unitCountService),
+                "Engineering Bay" => new ProductionStructureDesire(UnitTypes.TERRAN_ENGINEERINGBAY, amount, data, unitCountService),
+                "Factory" => new ProductionStructureDesire(UnitTypes.TERRAN_FACTORY, amount, data, unitCountService),
+                "Factory Tech Lab" => new AddonStructureDesire(UnitTypes.TERRAN_FACTORYTECHLAB, amount, data, unitCountService),
+                "Hellion" => new UnitDesire(UnitTypes.TERRAN_HELLION, amount, data.DesiredUnitCounts, unitCountService),
+                "Marauder" => new UnitDesire(UnitTypes.TERRAN_MARAUDER, amount, data.DesiredUnitCounts, unitCountService),
+                "Marine" => new UnitDesire(UnitTypes.TERRAN_MARINE, amount, data.DesiredUnitCounts, unitCountService),
+                "Medivac" => new UnitDesire(UnitTypes.TERRAN_MEDIVAC, amount, data.DesiredUnitCounts, unitCountService),
+                "Missile Turret" => new DefenseStructureDesire(UnitTypes.TERRAN_MISSILETURRET, amount, data, unitCountService),
+                "Orbital Command" => new MorphDesire(UnitTypes.TERRAN_ORBITALCOMMAND, amount, data, unitCountService),
+                "Raven" => new UnitDesire(UnitTypes.TERRAN_RAVEN, amount, data.DesiredUnitCounts, unitCountService),
+                "Siege Tank" => new UnitDesire(UnitTypes.TERRAN_SIEGETANK, amount, data.DesiredUnitCounts, unitCountService),
+                "Reaper" => new UnitDesire(UnitTypes.TERRAN_REAPER, amount, data.DesiredUnitCounts, unitCountService),
+                "Refinery" => new GasBuildingCountDesire(amount, data, unitCountService),
+                "Sensor Tower" => new DefenseStructureDesire(UnitTypes.TERRAN_SENSORTOWER, amount, data, unitCountService),
+                "Starport" => new ProductionStructureDesire(UnitTypes.TERRAN_STARPORT, amount, data, unitCountService),
+                "Starport Tech Lab" => new AddonStructureDesire(UnitTypes.TERRAN_STARPORTTECHLAB, amount, data, unitCountService),
+                "Starport Reactor" => new AddonStructureDesire(UnitTypes.TERRAN_STARPORTREACTOR, amount, data, unitCountService),
+                "Stimpack" => new UnitUpgradeDesire(Upgrades.STIMPACK, data, unitData),
+                "Supply Depot" => new SupplyDepotDesire(amount, data, unitCountService),
+                "Terran Infantry Armor Level 1" => new UnitUpgradeDesire(Upgrades.TERRANINFANTRYARMORSLEVEL1, data, unitData),
+                "Terran Infantry Armor Level 2" => new UnitUpgradeDesire(Upgrades.TERRANINFANTRYARMORSLEVEL2, data, unitData),
+                "Terran Infantry Weapons Level 1" => new UnitUpgradeDesire(Upgrades.TERRANINFANTRYWEAPONSLEVEL1, data, unitData),
+                "Terran Infantry Weapons Level 2" => new UnitUpgradeDesire(Upgrades.TERRANINFANTRYWEAPONSLEVEL2, data, unitData),
+                "Terran Vehicle And Ship Armor Level 1" => new UnitUpgradeDesire(Upgrades.TERRANVEHICLEANDSHIPARMORSLEVEL1, data, unitData),
+                "Thor" => new UnitDesire(UnitTypes.TERRAN_THOR, amount, data.DesiredUnitCounts, unitCountService),
+                "Widow Mine" => new UnitDesire(UnitTypes.TERRAN_WIDOWMINE, amount, data.DesiredUnitCounts, unitCountService),
                 _ => throw new Exception($"TODO: Include {desireString} as switch case to ParseDesireFromString in JsonBuild.cs", null),
             };
         }

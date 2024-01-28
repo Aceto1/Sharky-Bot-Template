@@ -41,56 +41,56 @@ namespace StarCraft2Bot.Builds
             BuildOrder = new Queue<BuildAction>();
 
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(14, MacroData),
-                                               new SupplyDepotDesire(1, MacroData)));
+                                               new SupplyDepotDesire(1, MacroData, UnitCountService)));
 
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(15, MacroData),
-                                               new GasBuildingCountDesire(1, MacroData)));
+                                               new GasBuildingCountDesire(1, MacroData, UnitCountService)));
 
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(16, MacroData),
-                                               new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 1, MacroData)));
+                                               new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 1, MacroData, UnitCountService)));
 
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(19, MacroData), 
-                                               new UnitDesire(UnitTypes.TERRAN_REAPER, 1, MacroData.DesiredUnitCounts),
-                                               new MorphDesire(UnitTypes.TERRAN_ORBITALCOMMAND, 1, MacroData)));
+                                               new UnitDesire(UnitTypes.TERRAN_REAPER, 1, MacroData.DesiredUnitCounts, UnitCountService),
+                                               new MorphDesire(UnitTypes.TERRAN_ORBITALCOMMAND, 1, MacroData, UnitCountService)));
 
             // ENTWEDER: Gegner hat Baracke in der Base => CC bauen, ODER: Gegner hat keine Baracke in der Base => Gegner spielt Proxy => Transition
             // Wir tun mal so als spielt der Gegner nie Proxy, TODO: anderen Fall implementieren (Hausaufgaben yay)
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(20, MacroData),
-                                               new ProductionStructureDesire(UnitTypes.TERRAN_COMMANDCENTER, 2, MacroData)));
+                                               new ProductionStructureDesire(UnitTypes.TERRAN_COMMANDCENTER, 2, MacroData, UnitCountService)));
 
             BuildOrder.Enqueue(new BuildAction(new UnitCountCondition(UnitTypes.TERRAN_COMMANDCENTER, 2, UnitCountService),
-                                               new UnitDesire(UnitTypes.TERRAN_SCV, 24, MacroData.DesiredUnitCounts)));
+                                               new UnitDesire(UnitTypes.TERRAN_SCV, 24, MacroData.DesiredUnitCounts, UnitCountService)));
 
             BuildOrder.Enqueue(new BuildAction(new UnitCountCondition(UnitTypes.TERRAN_COMMANDCENTER, 2, UnitCountService),
-                                               new ProductionStructureDesire(UnitTypes.TERRAN_FACTORY, 1, MacroData)));
+                                               new ProductionStructureDesire(UnitTypes.TERRAN_FACTORY, 1, MacroData, UnitCountService)));
 
             BuildOrder.Enqueue(new BuildAction(new UnitCompletedCountCondition(UnitTypes.TERRAN_REAPER, 1, UnitCountService),
-                                               new AddonStructureDesire(UnitTypes.TERRAN_BARRACKSREACTOR, 1, MacroData)));
+                                               new AddonStructureDesire(UnitTypes.TERRAN_BARRACKSREACTOR, 1, MacroData, UnitCountService)));
 
             BuildOrder.Enqueue(new BuildAction(new UnitCountCondition(UnitTypes.TERRAN_FACTORY, 1, UnitCountService),
-                                               new SupplyDepotDesire(2, MacroData),
-                                               new AddonStructureDesire(UnitTypes.TERRAN_FACTORYTECHLAB, 1, MacroData)));
+                                               new SupplyDepotDesire(2, MacroData, UnitCountService),
+                                               new AddonStructureDesire(UnitTypes.TERRAN_FACTORYTECHLAB, 1, MacroData, UnitCountService)));
 
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(22, MacroData),
-                                               new GasBuildingCountDesire(2, MacroData)));
+                                               new GasBuildingCountDesire(2, MacroData, UnitCountService)));
 
             BuildOrder.Enqueue(new BuildAction(new UnitCompletedCountCondition(UnitTypes.TERRAN_FACTORY, 1, UnitCountService),
-                                               new UnitDesire(UnitTypes.TERRAN_CYCLONE, 1, MacroData.DesiredUnitCounts)));
+                                               new UnitDesire(UnitTypes.TERRAN_CYCLONE, 1, MacroData.DesiredUnitCounts, UnitCountService)));
 
             BuildOrder.Enqueue(new BuildAction(new UnitCompletedCountCondition(UnitTypes.TERRAN_BARRACKSREACTOR, 1, UnitCountService),
-                                               new UnitDesire(UnitTypes.TERRAN_MARINE, 2, MacroData.DesiredUnitCounts)));
+                                               new UnitDesire(UnitTypes.TERRAN_MARINE, 2, MacroData.DesiredUnitCounts, UnitCountService)));
 
             BuildOrder.Enqueue(new BuildAction(new WorkerCountCondition(23, UnitCountService),
-                                               new MorphDesire(UnitTypes.TERRAN_ORBITALCOMMAND, 2, MacroData)));
+                                               new MorphDesire(UnitTypes.TERRAN_ORBITALCOMMAND, 2, MacroData, UnitCountService)));
 
             BuildOrder.Enqueue(new BuildAction(new UnitCompletedCountCondition(UnitTypes.TERRAN_MARINE, 2, UnitCountService),
-                                               new UnitDesire(UnitTypes.TERRAN_MARINE, 4, MacroData.DesiredUnitCounts)));
+                                               new UnitDesire(UnitTypes.TERRAN_MARINE, 4, MacroData.DesiredUnitCounts, UnitCountService)));
 
             BuildOrder.Enqueue(new BuildAction(new SupplyCondition(29, MacroData),
-                                               new ProductionStructureDesire(UnitTypes.TERRAN_STARPORT, 1, MacroData)));
+                                               new ProductionStructureDesire(UnitTypes.TERRAN_STARPORT, 1, MacroData, UnitCountService)));
 
             BuildOrder.Enqueue(new BuildAction(new UnitCountCondition(UnitTypes.TERRAN_STARPORT, 1, UnitCountService),
-                                               new UnitDesire(UnitTypes.TERRAN_CYCLONE, 2, MacroData.DesiredUnitCounts)));
+                                               new UnitDesire(UnitTypes.TERRAN_CYCLONE, 2, MacroData.DesiredUnitCounts, UnitCountService)));
         }
 
         public override void OnFrame(ResponseObservation observation)

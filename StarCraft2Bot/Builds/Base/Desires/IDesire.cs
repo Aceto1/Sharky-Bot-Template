@@ -6,6 +6,13 @@
 
         public bool Enforced { get; set; }
 
-        //public List<BuildAction> AdditionalActions { get; set; }
+        public int MineralCost { get; }
+
+        public int VespeneCost { get; }
+
+        /// <summary>
+        /// Cost in seconds
+        /// </summary>
+        public int TimeCost { get; }
     }
 }

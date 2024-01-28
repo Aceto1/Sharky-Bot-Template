@@ -7,7 +7,22 @@
             CurrentBuild = currentBuild;
         }
 
+        public TransitionDesire(Build currentBuild, int mineralCost, int vespeneCost, int timeCost)
+        {
+            CurrentBuild = currentBuild;
+
+            MineralCost = mineralCost;
+            VespeneCost = vespeneCost;
+            TimeCost = timeCost;
+        }
+
         public bool Enforced { get; set; }
+        
+        public int MineralCost { get; }
+        
+        public int VespeneCost { get; }
+        
+        public int TimeCost { get; }
 
         public Build CurrentBuild { get; set; }
 

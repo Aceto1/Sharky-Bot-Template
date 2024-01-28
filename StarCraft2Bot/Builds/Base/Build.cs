@@ -27,18 +27,18 @@ namespace StarCraft2Bot.Builds.Base
             DefaultBot = defaultSharkyBot;
         }
 
-        public void AddActionOnWorkerCount(ValueRange workerCount, UnitTypes desireUnitType, ValueRange desireCount, Dictionary<UnitTypes, ValueRange>? dataDict = null)
+        public void AddActionOnWorkerCount(ValueRange workerCount, UnitTypes desireUnitType, ValueRange desireCount, UnitCountService unitCountService, Dictionary<UnitTypes, ValueRange>? dataDict = null)
         {
             dataDict ??= MacroData.DesiredProductionCounts;
 
-            actions.Add(new BuildAction(new WorkerCountCondition(workerCount, UnitCountService), new UnitDesire(desireUnitType, desireCount, dataDict)));
+            actions.Add(new BuildAction(new WorkerCountCondition(workerCount, UnitCountService), new UnitDesire(desireUnitType, desireCount, dataDict, unitCountService)));
         }
 
-        public void AddActionOnCompletedStructure(UnitTypes structureType, ValueRange structureCount, UnitTypes desireUnitType, ValueRange desireCount, Dictionary<UnitTypes, ValueRange>? dataDict = null)
+        public void AddActionOnCompletedStructure(UnitTypes structureType, ValueRange structureCount, UnitTypes desireUnitType, ValueRange desireCount, UnitCountService unitCountService, Dictionary<UnitTypes, ValueRange>? dataDict = null)
         {
             dataDict ??= MacroData.DesiredProductionCounts;
 
-            actions.Add(new BuildAction(new UnitCountCondition(structureType, structureCount, UnitCountService), new UnitDesire(desireUnitType, desireCount, dataDict)));
+            actions.Add(new BuildAction(new UnitCountCondition(structureType, structureCount, UnitCountService), new UnitDesire(desireUnitType, desireCount, dataDict, unitCountService)));
         }
 
         public void AddAction(BuildAction action)

@@ -1,4 +1,5 @@
-﻿using StarCraft2Bot.Builds.Base.Condition;
+﻿using System.Security.Cryptography;
+using StarCraft2Bot.Builds.Base.Condition;
 using StarCraft2Bot.Builds.Base.Desires;
 
 namespace StarCraft2Bot.Builds.Base
@@ -44,6 +45,12 @@ namespace StarCraft2Bot.Builds.Base
         {
             Desires.ForEach(m => m.Enforce());
         }
+
+        public int MineralCost => Desires.Sum(m => m.MineralCost);
+
+        public int VespeneCost => Desires.Sum(m => m.VespeneCost);
+
+        public int TimeCost => Desires.Sum(m => m.TimeCost);
 
         public List<ICondition> Conditions { get; set; }
 

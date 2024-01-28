@@ -11,7 +11,7 @@ namespace StarCraft2Bot
     {
         private static int startupPort = 5000;
 
-        private static bool CheckPort(int startupPort)
+        private static bool CheckPort(int port)
         {
             bool isAvailable = true;
 
@@ -24,7 +24,7 @@ namespace StarCraft2Bot
 
             foreach (TcpConnectionInformation tcpi in tcpConnInfoArray)
             {
-                if (tcpi.LocalEndPoint.Port >= startupPort && tcpi.LocalEndPoint.Port <= startupPort + 5)
+                if (tcpi.LocalEndPoint.Port >= port && tcpi.LocalEndPoint.Port <= port + 5)
                 {
                     isAvailable = false;
                     break;
@@ -34,19 +34,32 @@ namespace StarCraft2Bot
             return isAvailable;
         }
 
-        public static Task<Process> StartSinglePlayerGame(List<Map> maps)
+        private static SharkyBot GetBot(GameConnection gameConnection)
         {
-            var gameConnection = new GameConnection();
             var defaultSharkyBot = new BaseBot(gameConnection);
             defaultSharkyBot.BuildChoices[Race.Terran] = new BuildChoicesManager(defaultSharkyBot).GetBuildChoices();
-            var exampleBot = defaultSharkyBot.CreateBot(defaultSharkyBot.Managers, defaultSharkyBot.DebugService);
-            
-            while(!CheckPort(startupPort))
+            return defaultSharkyBot.CreateBot(defaultSharkyBot.Managers, defaultSharkyBot.DebugService);
+        }
+
+        private static Task<Process> StartSinglePlayerGame(List<Map> maps)
+        {
+            var gameConnection = new GameConnection();
+            var exampleBot = GetBot(gameConnection);
+
+            while (!CheckPort(startupPort))
                 startupPort += 5;
 
             var map = maps.GetRandomEntry();
 
             return gameConnection.RunSinglePlayer(exampleBot, $"{Enum.GetName(map)}AIE.SC2Map", Race.Terran, Race.Terran, Difficulty.CheatInsane, AIBuild.RandomBuild, startupPort, realTime: false);
+        }
+
+        private static void RunLadderGame(string[] args)
+        {
+            var gameConnection = new GameConnection();
+            var exampleBot = GetBot(gameConnection);
+
+            gameConnection.RunLadder(exampleBot, Race.Terran, args).Wait();
         }
 
         static void Main(string[] args)
@@ -70,21 +83,26 @@ namespace StarCraft2Bot
                 Map.Moondance
             };
 
-            if(endless)
+            if (endless)
                 Console.WriteLine("Running in endless mode...");
 
-            do
+            if (endless || args.Length == 0)
             {
-                var game = StartSinglePlayerGame(maps);
-
-                while (!game.IsCompleted)
+                do
                 {
-                    Thread.Sleep(50);
-                }
-              
-                Thread.Sleep(500);
-                game.Result.Kill();
-            } while (endless);
+                    var game = StartSinglePlayerGame(maps);
+
+                    while (!game.IsCompleted)
+                    {
+                        Thread.Sleep(50);
+                    }
+
+                    Thread.Sleep(500);
+                    game.Result.Kill();
+                } while (true);
+            }
+            else 
+                RunLadderGame(args);
         }
     }
 }
