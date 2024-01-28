@@ -31,7 +31,7 @@ namespace StarCraft2Bot.Builds.Base.Action
 
         public void Enforce()
         {
-            ActionTree.EnforceChildrenNodes();
+            ActionTree.EnforceNode();
         }
     }
 }

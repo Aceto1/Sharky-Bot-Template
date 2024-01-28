@@ -58,16 +58,7 @@ namespace StarCraft2Bot.Helper
                 {UnitTypes.TERRAN_BATTLECRUISER, [UnitTypes.TERRAN_STARPORTTECHLAB, UnitTypes.TERRAN_FUSIONCORE] },
             };
 
-        public static bool RequiredTech(UnitTypes unit, UnitCountService ucs)
-        {
-            HashSet<UnitTypes> requiredTechUnits = GetRequiredTechStructuresForUnit(unit);
-            return requiredTechUnits.All(unit => ucs.BuildingsDoneAndInProgressCount(unit) > 0);
-        }
-
-        public static HashSet<UnitTypes> GetRequiredTechStructuresForUnit(UnitTypes unit)
-        {
-            return TechTreeDict[unit];
-        }
+        public static HashSet<UnitTypes> TechUnits => TechTreeDict.Values.SelectMany(v => v).ToHashSet();
 
         public static List<UnitTypes> GetRecursiveRequiredTechStructuresForUnit(UnitTypes unit)
         {

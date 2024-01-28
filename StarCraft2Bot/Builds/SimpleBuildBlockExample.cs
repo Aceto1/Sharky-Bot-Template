@@ -41,14 +41,23 @@ namespace StarCraft2Bot.Builds
                 });
             });
             var scoutWithTrainedReaper = new ScoutWithTrainedReaper(DefaultBot);
-
             var testBlock = new AutoTechBuildBlock("TestBlock",DefaultBot).WithActionNodes(root =>
             {
                 root.AddActionOnStart("BuildSupply",new BuildAction(new SupplyCondition(13, MacroData), new SupplyDepotDesire(1, MacroData, UnitCountService)), node =>
                 {
+                    node.AddActionOnCompletion("BuildSupply", new BuildAction(new SupplyCondition(13, MacroData), new SupplyDepotDesire(2, MacroData, UnitCountService)), node =>
+                    {
+                        node.AddActionOnCompletion("BuildSupply", new BuildAction(new SupplyCondition(13, MacroData), new SupplyDepotDesire(4, MacroData, UnitCountService)), node =>
+                        {
+                            node.AddActionOnCompletion("BuildSupply", new BuildAction(new SupplyCondition(13, MacroData), new SupplyDepotDesire(8, MacroData, UnitCountService)));
+                        });
+                    });
+                });
+                root.AddActionOnStart("BuildGas", new BuildAction(new SupplyCondition(13, MacroData), new GasBuildingCountDesire(1, MacroData, UnitCountService)));
+                root.AddActionOnStart("BuildBarrack", new BuildAction(new NoneCondition(), new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 1, DefaultBot.MacroData, DefaultBot.UnitCountService)), node =>
+                {
                     node.AddActionOnStart("BuildBattleCruiser", new BuildAction(new SupplyCondition(13, MacroData), new UnitDesire(UnitTypes.TERRAN_BATTLECRUISER, 1, DefaultBot.MacroData.DesiredUnitCounts, DefaultBot.UnitCountService)));
                 });
-                root.AddActionOnStart("BuildBarrack", new BuildAction(new NoneCondition(), new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 1, DefaultBot.MacroData, DefaultBot.UnitCountService)));
             });
             ActionQueue.Enqueue(expandSupplyBarrackGasBlock);
             ActionQueue.Enqueue(scoutWithTrainedReaper);
@@ -68,7 +77,6 @@ namespace StarCraft2Bot.Builds
             var currentBlock = ActionQueue.Peek();
             if (!currentBlock.AreConditionsFulfilled()) return;
 
-            if (!currentBlock.HasStarted()) currentBlock.PrintBuildBlock();
             if (currentBlock.HasCompleted())
             {
                 ActionQueue.Dequeue();

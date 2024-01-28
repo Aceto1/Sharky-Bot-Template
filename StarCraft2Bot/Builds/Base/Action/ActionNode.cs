@@ -5,8 +5,8 @@
         public readonly string? Name = null;
         public readonly IAction? nodeAction;
         readonly ParentConditionFunction nodeEnforceCondition;
-        readonly ActionNode? parentNode;
-        readonly List<ActionNode> childrenNodes = [];
+        internal ActionNode? parentNode;
+        internal readonly List<ActionNode> childrenNodes = [];
 
         private delegate bool ParentConditionFunction(ActionNode node);
         private static readonly ParentConditionFunction parentStartCondition = n => n.nodeAction?.HasStarted() ?? true;
@@ -21,6 +21,7 @@
             nodeAction = action;
             nodeEnforceCondition = condition;
         }
+
         internal static ActionNode GetRootNode(string name = "Root") => new ActionNode(name, null, null, parentStartCondition);
 
         public ActionNode AddActionOnStart(string name, IAction action, PopulateActionTree? populate = null) => AddActionToEnforce(name, action, parentStartCondition, populate);
@@ -35,17 +36,34 @@
             return this;
         }
 
-        internal void EnforceChildrenNodes()
+        internal void EnforceNode()
         {
             foreach (ActionNode child in childrenNodes)
             {
                 if (child.nodeEnforceCondition.Invoke(this))
                 {
                     child.nodeAction?.Enforce();
-                    child.EnforceChildrenNodes();
+                    child.EnforceNode();
                 }
             }
         }
+
+        internal void InjectActionBetweenParent(string name, IAction action)
+        {
+            if (this.parentNode == null) return;
+
+            ActionNode nodeToInject = new ActionNode(name, null, action, parentStartCondition);
+
+            nodeToInject.parentNode = this.parentNode;
+            nodeToInject.parentNode.childrenNodes.Add(nodeToInject);
+
+            this.parentNode.childrenNodes.Remove(this);
+
+            this.parentNode = nodeToInject;
+            nodeToInject.childrenNodes.Add(this);
+
+        }
+
         internal List<IAction> GetRecursiveChildActions()
         {
             List<IAction> recursiveChildActions = [];
@@ -62,7 +80,12 @@
 
         public static void PrintNodeTree(ActionNode node, string indent = "", bool last = true, Func<ActionNode, string>? additionalInfos = null)
         {
-            Console.WriteLine(indent + "+- " + node.Name + "(" + additionalInfos?.Invoke(node) + ")");
+            string treeBranch = node.nodeAction?.HasStarted()??false ? "*- " : (node.nodeAction?.HasCompleted() ?? false ? "#- " : "+- ");
+
+            string additionalInfosString = additionalInfos?.Invoke(node) ?? "";
+            additionalInfosString = additionalInfosString != "" ? "(" + additionalInfosString + ")" : "";
+
+            Console.WriteLine(indent + treeBranch + node.Name + additionalInfosString);
             indent += last ? "   " : "|  ";
 
             for (int i = 0; i < node.childrenNodes.Count; i++)
