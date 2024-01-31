@@ -93,13 +93,14 @@ namespace StarCraft2Bot.Builds.Base.Action.BuildBlocks
             node.nodeAction?.GetDesires().Select(GetUnitFromDesire).OfType<UnitTypes>().ToHashSet() ?? [];
 
         private HashSet<UnitTypes> GetAvailableTechUnits() => 
-            TerranTechTree.TechUnits.Where(unit => DefaultBot.UnitCountService.BuildingsDoneAndInProgressCount(unit) > 0).ToHashSet();
+            TerranTechTree.TechUnits.Where(unit => GetDesiredUnitCount(unit) > 0).ToHashSet();
 
         private IDesire GetDesireForUnit(UnitTypes unit, int amount = 1)
         {
             MacroData md = DefaultBot.MacroData;
             UnitCountService ucs = DefaultBot.UnitCountService;
-
+            amount = Math.Max(amount, GetDesiredUnitCount(unit));
+            
             return unit switch
             {
                 UnitTypes.TERRAN_SUPPLYDEPOT => new SupplyDepotDesire(amount, md, ucs),
@@ -132,6 +133,26 @@ namespace StarCraft2Bot.Builds.Base.Action.BuildBlocks
                 TechStructureDesire d => d.StructureType,
                 UnitDesire d => d.Unit,
                 _ => null
+            };
+        }
+        private int GetDesiredUnitCount(UnitTypes unit)
+        {
+            MacroData md = DefaultBot.MacroData;
+            return unit switch
+            {
+                UnitTypes.TERRAN_SUPPLYDEPOT => md.DesiredSupplyDepots,
+                UnitTypes.TERRAN_COMMANDCENTER => md.DesiredProductionCounts.GetValueOrDefault(unit),
+                UnitTypes.TERRAN_ENGINEERINGBAY => md.DesiredProductionCounts.GetValueOrDefault(unit),
+                UnitTypes.TERRAN_BARRACKS => md.DesiredProductionCounts.GetValueOrDefault(unit),
+                UnitTypes.TERRAN_BARRACKSTECHLAB => md.DesiredAddOnCounts.GetValueOrDefault(unit),
+                UnitTypes.TERRAN_GHOSTACADEMY => md.DesiredProductionCounts.GetValueOrDefault(unit),
+                UnitTypes.TERRAN_FACTORY => md.DesiredProductionCounts.GetValueOrDefault(unit),
+                UnitTypes.TERRAN_FACTORYTECHLAB => md.DesiredAddOnCounts.GetValueOrDefault(unit),
+                UnitTypes.TERRAN_ARMORY => md.DesiredTechCounts.GetValueOrDefault(unit),
+                UnitTypes.TERRAN_STARPORT => md.DesiredProductionCounts.GetValueOrDefault(unit),
+                UnitTypes.TERRAN_STARPORTTECHLAB => md.DesiredAddOnCounts.GetValueOrDefault(unit),
+                UnitTypes.TERRAN_FUSIONCORE => md.DesiredTechCounts.GetValueOrDefault(unit),
+                _ => -1
             };
         }
     }

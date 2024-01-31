@@ -47,11 +47,11 @@ namespace StarCraft2Bot
 
             var openers = new List<List<string>>
             {
-                //new() { tvtOpener.Name() },
-                //new() { reaperCheese.Name() },
-                //new() { threeCC.Name() },
+                new() { tvtOpener.Name() },
+                new() { reaperCheese.Name() },
+                new() { threeCC.Name() },
                 //new() { jsonStandartTvT.Name() }
-                new() {buildBlockExample.Name()}
+                //new() {buildBlockExample.Name()}
             };
 
             // INFO: The "Transition" entry should usually contain something other than the same builds over again
