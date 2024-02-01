@@ -1,17 +1,17 @@
 ﻿using SC2APIProtocol;
+using Sharky;
 using Sharky.Builds;
 using Sharky.Chat;
 using Sharky.DefaultBot;
+using Sharky.Managers;
 using Sharky.MicroControllers;
 using Sharky.MicroTasks;
-using Sharky.Proxy;
-using Sharky;
-using StarCraft2Bot.Builds.Base;
-using StarCraft2Bot.Builds.Base.Desires;
-using StarCraft2Bot.Builds.Base.Condition;
-using Sharky.Managers;
 using Sharky.MicroTasks.Attack;
+using Sharky.Proxy;
 using StarCraft2Bot.Bot;
+using StarCraft2Bot.Builds.Base;
+using StarCraft2Bot.Builds.Base.Condition;
+using StarCraft2Bot.Builds.Base.Desires;
 using StarCraft2Bot.Helper;
 
 namespace StarCraft2Bot.Builds
@@ -22,17 +22,35 @@ namespace StarCraft2Bot.Builds
         private EnemyUnitMemoryService UnitMemoryService;
 
         private Queue<BuildAction>? BuildOrder { get; set; }
-        
-        public TestScoutOpener(BaseBot defaultSharkyBot) : base(defaultSharkyBot)
+
+        public TestScoutOpener(BaseBot defaultSharkyBot)
+            : base(defaultSharkyBot)
         {
-            
             defaultSharkyBot.MicroController = new AdvancedMicroController(defaultSharkyBot);
-            var advancedAttackTask = new AdvancedAttackTask(defaultSharkyBot, new EnemyCleanupService(defaultSharkyBot.MicroController, defaultSharkyBot.DamageService), new List<UnitTypes> { UnitTypes.TERRAN_MARINE }, 100f, true);
+            var advancedAttackTask = new AdvancedAttackTask(
+                defaultSharkyBot,
+                new EnemyCleanupService(
+                    defaultSharkyBot.MicroController,
+                    defaultSharkyBot.DamageService
+                ),
+                new List<UnitTypes> { UnitTypes.TERRAN_MARINE },
+                100f,
+                true
+            );
             defaultSharkyBot.MicroTaskData[typeof(AttackTask).Name] = advancedAttackTask;
 
             UnitMemoryService = defaultSharkyBot.EnemyUnitMemoryService;
 
-            EnemyInformationsManager = new EnemyInformationsManager(UnitCountService, MapDataService, ActiveUnitData,UnitMemoryService,defaultSharkyBot.SharkyUnitData, FrameToTimeConverter, defaultSharkyBot.MapMemoryService);
+            EnemyInformationsManager = new EnemyInformationsManager(
+                UnitCountService,
+                MapDataService,
+                ActiveUnitData,
+                UnitMemoryService,
+                defaultSharkyBot.SharkyUnitData,
+                FrameToTimeConverter,
+                defaultSharkyBot.MapMemoryService,
+                defaultSharkyBot.EnemyUnitApproximationService
+            );
         }
 
         public override void StartBuild(int frame)
@@ -59,11 +77,6 @@ namespace StarCraft2Bot.Builds
             //}
         }
 
-        private int FrameFromTime(int minutes, int seconds)
-        {
-            return (int)((minutes * 60 + seconds) * 22.4);
-        }
-
         public override void OnFrame(ResponseObservation observation)
         {
             //base.OnFrame(observation);
@@ -84,7 +97,10 @@ namespace StarCraft2Bot.Builds
 
 
             Console.WriteLine("Frame: " + observation.Observation.GameLoop + "\n======");
-            Console.WriteLine("Mineralapproximation: " + EnemyInformationsManager.GetApproximatedProducedEnemyMinerals(observation));
+            Console.WriteLine(
+                "Mineralapproximation: "
+                    + EnemyInformationsManager.GetApproximatedProducedEnemyMinerals(observation)
+            );
 
             Console.WriteLine("Seen:\n=====");
             foreach (var key in UnitMemoryService.CurrentTotalUnits.Keys)
@@ -92,7 +108,9 @@ namespace StarCraft2Bot.Builds
                 Console.WriteLine(UnitMemoryService.CurrentTotalUnits[key] + "x " + key.ToString());
             }
 
-            var approx = EnemyInformationsManager.GetApproximatedProducedEnemyUnits(EnemyInformationsManager.GetApproximatedProducedEnemyMinerals(observation).Item2);
+            var approx = EnemyInformationsManager.GetApproximatedProducedEnemyUnits(
+                EnemyInformationsManager.GetApproximatedProducedEnemyMinerals(observation).Item2
+            );
 
             Console.WriteLine("Approximated:\n=============");
 
@@ -100,7 +118,6 @@ namespace StarCraft2Bot.Builds
             {
                 Console.WriteLine(approx[key] + "x " + key.ToString());
             }
-
 
             // Console.WriteLine(EnemyInformationsManager.GetVisibleAreaPercentage() + "%");
 
@@ -112,10 +129,8 @@ namespace StarCraft2Bot.Builds
             //    nextAction.EnforceDesires();
             //    BuildOrder.Dequeue();
             //}
-
         }
 
-       
         public override bool Transition(int frame)
         {
             //if (BuildOrder == null)
