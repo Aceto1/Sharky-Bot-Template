@@ -2,6 +2,7 @@
 using SC2APIProtocol;
 using Sharky.DefaultBot;
 using StarCraft2Bot.Bot;
+using StarCraft2Bot.Builds.Base.Action;
 using StarCraft2Bot.Builds.Base.Condition;
 using StarCraft2Bot.Builds.Base.Desires;
 
@@ -72,7 +73,7 @@ namespace StarCraft2Bot.Builds.Base
             {
                 FullfillActionDebugMessage(nextAction);
 
-                nextAction.EnforceDesires();
+                nextAction.Enforce();
                 buildOrder.Dequeue();
             }
         }
@@ -112,8 +113,8 @@ namespace StarCraft2Bot.Builds.Base
 
         private string GetActionAsString(BuildAction action)
         {
-            string conditionString = String.Join(";", action.Conditions.ConvertAll(GetConditionAsString));
-            string desireString =  String.Join(";", action.Desires.ConvertAll(GetDesireAsString));
+            string conditionString = String.Join(";", action.GetConditions().ConvertAll(GetConditionAsString));
+            string desireString =  String.Join(";", action.GetDesires().ConvertAll(GetDesireAsString));
             return $"Action({conditionString} :: {desireString})";
         }
 

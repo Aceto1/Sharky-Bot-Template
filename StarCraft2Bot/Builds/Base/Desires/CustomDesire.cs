@@ -2,12 +2,12 @@
 {
     public class CustomDesire : IDesire
     {
-        public CustomDesire(Action customEnforceFunc)
+        public CustomDesire(System.Action customEnforceFunc)
         {
             CustomEnforceFunc = customEnforceFunc;
         }
 
-        public CustomDesire(Action customEnforceFunc, int mineralCost, int vespeneCost, int timeCost)
+        public CustomDesire(System.Action customEnforceFunc, int mineralCost, int vespeneCost, int timeCost)
         {
             CustomEnforceFunc = customEnforceFunc;
 
@@ -16,7 +16,7 @@
             TimeCost = timeCost;
         }
 
-        public Action CustomEnforceFunc { get; set; }
+        public System.Action CustomEnforceFunc { get; set; }
 
         public bool Enforced { get; set; }
 

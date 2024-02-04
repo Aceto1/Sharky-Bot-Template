@@ -3,6 +3,7 @@ using Sharky;
 using Sharky.Builds.Terran;
 using Sharky.Helper;
 using StarCraft2Bot.Bot;
+using StarCraft2Bot.Builds.Base.Action;
 using StarCraft2Bot.Builds.Base.Condition;
 using StarCraft2Bot.Builds.Base.Desires;
 using StarCraft2Bot.Database;
@@ -69,7 +70,7 @@ namespace StarCraft2Bot.Builds.Base
             foreach (var action in actions)
             {
                 if (action.AreConditionsFulfilled())
-                    action.EnforceDesires();
+                    action.Enforce();
             }
         }
 

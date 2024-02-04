@@ -27,6 +27,7 @@ namespace StarCraft2Bot
             var tvtOpener = new TvTOpener(defaultSharkyBot);
             var jsonStandartTvT = new JsonBuild(defaultSharkyBot, "Standard TvT");
             var json3CCExample = new JsonBuild(defaultSharkyBot, "3CC-Example");
+            var buildBlockExample = new SimpleBuildBlockExample(defaultSharkyBot);
 
             var builds = new Dictionary<string, ISharkyBuild>
             {
@@ -36,6 +37,7 @@ namespace StarCraft2Bot
                 [saltyMarines.Name()] = saltyMarines,
                 [jsonStandartTvT.Name()] = jsonStandartTvT,
                 [json3CCExample.Name()] = json3CCExample,
+                [buildBlockExample.Name()] = buildBlockExample,
             };
 
             var transitions = new List<List<string>>
@@ -49,6 +51,7 @@ namespace StarCraft2Bot
                 new() { reaperCheese.Name() },
                 new() { threeCC.Name() },
                 //new() { jsonStandartTvT.Name() }
+                //new() {buildBlockExample.Name()}
             };
 
             // INFO: The "Transition" entry should usually contain something other than the same builds over again
