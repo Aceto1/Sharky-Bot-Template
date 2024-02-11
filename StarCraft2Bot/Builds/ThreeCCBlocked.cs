@@ -1,4 +1,5 @@
-﻿using SC2APIProtocol;
+﻿using Roy_T.AStar.Graphs;
+using SC2APIProtocol;
 using Sharky;
 using Sharky.Builds;
 using Sharky.MicroControllers;
@@ -68,12 +69,10 @@ namespace StarCraft2Bot.Builds
                 }),
                 new AutoTechBuildBlock("OptionalBuildEnemyRushDefense", DefaultBot).WithConditions(new CustomCondition(IsEnemyRushing), new BuildingDoneOrInProgressCondition(UnitTypes.TERRAN_ORBITALCOMMAND, 1, ucs)).WithActionNodes(root =>
                 {
-                    root.AddActionOnStart("Train8Marines", new UnitDesire(UnitTypes.TERRAN_MARINE, 4, md.DesiredUnitCounts, ucs), node =>
+                    root.AddActionOnStart("Train8Marines", new UnitDesire(UnitTypes.TERRAN_MARINE, 4, md.DesiredUnitCounts, ucs));
+                    root.AddActionOnStart("SecondBarrack", new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 2, md, ucs), node =>
                     {
-                        node.AddActionOnStart("SecondBarrack", new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 2, md, ucs), node =>
-                        {
-                            node.AddActionOnResourcesSpend("FirstBunker", new BuildingDoneOrInProgressCondition(UnitTypes.TERRAN_BARRACKS, 2, ucs), new DefenseStructureDesire(UnitTypes.TERRAN_BUNKER, 1, md, ucs));
-                        });
+                        node.AddActionOnResourcesSpend("FirstBunker", new BuildingDoneOrInProgressCondition(UnitTypes.TERRAN_BARRACKS, 2, ucs), new DefenseStructureDesire(UnitTypes.TERRAN_BUNKER, 1, md, ucs));
                     });
                 }),
                 new AutoTechBuildBlock("2CC+BarrackReactor", DefaultBot).WithConditions(new BuildingDoneOrInProgressCondition(UnitTypes.TERRAN_BARRACKS, 1, ucs)).WithActionNodes(root =>
@@ -142,19 +141,18 @@ namespace StarCraft2Bot.Builds
 
             foreach (BuildBlock block in ActiveBuildBlocks.ToList())
             {
-                Console.WriteLine(block.Name + ": " + block.MineralCost + "|" + block.VespeneCost);
-                if (block.HasSpendResources())
+                block.Enforce();
+                if (block.HasCompleted())
                 {
                     ActiveBuildBlocks.Remove(block);
                     Console.WriteLine("Completed:" + block);
                 }
-                block.Enforce();
             }
         }
 
         public override bool Transition(int frame)
         {
-            if (IsEnemyAttacking() || BuildBlocks.All(a => !a.AreConditionsFulfilled() && a.Name.Contains("Optional")))
+            if (IsEnemyAttacking() || ActiveBuildBlocks.Count == 0 && BuildBlocks.All(a => !a.AreConditionsFulfilled() && a.Name.Contains("Optional")))
             {
                 BuildOptions.StrictSupplyCount = false;
                 BuildOptions.StrictGasCount = false;
