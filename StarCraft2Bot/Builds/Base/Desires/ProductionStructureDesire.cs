@@ -45,7 +45,7 @@ namespace StarCraft2Bot.Builds.Base.Desires
             if (remainingCount <= 0)
                 return 0;
 
-            return existingCount * buildingTypeData?.Minerals ?? 0;
+            return remainingCount * buildingTypeData?.Minerals ?? 0;
         }
 
         public int GetVespeneCost()
@@ -56,7 +56,7 @@ namespace StarCraft2Bot.Builds.Base.Desires
             if (remainingCount <= 0)
                 return 0;
 
-            return existingCount * buildingTypeData?.Gas ?? 0;
+            return remainingCount * buildingTypeData?.Gas ?? 0;
         }
 
         public ProductionStructureDesire(UnitTypes structureType, ValueRange count, MacroData data, UnitCountService unitCountService)
