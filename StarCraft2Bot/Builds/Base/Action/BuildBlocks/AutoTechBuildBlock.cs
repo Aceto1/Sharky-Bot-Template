@@ -155,5 +155,7 @@ namespace StarCraft2Bot.Builds.Base.Action.BuildBlocks
                 _ => -1
             };
         }
+
+        public override string ToString() => Name;
     }
 }

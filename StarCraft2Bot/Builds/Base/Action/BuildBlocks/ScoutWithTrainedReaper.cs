@@ -17,7 +17,7 @@ namespace StarCraft2Bot.Builds.Base.Action.BuildBlocks
             {
                 root.AddActionOnStart("TrainReaper", new BuildAction(new UnitCompletedCountCondition(UnitTypes.TERRAN_BARRACKS, 1, DefaultBot.UnitCountService), new UnitDesire(UnitTypes.TERRAN_REAPER, 1, DefaultBot.MacroData.DesiredUnitCounts, DefaultBot.UnitCountService)), node =>
                 {
-                    node.AddActionOnStart("StartReaperScouting", new BuildAction(new UnitCompletedCountCondition(UnitTypes.TERRAN_REAPER, 1, DefaultBot.UnitCountService), new CustomDesire(EnableReaperScouting)));
+                    node.AddActionOnCompletion("StartReaperScouting", new BuildAction(new UnitCompletedCountCondition(UnitTypes.TERRAN_REAPER, 1, DefaultBot.UnitCountService), new CustomDesire(EnableReaperScouting)));
                 });
             });
         }
