@@ -83,7 +83,7 @@ namespace StarCraft2Bot.Builds.Base.Desires
             if (remainingCount <= 0)
                 return 0;
 
-            return existingCount * typeData?.Minerals ?? 0;
+            return remainingCount * typeData?.Minerals ?? 0;
         }
 
         public int GetVespeneCost()
@@ -94,7 +94,7 @@ namespace StarCraft2Bot.Builds.Base.Desires
             if (remainingCount <= 0)
                 return 0;
 
-            return existingCount * typeData?.Gas ?? 0;
+            return remainingCount * typeData?.Gas ?? 0;
         }
     }
 }
