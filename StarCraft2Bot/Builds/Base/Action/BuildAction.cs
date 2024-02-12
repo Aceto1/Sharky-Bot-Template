@@ -50,10 +50,14 @@ namespace StarCraft2Bot.Builds.Base.Action
             return Desires.Any(d => d.Enforced);
         }
 
+        public bool HasSpendResources()
+        {
+            return MineralCost == 0 && VespeneCost == 0;
+        }
+
         public bool HasCompleted ()
         {
-            return MineralCost == 0 && VespeneCost == 0 && TimeCost == 0
-                && Desires.All(d => d.Enforced);
+            return MineralCost == 0 && VespeneCost == 0 && TimeCost == 0;
         }
 
         public List<ICondition> GetConditions()

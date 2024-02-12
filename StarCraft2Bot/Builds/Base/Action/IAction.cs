@@ -10,6 +10,7 @@ namespace StarCraft2Bot.Builds.Base.Action
         public int VespeneCost { get; }
 
         public bool HasStarted();
+        public bool HasSpendResources();
         public bool HasCompleted();
 
         public List<ICondition> GetConditions();

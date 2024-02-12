@@ -19,6 +19,7 @@ namespace StarCraft2Bot.Builds.Base.Action
         public List<IDesire> GetDesires() => Actions.SelectMany(action => action.GetDesires()).ToList();
 
         public bool HasStarted() => Actions.Any(a => a.HasStarted());
+        public bool HasSpendResources() => MineralCost == 0 && VespeneCost == 0;
         public bool HasCompleted() => MineralCost == 0 && VespeneCost == 0 && TimeCost == 0;
         public bool AreConditionsFulfilled() => Conditions.All(m => m.IsFulfilled());
 
@@ -29,9 +30,14 @@ namespace StarCraft2Bot.Builds.Base.Action
             return serialTimeCost;
         }
 
-        public void Enforce()
+        public virtual void Enforce()
         {
             ActionTree.EnforceNode();
+        }
+
+        public override string ToString()
+        {
+            return Name + "(M" + MineralCost + "|V" + VespeneCost + "|T" + TimeCost + ")\n" + ActionNode.GetNodeTreeString(ActionTree);
         }
     }
 }
