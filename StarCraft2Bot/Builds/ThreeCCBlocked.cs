@@ -2,6 +2,7 @@
 using SC2APIProtocol;
 using Sharky;
 using Sharky.Builds;
+using Sharky.Managers;
 using Sharky.MicroControllers;
 using Sharky.MicroTasks;
 using Sharky.MicroTasks.Attack;
@@ -18,14 +19,26 @@ namespace StarCraft2Bot.Builds
     {
         List<BuildBlock> BuildBlocks = [];
         List<BuildBlock> ActiveBuildBlocks = [];
+        readonly bool SendDebugMessages = true;
 
         public ThreeCCBlocked(BaseBot defaultSharkyBot) : base(defaultSharkyBot)
         {
             defaultSharkyBot.MicroController = new AdvancedMicroController(defaultSharkyBot);
             defaultSharkyBot.SharkyOptions.GameStatusReportingEnabled = false;
 
-            var advancedAttackTask = new AdvancedAttackTask(defaultSharkyBot, new EnemyCleanupService(defaultSharkyBot.MicroController, defaultSharkyBot.DamageService), new List<UnitTypes> { UnitTypes.TERRAN_MARINE }, 100f, true);
+            InitAttackManager(defaultSharkyBot);
+        }
+
+        public void InitAttackManager(BaseBot defaultSharkyBot)
+        {
+            var advancedAttackTask = new AdvancedAttackTask(defaultSharkyBot, new EnemyCleanupService(defaultSharkyBot.MicroController,
+                defaultSharkyBot.DamageService), new List<UnitTypes> { UnitTypes.TERRAN_MARINE }, 1f, true);
             defaultSharkyBot.MicroTaskData[typeof(AttackTask).Name] = advancedAttackTask;
+            var advancedAttackService = new AdvancedAttackService(defaultSharkyBot, advancedAttackTask);
+            var advancedAttackDataManager = new AdvancedAttackDataManager(defaultSharkyBot, advancedAttackService, advancedAttackTask);
+            defaultSharkyBot.AttackDataManager = advancedAttackDataManager;
+            defaultSharkyBot.Managers.RemoveAll(m => m.GetType() == typeof(AttackDataManager));
+            defaultSharkyBot.Managers.Add(advancedAttackDataManager);
         }
 
         private void SetInitialBuildSettings()
@@ -58,16 +71,19 @@ namespace StarCraft2Bot.Builds
                         });
                     });
                 }),
-                new ScoutWithTrainedReaper(DefaultBot),
+                new ScoutWithTrainedReaper(DefaultBot).WithActionNodes(root =>
+                {
+                    root.AddActionOnStart("Reduce Gas Worker", new UnitCompletedCountCondition(UnitTypes.TERRAN_REAPER, 1, DefaultBot.UnitCountService), new CustomDesire(() => BuildOptions.StrictWorkersPerGasCount = 1));
+                }),
                 new AutoTechBuildBlock("FirstOrbitalCommand", DefaultBot).WithActionNodes(root =>
                 {
                     root.AddActionOnStart("BuildOrbitalCommand", new MorphDesire(UnitTypes.TERRAN_ORBITALCOMMAND, 1, md, ucs));
                 }),
-                new AutoTechBuildBlock("OptionalBuildEnemyProxyDefense", DefaultBot).WithConditions(new CustomCondition(IsEnemyProxing), new BuildingDoneOrInProgressCondition(UnitTypes.TERRAN_ORBITALCOMMAND, 1, ucs)).WithActionNodes(root =>
+                new AutoTechBuildBlock("OptionalBuildEnemyProxyDefense", DefaultBot).WithConditions(new CustomCondition(IsEnemyProxing), new BuildingDoneOrInProgressCondition(UnitTypes.TERRAN_BARRACKS, 1, ucs)).WithActionNodes(root =>
                 {
                     root.AddActionOnStart("Train4Marines", new UnitDesire(UnitTypes.TERRAN_MARINE, 4, md.DesiredUnitCounts, ucs));
                 }),
-                new AutoTechBuildBlock("OptionalBuildEnemyRushDefense", DefaultBot).WithConditions(new CustomCondition(IsEnemyRushing), new BuildingDoneOrInProgressCondition(UnitTypes.TERRAN_ORBITALCOMMAND, 1, ucs)).WithActionNodes(root =>
+                new AutoTechBuildBlock("OptionalBuildEnemyRushDefense", DefaultBot).WithConditions(new CustomCondition(IsEnemyRushing), new BuildingDoneOrInProgressCondition(UnitTypes.TERRAN_BARRACKS, 1, ucs)).WithActionNodes(root =>
                 {
                     root.AddActionOnStart("Train8Marines", new UnitDesire(UnitTypes.TERRAN_MARINE, 4, md.DesiredUnitCounts, ucs));
                     root.AddActionOnStart("SecondBarrack", new ProductionStructureDesire(UnitTypes.TERRAN_BARRACKS, 2, md, ucs), node =>
@@ -90,23 +106,26 @@ namespace StarCraft2Bot.Builds
                     {
                         node.AddActionOnResourcesSpend("BuildSecondBunker", new BuildingDoneOrInProgressCondition(UnitTypes.TERRAN_BARRACKS, 3, ucs), new DefenseStructureDesire(UnitTypes.TERRAN_BUNKER, 2, md, ucs));
                     });
-                    root.AddActionOnStart("BuildMoreSupplyDepots", new SupplyDepotDesire(3, md, ucs));
+                    root.AddActionOnStart("BuildMoreSupplyDepots", new SupplyDepotDesire(4, md, ucs));
                 }),
-                new AutoTechBuildBlock("BuildThreeCCIntoFactory", DefaultBot).WithConditions(new BuildingDoneOrInProgressCondition(UnitTypes.TERRAN_COMMANDCENTER, 2, ucs)).WithActionNodes(root =>
+                new AutoTechBuildBlock("BuildThreeCC", DefaultBot).WithConditions(new BuildingDoneOrInProgressCondition(UnitTypes.TERRAN_COMMANDCENTER, 2, ucs)).WithActionNodes(root =>
                 {
                     root.AddActionOnStart("Build3CC", new ProductionStructureDesire(UnitTypes.TERRAN_COMMANDCENTER, 3, md, ucs), node =>
                     {
-                        node.AddActionOnResourcesSpend("BuildFactory", new BuildingDoneOrInProgressCondition(UnitTypes.TERRAN_COMMANDCENTER, 3, ucs), new ProductionStructureDesire(UnitTypes.TERRAN_FACTORY, 1, md, ucs), node =>
-                        {
-                            node.AddActionOnResourcesSpend("BuildStarport", new ProductionStructureDesire(UnitTypes.TERRAN_STARPORT, 1, md, ucs));
-                            node.AddActionOnResourcesSpend("BuildFactoryTech", new AddonStructureDesire(UnitTypes.TERRAN_FACTORYTECHLAB, 1, md, ucs), node =>
-                            {
-                                node.AddActionOnResourcesSpend("BuildCyclone", new UnitDesire(UnitTypes.TERRAN_CYCLONE, 1, md.DesiredUnitCounts, ucs));
-                            });
-                        });
-                        node.AddActionOnResourcesSpend("BuildSecondOrbitalCenter", new BuildingDoneOrInProgressCondition(UnitTypes.TERRAN_COMMANDCENTER, 3, ucs), new MorphDesire(UnitTypes.TERRAN_ORBITALCOMMAND, 2, md, ucs), node =>
+                        node.AddActionOnResourcesSpend("BuildSecondOrbitalCenter", new MorphDesire(UnitTypes.TERRAN_ORBITALCOMMAND, 2, md, ucs), node =>
                         {
                             node.AddActionOnResourcesSpend("BuildSecondGas", new GasBuildingCountDesire(2, md, ucs));
+                        });
+                    });
+                }),
+                new AutoTechBuildBlock("BuildTechFactoryAndStarport", DefaultBot).WithConditions(new BuildingDoneOrInProgressCondition(UnitTypes.TERRAN_COMMANDCENTER, 3, ucs)).WithActionNodes(root =>
+                {
+                    root.AddActionOnStart("BuildFactory", new ProductionStructureDesire(UnitTypes.TERRAN_FACTORY, 1, md, ucs), node =>
+                    {
+                        node.AddActionOnResourcesSpend("BuildStarport", new ProductionStructureDesire(UnitTypes.TERRAN_STARPORT, 1, md, ucs));
+                        node.AddActionOnResourcesSpend("BuildFactoryTech", new AddonStructureDesire(UnitTypes.TERRAN_FACTORYTECHLAB, 1, md, ucs), node =>
+                        {
+                            node.AddActionOnResourcesSpend("BuildCyclone", new UnitDesire(UnitTypes.TERRAN_CYCLONE, 1, md.DesiredUnitCounts, ucs));
                         });
                     });
                 })
@@ -121,38 +140,49 @@ namespace StarCraft2Bot.Builds
         public override void OnFrame(ResponseObservation observation)
         {
             base.OnFrame(observation);
-            if (BuildBlocks.Count == 0) return;
+            string debugMessage = "";
 
+            //Activates new buildBlocks in order if no block is active or enough minerals and gas is present to start additional blocks
             int freeMinerals = MacroData.Minerals - ActiveBuildBlocks.Sum(a => a.MineralCost);
             int freeVespene = MacroData.VespeneGas - ActiveBuildBlocks.Sum(a => a.VespeneCost);
-
             foreach (BuildBlock block in BuildBlocks.ToList())
             {
                 if (block.AreConditionsFulfilled())
                 {
                     if (ActiveBuildBlocks.Count == 0 || block.MineralCost < freeMinerals && block.VespeneCost < freeVespene)
                     {
+                        debugMessage += "**Activated** " + block.ToString();
                         BuildBlocks.Remove(block);
                         ActiveBuildBlocks.Add(block);
-                        Console.WriteLine("Activate " + block);
                     }
                 }
             }
 
+            //Enforces active buildBlocks
             foreach (BuildBlock block in ActiveBuildBlocks.ToList())
             {
-                block.Enforce();
                 if (block.HasCompleted())
                 {
+                    debugMessage += "**Completed** " + block.ToString();
                     ActiveBuildBlocks.Remove(block);
-                    Console.WriteLine("Completed:" + block);
+                    continue;
                 }
+
+                string treeString = block.ToString();
+                block.Enforce();
+                if (!treeString.Equals(block.ToString()))
+                    debugMessage += "**Updated** " + block.ToString();
+            }
+
+            if (SendDebugMessages && debugMessage != "")
+            {
+                Console.WriteLine(debugMessage);
             }
         }
 
         public override bool Transition(int frame)
         {
-            if (IsEnemyAttacking() || ActiveBuildBlocks.Count == 0 && BuildBlocks.All(a => !a.AreConditionsFulfilled() && a.Name.Contains("Optional")))
+            if (IsEnemyAttacking() || ActiveBuildBlocks.All(a => a.HasSpendResources()) && BuildBlocks.All(a => !a.AreConditionsFulfilled() && a.Name.Contains("Optional")))
             {
                 BuildOptions.StrictSupplyCount = false;
                 BuildOptions.StrictGasCount = false;

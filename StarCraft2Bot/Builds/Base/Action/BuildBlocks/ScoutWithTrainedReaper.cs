@@ -24,8 +24,6 @@ namespace StarCraft2Bot.Builds.Base.Action.BuildBlocks
 
         private void EnableReaperScouting()
         {
-            ReaperScoutTask scoutTask = (ReaperScoutTask)DefaultBot.MicroTaskData[typeof(ReaperScoutTask).Name];
-
             var reaperCommanders = DefaultBot.ActiveUnitData.Commanders.Values.Where(c => c.UnitCalculation.Unit.UnitType == (uint)UnitTypes.TERRAN_REAPER);
             if (reaperCommanders.Count() == 0) return;
 
@@ -33,8 +31,10 @@ namespace StarCraft2Bot.Builds.Base.Action.BuildBlocks
             UnitCommander nearestReaperToEnemyBase = reaperCommanders.OrderBy(p => Vector2.DistanceSquared(p.UnitCalculation.Position, DefaultBot.BaseData.EnemyBaseLocations[0].Location.ToVector2())).First();
             nearestReaperToEnemyBase.Claimed = false;
             DefaultBot.MicroTaskData.StealCommanderFromAllTasks(nearestReaperToEnemyBase);
-            scoutTask.ClaimUnits(DefaultBot.ActiveUnitData.Commanders.Where(c => c.Value == nearestReaperToEnemyBase).ToDictionary(c => c.Key, c => c.Value));
-            scoutTask.Enable();
+
+            DefaultBot.MicroTaskData[typeof(ReaperScoutTask).Name] = new ReaperScoutTask(DefaultBot, false, 100);
+            DefaultBot.MicroTaskData[typeof(ReaperScoutTask).Name].ClaimUnits(DefaultBot.ActiveUnitData.Commanders.Where(c => c.Value == nearestReaperToEnemyBase).ToDictionary(c => c.Key, c => c.Value));
+            DefaultBot.MicroTaskData[typeof(ReaperScoutTask).Name].Enable();
 
             //retreat worker scout
             DefaultBot.MicroTaskData[typeof(WorkerScoutTask).Name].Disable();

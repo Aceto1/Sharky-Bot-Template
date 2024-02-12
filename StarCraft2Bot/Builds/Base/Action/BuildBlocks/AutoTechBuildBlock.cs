@@ -6,7 +6,7 @@ using StarCraft2Bot.Helper;
 
 namespace StarCraft2Bot.Builds.Base.Action.BuildBlocks
 {
-    public class AutoTechBuildBlock(string name, BaseBot bot, bool debugMessages = true) : BuildBlock(name)
+    public class AutoTechBuildBlock(string name, BaseBot bot, bool debugMessages = false) : BuildBlock(name)
     {
         protected readonly BaseBot DefaultBot = bot;
         private readonly bool debugMessages = debugMessages;
@@ -27,22 +27,20 @@ namespace StarCraft2Bot.Builds.Base.Action.BuildBlocks
             return this;
         }
 
-        public new void Enforce()
+        public override void Enforce()
         {
-            if(!this.HasStarted()) //inject tech requirements for first enforcement
+            if(!HasStarted()) //inject tech requirements for first enforcement
             {
                 if (debugMessages)
                 {
-                    Console.WriteLine("Build Block " + Name + " started:");
-                    var requiredTechPerNode = CalculateRequiredTechForActionNodes(ActionTree, GetAvailableTechUnits());
-                    ActionNode.PrintNodeTree(ActionTree, additionalInfos: node => string.Join(",", requiredTechPerNode[node]));
+                    Console.WriteLine(GetBlockAsTreeString());
                     Console.WriteLine("Injecting Tech Requirements...");
                 }
                 InjectMissingTechBuildingNodes();
                 if (debugMessages)
                 {
                     Console.WriteLine("Tech Requirements Injected:");
-                    ActionNode.PrintNodeTree(ActionTree);
+                    Console.WriteLine(GetBlockAsTreeString());
                 }
             }
 
@@ -156,6 +154,7 @@ namespace StarCraft2Bot.Builds.Base.Action.BuildBlocks
             };
         }
 
-        public override string ToString() => Name;
+        public override string ToString() => Name + "(M" + MineralCost + "|V" + VespeneCost + "|T" + TimeCost + ")\n" + GetBlockAsTreeString();
+        private string GetBlockAsTreeString() => ActionNode.GetNodeTreeString(ActionTree, additionalInfos: node => string.Join(",", CalculateRequiredTechForActionNodes(ActionTree, GetAvailableTechUnits())[node]));
     }
 }

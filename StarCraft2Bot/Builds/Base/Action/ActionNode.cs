@@ -90,20 +90,24 @@ namespace StarCraft2Bot.Builds.Base.Action
             return recursiveChildActions;
         }
 
-        public static void PrintNodeTree(ActionNode node, string indent = "", bool last = true, Func<ActionNode, string>? additionalInfos = null)
+        public static string GetNodeTreeString(ActionNode node, string indent = "", bool last = true, Func<ActionNode, string>? additionalInfos = null)
         {
-            string treeBranch = node.nodeAction?.HasStarted()??false ? "*- " : (node.nodeAction?.HasCompleted() ?? false ? "#- " : "+- ");
+            string treeBranch = "+- ";
+            if (node.nodeAction?.HasStarted() ?? false) treeBranch = "*- ";
+            if (node.nodeAction?.HasSpendResources() ?? false) treeBranch = "$- ";
+            if (node.nodeAction?.HasCompleted() ?? false) treeBranch = "#- ";
 
             string additionalInfosString = additionalInfos?.Invoke(node) ?? "";
             additionalInfosString = additionalInfosString != "" ? "(" + additionalInfosString + ")" : "";
 
-            Console.WriteLine(indent + treeBranch + node.Name + additionalInfosString);
+            string outString = indent + treeBranch + node.Name + additionalInfosString + "\n";
             indent += last ? "   " : "|  ";
 
             for (int i = 0; i < node.childrenNodes.Count; i++)
             {
-                PrintNodeTree(node.childrenNodes[i], indent, i == node.childrenNodes.Count - 1, additionalInfos);
+                outString += GetNodeTreeString(node.childrenNodes[i], indent, i == node.childrenNodes.Count - 1, additionalInfos);
             }
+            return outString;
         }
     }
 }

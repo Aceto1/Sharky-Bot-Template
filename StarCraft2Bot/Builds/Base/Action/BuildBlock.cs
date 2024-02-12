@@ -30,9 +30,14 @@ namespace StarCraft2Bot.Builds.Base.Action
             return serialTimeCost;
         }
 
-        public void Enforce()
+        public virtual void Enforce()
         {
             ActionTree.EnforceNode();
+        }
+
+        public override string ToString()
+        {
+            return Name + "(M" + MineralCost + "|V" + VespeneCost + "|T" + TimeCost + ")\n" + ActionNode.GetNodeTreeString(ActionTree);
         }
     }
 }
