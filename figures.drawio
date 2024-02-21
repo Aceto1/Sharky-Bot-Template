@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2024-02-21T14:45:49.851Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:122.0) Gecko/20100101 Firefox/122.0" etag="socj01rnJiQgA3FwawBO" version="23.1.2" type="github">
+<mxfile host="app.diagrams.net" modified="2024-02-21T14:56:42.593Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:122.0) Gecko/20100101 Firefox/122.0" etag="zV3UI7GVdSbg7crZ1Sfp" version="23.1.2" type="github">
   <diagram name="Page-1" id="10a91c8b-09ff-31b1-d368-03940ed4cc9e">
     <mxGraphModel dx="1195" dy="645" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="none" math="0" shadow="0">
       <root>
@@ -425,6 +425,120 @@
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="3823" y="420" as="sourcePoint" />
             <mxPoint x="3873" y="370" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-39" value="Siege Tanks&lt;br&gt;&amp;amp;&lt;br&gt;Marines" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="4670" y="582" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-40" value="Siege Tanks" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="4496" y="391" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-42" value="Marines" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="4845" y="388" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-44" value="&lt;div&gt;Build factories&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="4496" y="235" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-45" value="Build Armory" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="4426" y="313" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-46" value="Barracks" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="4496" y="157" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-47" value="Supply Depot" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="4496" y="80" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-48" value="Supply Depot" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="4775" y="152" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-49" value="Barracks" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="4775" y="230" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-50" value="Barracks with Reactor" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="4775" y="308" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-52" value="&lt;div&gt;Build factories&lt;/div&gt;&lt;div&gt;with techlab&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="4565" y="313" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-53" value="Engineering Bay" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="4921" y="308" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-62" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="wxDiK8NXT3SNDazrodht-48" target="wxDiK8NXT3SNDazrodht-49">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="4612" y="349" as="sourcePoint" />
+            <mxPoint x="4662" y="299" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-63" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="wxDiK8NXT3SNDazrodht-45" target="wxDiK8NXT3SNDazrodht-40">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="4761" y="274" as="sourcePoint" />
+            <mxPoint x="4811" y="224" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-64" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="wxDiK8NXT3SNDazrodht-52" target="wxDiK8NXT3SNDazrodht-40">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="4761" y="274" as="sourcePoint" />
+            <mxPoint x="4811" y="224" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-65" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="wxDiK8NXT3SNDazrodht-44" target="wxDiK8NXT3SNDazrodht-45">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="4761" y="274" as="sourcePoint" />
+            <mxPoint x="4811" y="224" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-66" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="wxDiK8NXT3SNDazrodht-44" target="wxDiK8NXT3SNDazrodht-52">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="4761" y="274" as="sourcePoint" />
+            <mxPoint x="4811" y="224" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-67" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="wxDiK8NXT3SNDazrodht-46" target="wxDiK8NXT3SNDazrodht-44">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="4761" y="274" as="sourcePoint" />
+            <mxPoint x="4811" y="224" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-68" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="wxDiK8NXT3SNDazrodht-47" target="wxDiK8NXT3SNDazrodht-46">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="4761" y="274" as="sourcePoint" />
+            <mxPoint x="4811" y="224" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-69" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="wxDiK8NXT3SNDazrodht-53" target="wxDiK8NXT3SNDazrodht-42">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="4612" y="349" as="sourcePoint" />
+            <mxPoint x="4662" y="299" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-70" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="wxDiK8NXT3SNDazrodht-50" target="wxDiK8NXT3SNDazrodht-42">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="4612" y="349" as="sourcePoint" />
+            <mxPoint x="4662" y="299" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-71" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="wxDiK8NXT3SNDazrodht-49" target="wxDiK8NXT3SNDazrodht-50">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="4612" y="349" as="sourcePoint" />
+            <mxPoint x="4662" y="299" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-73" value="Marines" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="4745" y="502" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-74" value="Siege Tanks" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="4597" y="502" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-75" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="wxDiK8NXT3SNDazrodht-73" target="wxDiK8NXT3SNDazrodht-39">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="4748" y="508" as="sourcePoint" />
+            <mxPoint x="4798" y="458" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-76" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="wxDiK8NXT3SNDazrodht-74" target="wxDiK8NXT3SNDazrodht-39">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="4748" y="508" as="sourcePoint" />
+            <mxPoint x="4798" y="458" as="targetPoint" />
           </mxGeometry>
         </mxCell>
       </root>
