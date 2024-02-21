@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2024-02-21T12:11:37.392Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:122.0) Gecko/20100101 Firefox/122.0" etag="38868MnZLnzJvEGhADax" version="23.1.2" type="github">
+<mxfile host="app.diagrams.net" modified="2024-02-21T14:45:49.851Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:122.0) Gecko/20100101 Firefox/122.0" etag="socj01rnJiQgA3FwawBO" version="23.1.2" type="github">
   <diagram name="Page-1" id="10a91c8b-09ff-31b1-d368-03940ed4cc9e">
     <mxGraphModel dx="1195" dy="645" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="none" math="0" shadow="0">
       <root>
@@ -314,6 +314,117 @@
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="2485.2500000000005" y="434" as="sourcePoint" />
             <mxPoint x="2265" y="305" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-1" value="&lt;div&gt;Late game&lt;/div&gt;&lt;div&gt;expand&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="3742" y="542" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-2" value="Defend position" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="4043" y="313" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-3" value="Scan position" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="3581" y="73" width="121" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-4" value="&lt;div&gt;Move army to&amp;nbsp;&lt;/div&gt;&lt;div&gt;position&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="3901" y="153" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-5" value="Clear position" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="3901" y="233" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-7" value="&lt;div&gt;Move scout unit&lt;/div&gt;&lt;div&gt;to position&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="3734" y="73" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-8" value="&lt;div&gt;Scout&lt;/div&gt;&lt;div&gt;position&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="3660" y="235" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-12" value="&lt;div&gt;Exclusive&lt;/div&gt;&lt;div&gt;Or&lt;br&gt;&lt;/div&gt;" style="shape=trapezoid;perimeter=trapezoidPerimeter;whiteSpace=wrap;html=1;fixedSize=1;direction=west;" vertex="1" parent="1">
+          <mxGeometry x="3660" y="153" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-13" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="wxDiK8NXT3SNDazrodht-3" target="wxDiK8NXT3SNDazrodht-12">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="3671.3614457831327" y="133.5" as="sourcePoint" />
+            <mxPoint x="4242" y="290.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-14" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="wxDiK8NXT3SNDazrodht-7" target="wxDiK8NXT3SNDazrodht-12">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="4192" y="340.5" as="sourcePoint" />
+            <mxPoint x="4242" y="290.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-15" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="wxDiK8NXT3SNDazrodht-12" target="wxDiK8NXT3SNDazrodht-8">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="4192" y="340.5" as="sourcePoint" />
+            <mxPoint x="4242" y="290.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-16" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="wxDiK8NXT3SNDazrodht-21" target="wxDiK8NXT3SNDazrodht-4">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="3812" y="324" as="sourcePoint" />
+            <mxPoint x="3862" y="274" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-18" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="wxDiK8NXT3SNDazrodht-4" target="wxDiK8NXT3SNDazrodht-5">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="3812" y="324" as="sourcePoint" />
+            <mxPoint x="3862" y="274" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-19" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="wxDiK8NXT3SNDazrodht-5" target="wxDiK8NXT3SNDazrodht-2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="3812" y="324" as="sourcePoint" />
+            <mxPoint x="3961" y="313" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-21" value="Scout position" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="3901" y="73" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-27" value="&lt;div&gt;Provide permanent&lt;/div&gt;&lt;div&gt;scouting info&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="3405" y="235" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-28" value="&lt;div&gt;Build sensor&lt;/div&gt;&lt;div&gt;tower&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="3405" y="155" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-29" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="wxDiK8NXT3SNDazrodht-28" target="wxDiK8NXT3SNDazrodht-27">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="3787" y="349" as="sourcePoint" />
+            <mxPoint x="3837" y="299" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-30" value="Build missile turrets" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="4043" y="233" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-31" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="wxDiK8NXT3SNDazrodht-30" target="wxDiK8NXT3SNDazrodht-2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="3644" y="367" as="sourcePoint" />
+            <mxPoint x="3694" y="317" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-32" value="&lt;div&gt;Provide permanent&lt;/div&gt;&lt;div&gt;scouting information&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="4187" y="233" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-33" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="wxDiK8NXT3SNDazrodht-32" target="wxDiK8NXT3SNDazrodht-2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="4130" y="367" as="sourcePoint" />
+            <mxPoint x="4180" y="317" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-35" value="Build Commandcenter" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="3671" y="463" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-36" value="Defend position" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="3810" y="463" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-37" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="wxDiK8NXT3SNDazrodht-36" target="wxDiK8NXT3SNDazrodht-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="3823" y="420" as="sourcePoint" />
+            <mxPoint x="3873" y="370" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wxDiK8NXT3SNDazrodht-38" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="wxDiK8NXT3SNDazrodht-35" target="wxDiK8NXT3SNDazrodht-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="3823" y="420" as="sourcePoint" />
+            <mxPoint x="3873" y="370" as="targetPoint" />
           </mxGeometry>
         </mxCell>
       </root>
