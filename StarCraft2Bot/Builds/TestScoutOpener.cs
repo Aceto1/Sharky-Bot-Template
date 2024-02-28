@@ -1,17 +1,12 @@
 ﻿using SC2APIProtocol;
 using Sharky;
 using Sharky.Builds;
-using Sharky.Chat;
-using Sharky.DefaultBot;
-using Sharky.Managers;
 using Sharky.MicroControllers;
 using Sharky.MicroTasks;
 using Sharky.MicroTasks.Attack;
-using Sharky.Proxy;
 using StarCraft2Bot.Bot;
 using StarCraft2Bot.Builds.Base;
-using StarCraft2Bot.Builds.Base.Condition;
-using StarCraft2Bot.Builds.Base.Desires;
+using StarCraft2Bot.Builds.Base.Action;
 using StarCraft2Bot.Helper;
 
 namespace StarCraft2Bot.Builds

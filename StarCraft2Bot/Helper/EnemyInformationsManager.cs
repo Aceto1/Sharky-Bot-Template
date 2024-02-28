@@ -1,20 +1,6 @@
-﻿using System;
-using System.ComponentModel;
-using SC2APIProtocol;
+﻿using SC2APIProtocol;
 using Sharky;
-using Sharky.Builds;
-using Sharky.Chat;
-using Sharky.DefaultBot;
-using Sharky.Helper;
-using Sharky.Managers;
-using Sharky.MicroControllers;
-using Sharky.MicroTasks;
-using Sharky.MicroTasks.Attack;
 using Sharky.Pathing;
-using StarCraft2Bot.Builds.Base;
-using StarCraft2Bot.Builds.Base.Condition;
-using StarCraft2Bot.Builds.Base.Desires;
-using StarCraft2Bot.Database;
 
 namespace StarCraft2Bot.Helper
 {
